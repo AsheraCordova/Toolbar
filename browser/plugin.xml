@@ -6,7 +6,7 @@
   <name>Toolbar Plugin</name>
 
   <platform name="browser">
-  	<config-file target="res/xml/config.xml" parent="/*">
+  	<config-file target="config.xml" parent="/*">
       <feature name="CordovaToolbarPlugin">
         <param name="android-package" value="com.ashera.toolbar.CordovaToolbarPlugin"/>
         <param name="onload" value="true" />
