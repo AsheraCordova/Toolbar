@@ -13,7 +13,7 @@ https://asheracordova.github.io/doc/androidx/appcompat/widget/Toolbar.html
 https://asheracordova.github.io/playground/index.html
 
 The first release 1.0.0 has the following features:
-* Menu support with showAction support
+* Menu with showAction support
 * Responsive layout
 
 Roadmap (1.1.0):
