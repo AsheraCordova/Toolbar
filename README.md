@@ -12,6 +12,12 @@ https://asheracordova.github.io/doc/androidx/appcompat/widget/Toolbar.html
 
 https://asheracordova.github.io/playground/index.html
 
+To install the plugin use:
+
+```
+cordova plugin add https://github.com/AsheraCordova/Toolbar.git
+```
+
 The first release 1.0.0 has the following features:
 * Menu with showAction support
 * Responsive layout
