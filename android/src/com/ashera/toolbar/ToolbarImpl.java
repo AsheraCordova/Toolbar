@@ -745,6 +745,10 @@ public java.util.Map<String, Object> getOnClickEventObj(View v) {
     obj.put("fragmentId", w.getFragment().getFragmentId());
     obj.put("actionUrl", w.getFragment().getActionUrl());
     
+    if (w.getComponentId() != null) {
+    	obj.put("componentId", w.getComponentId());
+    }
+    
     PluginInvoker.putJSONSafeObjectIntoMap(obj, "id", w.getId());
      
     
@@ -817,6 +821,10 @@ public java.util.Map<String, Object> getOnMenuItemClickEventObj(MenuItem item) {
     obj.put("eventType", "menuitemclick");
     obj.put("fragmentId", w.getFragment().getFragmentId());
     obj.put("actionUrl", w.getFragment().getActionUrl());
+    
+    if (w.getComponentId() != null) {
+    	obj.put("componentId", w.getComponentId());
+    }
     
     PluginInvoker.putJSONSafeObjectIntoMap(obj, "id", w.getId());
      

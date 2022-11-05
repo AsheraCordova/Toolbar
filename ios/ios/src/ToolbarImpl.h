@@ -324,6 +324,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setButtonGravityWithNSString:(NSString *)value;
 
+- (ASToolbarImpl_ToolbarCommandBuilder *)setChildXmlWithNSString:(NSString *)arg0;
+
 - (ASToolbarImpl_ToolbarCommandBuilder *)setClickableWithBoolean:(jboolean)arg0;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setClipChildrenWithBoolean:(jboolean)arg0;
