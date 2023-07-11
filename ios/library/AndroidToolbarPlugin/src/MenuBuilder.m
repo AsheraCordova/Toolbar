@@ -16,8 +16,10 @@
 #include "java/lang/IllegalArgumentException.h"
 #include "java/lang/ref/WeakReference.h"
 #include "java/util/ArrayList.h"
+#include "java/util/concurrent/CopyOnWriteArrayList.h"
 
 @class JavaUtilArrayList;
+@class JavaUtilConcurrentCopyOnWriteArrayList;
 @protocol JavaLangCharSequence;
 
 
@@ -38,7 +40,7 @@
   jboolean mStructureChangedWhileDispatchPrevented_;
   jboolean mOptionalIconsVisible_;
   jboolean mIsClosing_;
-  ADXMenuBuilder_CopyOnWriteArrayList *mPresenters_;
+  JavaUtilConcurrentCopyOnWriteArrayList *mPresenters_;
   ADXMenuItemImpl *mExpandedItem_;
   jboolean mGroupDividerEnabled_;
   jboolean mOverrideVisibleItems_;
@@ -65,7 +67,7 @@ J2OBJC_FIELD_SETTER(ADXMenuBuilder, mItems_, JavaUtilArrayList *)
 J2OBJC_FIELD_SETTER(ADXMenuBuilder, mVisibleItems_, JavaUtilArrayList *)
 J2OBJC_FIELD_SETTER(ADXMenuBuilder, mActionItems_, JavaUtilArrayList *)
 J2OBJC_FIELD_SETTER(ADXMenuBuilder, mNonActionItems_, JavaUtilArrayList *)
-J2OBJC_FIELD_SETTER(ADXMenuBuilder, mPresenters_, ADXMenuBuilder_CopyOnWriteArrayList *)
+J2OBJC_FIELD_SETTER(ADXMenuBuilder, mPresenters_, JavaUtilConcurrentCopyOnWriteArrayList *)
 J2OBJC_FIELD_SETTER(ADXMenuBuilder, mExpandedItem_, ADXMenuItemImpl *)
 
 inline IOSIntArray *ADXMenuBuilder_get_sCategoryToOrder(void);
@@ -134,7 +136,7 @@ J2OBJC_INITIALIZED_DEFN(ADXMenuBuilder)
   mPreventDispatchingItemsChanged_ = true;
   [self clear];
   [self clearHeader];
-  [((ADXMenuBuilder_CopyOnWriteArrayList *) nil_chk(mPresenters_)) clear];
+  [((JavaUtilConcurrentCopyOnWriteArrayList *) nil_chk(mPresenters_)) clear];
   mPreventDispatchingItemsChanged_ = false;
   mItemsChangedWhileDispatchPrevented_ = false;
   mStructureChangedWhileDispatchPrevented_ = false;
@@ -181,7 +183,7 @@ J2OBJC_INITIALIZED_DEFN(ADXMenuBuilder)
   for (JavaLangRefWeakReference * __strong ref in nil_chk(mPresenters_)) {
     id<ADXMenuPresenter> presenter = [((JavaLangRefWeakReference *) nil_chk(ref)) get];
     if (presenter == nil) {
-      [((ADXMenuBuilder_CopyOnWriteArrayList *) nil_chk(mPresenters_)) removeWithId:ref];
+      [((JavaUtilConcurrentCopyOnWriteArrayList *) nil_chk(mPresenters_)) removeWithId:ref];
     }
     else {
       flagged |= [presenter flagActionItems];
@@ -238,7 +240,7 @@ J2OBJC_IGNORE_DESIGNATED_END
 }
 
 - (void)setActionMenuPresenterWithADXMenuPresenter:(id<ADXMenuPresenter>)mPresenter {
-  [((ADXMenuBuilder_CopyOnWriteArrayList *) nil_chk(mPresenters_)) addWithId:create_JavaLangRefWeakReference_initWithId_(mPresenter)];
+  [((JavaUtilConcurrentCopyOnWriteArrayList *) nil_chk(mPresenters_)) addWithId:create_JavaLangRefWeakReference_initWithId_(mPresenter)];
 }
 
 - (void)onItemActionRequestChangedWithADMenuItem:(id<ADMenuItem>)menuItem {
@@ -328,7 +330,7 @@ J2OBJC_IGNORE_DESIGNATED_END
     { "mStructureChangedWhileDispatchPrevented_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mOptionalIconsVisible_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mIsClosing_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "mPresenters_", "LADXMenuBuilder_CopyOnWriteArrayList;", .constantValue.asLong = 0, 0x2, -1, -1, 22, -1 },
+    { "mPresenters_", "LJavaUtilConcurrentCopyOnWriteArrayList;", .constantValue.asLong = 0, 0x2, -1, -1, 22, -1 },
     { "mExpandedItem_", "LADXMenuItemImpl;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mGroupDividerEnabled_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mOverrideVisibleItems_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
@@ -339,7 +341,7 @@ J2OBJC_IGNORE_DESIGNATED_END
     { "SUPPORTED_MODIFIERS_MASK", "I", .constantValue.asInt = ADXMenuBuilder_SUPPORTED_MODIFIERS_MASK, 0x18, -1, -1, -1, -1 },
     { "FLAG_KEEP_OPEN_ON_SUBMENU_OPENED", "I", .constantValue.asInt = ADXMenuBuilder_FLAG_KEEP_OPEN_ON_SUBMENU_OPENED, 0x18, -1, -1, -1, -1 },
   };
-  static const void *ptrTable[] = { "addInternal", "IIILJavaLangCharSequence;", "createNewMenuItem", "IIIILJavaLangCharSequence;I", "add", "LJavaLangCharSequence;", "I", "IIII", "getOrdering", "findInsertIndex", "LJavaUtilArrayList;I", "(Ljava/util/ArrayList<Landroidx/appcompat/view/menu/MenuItemImpl;>;I)I", "()Ljava/util/ArrayList<Landroidx/appcompat/view/menu/MenuItemImpl;>;", "collapseItemActionView", "LADMenuItem;", "setActionMenuPresenter", "LADXMenuPresenter;", "onItemActionRequestChanged", "onItemsChanged", "Z", &ADXMenuBuilder_sCategoryToOrder, "Ljava/util/ArrayList<Landroidx/appcompat/view/menu/MenuItemImpl;>;", "Landroidx/appcompat/view/menu/MenuBuilder$CopyOnWriteArrayList<Ljava/lang/ref/WeakReference<Landroidx/appcompat/view/menu/MenuPresenter;>;>;", "LADXMenuBuilder_SupportMenuItem;LADXMenuBuilder_ContextMenu;LADXMenuBuilder_CopyOnWriteArrayList;" };
+  static const void *ptrTable[] = { "addInternal", "IIILJavaLangCharSequence;", "createNewMenuItem", "IIIILJavaLangCharSequence;I", "add", "LJavaLangCharSequence;", "I", "IIII", "getOrdering", "findInsertIndex", "LJavaUtilArrayList;I", "(Ljava/util/ArrayList<Landroidx/appcompat/view/menu/MenuItemImpl;>;I)I", "()Ljava/util/ArrayList<Landroidx/appcompat/view/menu/MenuItemImpl;>;", "collapseItemActionView", "LADMenuItem;", "setActionMenuPresenter", "LADXMenuPresenter;", "onItemActionRequestChanged", "onItemsChanged", "Z", &ADXMenuBuilder_sCategoryToOrder, "Ljava/util/ArrayList<Landroidx/appcompat/view/menu/MenuItemImpl;>;", "Ljava/util/concurrent/CopyOnWriteArrayList<Ljava/lang/ref/WeakReference<Landroidx/appcompat/view/menu/MenuPresenter;>;>;", "LADXMenuBuilder_SupportMenuItem;LADXMenuBuilder_ContextMenu;" };
   static const J2ObjcClassInfo _ADXMenuBuilder = { "MenuBuilder", "androidx.appcompat.view.menu", ptrTable, methods, fields, 7, 0x1, 20, 29, -1, 23, -1, -1, -1 };
   return &_ADXMenuBuilder;
 }
@@ -385,7 +387,7 @@ void ADXMenuBuilder_init(ADXMenuBuilder *self) {
   self->mStructureChangedWhileDispatchPrevented_ = false;
   self->mOptionalIconsVisible_ = false;
   self->mIsClosing_ = false;
-  JreStrongAssignAndConsume(&self->mPresenters_, new_ADXMenuBuilder_CopyOnWriteArrayList_initWithADXMenuBuilder_(self));
+  JreStrongAssignAndConsume(&self->mPresenters_, new_JavaUtilConcurrentCopyOnWriteArrayList_init());
   self->mGroupDividerEnabled_ = false;
   JreStrongAssign(&self->mResources_, nil);
   JreStrongAssignAndConsume(&self->mItems_, new_JavaUtilArrayList_init());
@@ -456,44 +458,3 @@ ADXMenuBuilder_ContextMenu *create_ADXMenuBuilder_ContextMenu_initWithADXMenuBui
 }
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXMenuBuilder_ContextMenu)
-
-@implementation ADXMenuBuilder_CopyOnWriteArrayList
-
-- (instancetype)initWithADXMenuBuilder:(ADXMenuBuilder *)outer$ {
-  ADXMenuBuilder_CopyOnWriteArrayList_initWithADXMenuBuilder_(self, outer$);
-  return self;
-}
-
-- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(__unsafe_unretained id *)stackbuf count:(NSUInteger)len {
-  return JreDefaultFastEnumeration(self, state, stackbuf);
-}
-
-+ (const J2ObjcClassInfo *)__metadata {
-  static J2ObjcMethodInfo methods[] = {
-    { NULL, NULL, 0x0, -1, 0, -1, -1, -1, -1 },
-  };
-  #pragma clang diagnostic push
-  #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
-  #pragma clang diagnostic ignored "-Wundeclared-selector"
-  methods[0].selector = @selector(initWithADXMenuBuilder:);
-  #pragma clang diagnostic pop
-  static const void *ptrTable[] = { "LADXMenuBuilder;", "<T:Ljava/lang/Object;>Ljava/util/ArrayList<TT;>;" };
-  static const J2ObjcClassInfo _ADXMenuBuilder_CopyOnWriteArrayList = { "CopyOnWriteArrayList", "androidx.appcompat.view.menu", ptrTable, methods, NULL, 7, 0x0, 1, 0, 0, -1, -1, 1, -1 };
-  return &_ADXMenuBuilder_CopyOnWriteArrayList;
-}
-
-@end
-
-void ADXMenuBuilder_CopyOnWriteArrayList_initWithADXMenuBuilder_(ADXMenuBuilder_CopyOnWriteArrayList *self, ADXMenuBuilder *outer$) {
-  JavaUtilArrayList_init(self);
-}
-
-ADXMenuBuilder_CopyOnWriteArrayList *new_ADXMenuBuilder_CopyOnWriteArrayList_initWithADXMenuBuilder_(ADXMenuBuilder *outer$) {
-  J2OBJC_NEW_IMPL(ADXMenuBuilder_CopyOnWriteArrayList, initWithADXMenuBuilder_, outer$)
-}
-
-ADXMenuBuilder_CopyOnWriteArrayList *create_ADXMenuBuilder_CopyOnWriteArrayList_initWithADXMenuBuilder_(ADXMenuBuilder *outer$) {
-  J2OBJC_CREATE_IMPL(ADXMenuBuilder_CopyOnWriteArrayList, initWithADXMenuBuilder_, outer$)
-}
-
-J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXMenuBuilder_CopyOnWriteArrayList)

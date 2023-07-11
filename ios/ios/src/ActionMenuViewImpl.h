@@ -26,6 +26,7 @@
 @class ASActionMenuViewImpl_ActionMenuViewCommandParamsBuilder;
 @class ASActionMenuViewImpl_ActionMenuViewParamsBean;
 @class ASWidgetAttribute;
+@class IOSClass;
 @protocol ADMenuItem;
 @protocol ASIFragment;
 @protocol ASILifeCycleDecorator;
@@ -76,6 +77,8 @@
 
 - (id)getPluginWithNSString:(NSString *)plugin;
 
+- (IOSClass *)getViewClass;
+
 - (void)initialized OBJC_METHOD_FAMILY_NONE;
 
 - (void)invalidate;
@@ -104,8 +107,7 @@
 
 - (void)setIdWithNSString:(NSString *)id_;
 
-- (void)updateMeasuredDimensionWithInt:(jint)width
-                               withInt:(jint)height;
+- (void)setVisibleWithBoolean:(jboolean)b;
 
 #pragma mark Package-Private
 
@@ -147,42 +149,6 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl)
 
 #endif
 
-#if !defined (ASActionMenuViewImpl_Orientation_) && (INCLUDE_ALL_ActionMenuViewImpl || defined(INCLUDE_ASActionMenuViewImpl_Orientation))
-#define ASActionMenuViewImpl_Orientation_
-
-#define RESTRICT_AbstractEnumToIntConverter 1
-#define INCLUDE_ASAbstractEnumToIntConverter 1
-#include "AbstractEnumToIntConverter.h"
-
-@class JavaLangInteger;
-@protocol JavaUtilMap;
-
-@interface ASActionMenuViewImpl_Orientation : ASAbstractEnumToIntConverter
-
-#pragma mark Public
-
-- (JavaLangInteger *)getDefault;
-
-- (id<JavaUtilMap>)getMapping;
-
-#pragma mark Package-Private
-
-- (instancetype)init;
-
-@end
-
-J2OBJC_EMPTY_STATIC_INIT(ASActionMenuViewImpl_Orientation)
-
-FOUNDATION_EXPORT void ASActionMenuViewImpl_Orientation_init(ASActionMenuViewImpl_Orientation *self);
-
-FOUNDATION_EXPORT ASActionMenuViewImpl_Orientation *new_ASActionMenuViewImpl_Orientation_init(void) NS_RETURNS_RETAINED;
-
-FOUNDATION_EXPORT ASActionMenuViewImpl_Orientation *create_ASActionMenuViewImpl_Orientation_init(void);
-
-J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Orientation)
-
-#endif
-
 #if !defined (ASActionMenuViewImpl_Divider_) && (INCLUDE_ALL_ActionMenuViewImpl || defined(INCLUDE_ASActionMenuViewImpl_Divider))
 #define ASActionMenuViewImpl_Divider_
 
@@ -219,6 +185,42 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Divider)
 
 #endif
 
+#if !defined (ASActionMenuViewImpl_Orientation_) && (INCLUDE_ALL_ActionMenuViewImpl || defined(INCLUDE_ASActionMenuViewImpl_Orientation))
+#define ASActionMenuViewImpl_Orientation_
+
+#define RESTRICT_AbstractEnumToIntConverter 1
+#define INCLUDE_ASAbstractEnumToIntConverter 1
+#include "AbstractEnumToIntConverter.h"
+
+@class JavaLangInteger;
+@protocol JavaUtilMap;
+
+@interface ASActionMenuViewImpl_Orientation : ASAbstractEnumToIntConverter
+
+#pragma mark Public
+
+- (JavaLangInteger *)getDefault;
+
+- (id<JavaUtilMap>)getMapping;
+
+#pragma mark Package-Private
+
+- (instancetype)init;
+
+@end
+
+J2OBJC_EMPTY_STATIC_INIT(ASActionMenuViewImpl_Orientation)
+
+FOUNDATION_EXPORT void ASActionMenuViewImpl_Orientation_init(ASActionMenuViewImpl_Orientation *self);
+
+FOUNDATION_EXPORT ASActionMenuViewImpl_Orientation *new_ASActionMenuViewImpl_Orientation_init(void) NS_RETURNS_RETAINED;
+
+FOUNDATION_EXPORT ASActionMenuViewImpl_Orientation *create_ASActionMenuViewImpl_Orientation_init(void);
+
+J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Orientation)
+
+#endif
+
 #if !defined (ASActionMenuViewImpl_ActionMenuViewExt_) && (INCLUDE_ALL_ActionMenuViewImpl || defined(INCLUDE_ASActionMenuViewImpl_ActionMenuViewExt))
 #define ASActionMenuViewImpl_ActionMenuViewExt_
 
@@ -234,9 +236,11 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Divider)
 #define INCLUDE_ASIMaxDimension 1
 #include "IMaxDimension.h"
 
+@class ADRect;
 @class ADView;
 @class ASActionMenuViewImpl;
 @class ASWidgetAttribute;
+@class IOSIntArray;
 @class IOSObjectArray;
 @protocol ADMenuItem;
 @protocol ASIWidget;
@@ -257,6 +261,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Divider)
 
 - (ADView *)getItemViewWithADMenuItem:(id<ADMenuItem>)item;
 
+- (void)getLocationOnScreenWithIntArray:(IOSIntArray *)appScreenLocation;
+
 - (jint)getMaxHeight;
 
 - (jint)getMaxWidth;
@@ -264,6 +270,10 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Divider)
 - (id<JavaUtilList>)getMethods;
 
 - (ADView *)getOverFlowButton;
+
+- (void)getWindowVisibleDisplayFrameWithADRect:(ADRect *)displayFrame;
+
+- (ADView *)inflateViewWithNSString:(NSString *)layout;
 
 - (void)initialized OBJC_METHOD_FAMILY_NONE;
 
@@ -276,6 +286,10 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Divider)
 - (void)onMeasureWithInt:(jint)widthMeasureSpec
                  withInt:(jint)heightMeasureSpec;
 
+- (void)remeasure;
+
+- (void)removeFromParent;
+
 - (void)setAttributeWithASWidgetAttribute:(ASWidgetAttribute *)widgetAttribute
                              withNSString:(NSString *)strValue
                                    withId:(id)objValue;
@@ -283,6 +297,9 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Divider)
 - (void)setMaxHeightWithInt:(jint)height;
 
 - (void)setMaxWidthWithInt:(jint)width;
+
+- (void)setMyAttributeWithNSString:(NSString *)name
+                            withId:(id)value;
 
 - (void)setVisibilityWithInt:(jint)visibility;
 
@@ -425,6 +442,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_ShowAsAction)
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setBaselineAlignedChildIndexWithInt:(jint)value;
 
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setChildXmlWithNSString:(NSString *)arg0;
+
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setClickableWithBoolean:(jboolean)arg0;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setClipChildrenWithBoolean:(jboolean)arg0;
@@ -547,6 +566,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_ShowAsAction)
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setMinWidthWithNSString:(NSString *)arg0;
 
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setModelDescPathWithNSString:(NSString *)arg0;
+
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setModelForWithNSString:(NSString *)arg0;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setModelIdPathWithNSString:(NSString *)arg0;
@@ -575,9 +596,13 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_ShowAsAction)
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setOnLongClickWithNSString:(NSString *)arg0;
 
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setOnSwipedWithNSString:(NSString *)arg0;
+
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setOnTouchWithNSString:(NSString *)arg0;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setOrientationWithNSString:(NSString *)value;
+
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setOutsideTouchableWithBoolean:(jboolean)arg0;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setPaddingBottomWithNSString:(NSString *)arg0;
 
@@ -768,6 +793,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_ShowAsAction)
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)tryGetMinHeight;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)tryGetMinWidth;
+
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)tryGetModelDescPath;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)tryGetModelIdPath;
 

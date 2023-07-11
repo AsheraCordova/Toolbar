@@ -1,14 +1,14 @@
 // start - imports
 
-export const enum Orientation {
-horizontal = "horizontal",
-vertical = "vertical",
-}
 export const enum Divider {
 none = "none",
 beginning = "beginning",
 end = "end",
 middle = "middle",
+}
+export const enum Orientation {
+horizontal = "horizontal",
+vertical = "vertical",
 }	
 import CommandAttr from '../../widget/CommandAttr';
 import IWidget from '../../widget/IWidget';
@@ -22,7 +22,6 @@ import {MotionEvent} from '../../app/MotionEvent';
 import {DragEvent} from '../../app/DragEvent';
 import {KeyEvent} from '../../app/KeyEvent';
 import { ScopedObject } from '../../app/ScopedObject';
-
 
 
 
@@ -63,6 +62,7 @@ export class DividerTransformer implements ITranform {
 
 
 
+
 import {ViewGroupImpl_LayoutParams} from './ViewGroupImpl';
 
 // end - imports
@@ -72,9 +72,6 @@ export abstract class ActionMenuViewImpl<T> extends ViewGroupImpl<T>{
 	static initialize() {
 		TransformerFactory.getInstance().register("divider", new DividerTransformer());
     }	
-	@Type(() => CommandAttr)
-	@Expose({ name: "orientation" })
-	orientation!:CommandAttr<Orientation>| undefined;
 	@Type(() => CommandAttr)
 	@Expose({ name: "baselineAligned" })
 	baselineAligned!:CommandAttr<boolean>| undefined;
@@ -99,13 +96,15 @@ export abstract class ActionMenuViewImpl<T> extends ViewGroupImpl<T>{
 	@Type(() => CommandAttr)
 	@Expose({ name: "dividerPadding" })
 	dividerPadding!:CommandAttr<string>| undefined;
+	@Type(() => CommandAttr)
+	@Expose({ name: "orientation" })
+	orientation!:CommandAttr<Orientation>| undefined;
 
 	@Exclude()
 	protected thisPointer: T;	
 	protected abstract getThisPointer(): T;
 	reset() : T {	
 		super.reset();
-		this.orientation = undefined;
 		this.baselineAligned = undefined;
 		this.baselineAlignedChildIndex = undefined;
 		this.divider = undefined;
@@ -114,6 +113,7 @@ export abstract class ActionMenuViewImpl<T> extends ViewGroupImpl<T>{
 		this.weightSum = undefined;
 		this.showDividers = undefined;
 		this.dividerPadding = undefined;
+		this.orientation = undefined;
 		return this.thisPointer;
 	}
 	constructor(id: string, path: string[], event:  string) {
@@ -121,20 +121,6 @@ export abstract class ActionMenuViewImpl<T> extends ViewGroupImpl<T>{
 		this.thisPointer = this.getThisPointer();
 	}
 	
-
-	public setOrientation(value : Orientation) : T {
-		this.resetIfRequired();
-		if (this.orientation == null || this.orientation == undefined) {
-			this.orientation = new CommandAttr<Orientation>();
-		}
-		
-		this.orientation.setSetter(true);
-		this.orientation.setValue(value);
-		this.orderSet++;
-		this.orientation.setOrderSet(this.orderSet);
-		return this.thisPointer;
-	}
-		
 
 	public tryGetBaselineAligned() : T {
 		this.resetIfRequired();
@@ -388,6 +374,20 @@ this.showDividers.setTransformer('divider');		return this.thisPointer;
 		this.dividerPadding.setValue(value);
 		this.orderSet++;
 		this.dividerPadding.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setOrientation(value : Orientation) : T {
+		this.resetIfRequired();
+		if (this.orientation == null || this.orientation == undefined) {
+			this.orientation = new CommandAttr<Orientation>();
+		}
+		
+		this.orientation.setSetter(true);
+		this.orientation.setValue(value);
+		this.orderSet++;
+		this.orientation.setOrderSet(this.orderSet);
 		return this.thisPointer;
 	}
 		

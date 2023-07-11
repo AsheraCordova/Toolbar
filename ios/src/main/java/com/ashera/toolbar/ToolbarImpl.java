@@ -63,15 +63,6 @@ public class ToolbarImpl extends BaseHasWidgets {
 	public void loadAttributes(String localName) {
 		ViewGroupImpl.register(localName);
 
-		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("title").withType("resourcestring"));
-		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("titleTextColor").withType("color"));
-		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("subtitle").withType("resourcestring"));
-		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("subtitleTextColor").withType("color"));
-		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("logo").withType("drawable"));
-		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("navigationIcon").withType("drawable"));
-		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("overflowIcon").withType("drawable").withOrder(10));
-		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("onNavigationIconClick").withType("string"));
-		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("onMenuItemClick").withType("string").withOrder(-1));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("gravity").withType("gravity").withUiFlag(UPDATE_UI_REQUEST_LAYOUT));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("titleMargin").withType("dimension"));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("titleMarginStart").withType("dimension"));
@@ -88,6 +79,15 @@ public class ToolbarImpl extends BaseHasWidgets {
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("maxButtonHeight").withType("dimension").withUiFlag(UPDATE_UI_REQUEST_LAYOUT));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("buttonGravity").withType("gravity").withUiFlag(UPDATE_UI_REQUEST_LAYOUT));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("menu").withType("string"));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("title").withType("resourcestring"));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("titleTextColor").withType("color"));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("subtitle").withType("resourcestring"));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("subtitleTextColor").withType("color"));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("logo").withType("drawable"));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("navigationIcon").withType("drawable"));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("overflowIcon").withType("drawable").withOrder(10));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("onNavigationIconClick").withType("string"));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("onMenuItemClick").withType("string").withOrder(-1));
 	
 	}
 	
@@ -103,7 +103,7 @@ public class ToolbarImpl extends BaseHasWidgets {
 
 	@Override
 	public IWidget newInstance() {
-		return new ToolbarImpl();
+		return new ToolbarImpl(groupName, localName);
 	}
 	
 	@SuppressLint("NewApi")
@@ -129,7 +129,7 @@ public class ToolbarImpl extends BaseHasWidgets {
 	}
 
 	@Override
-	public boolean remove(IWidget w) {
+	public boolean remove(IWidget w) {		
 		boolean remove = super.remove(w);
 		toolbar.removeView((View) w.asWidget());
          ViewGroupImpl.nativeRemoveView(w);            
@@ -248,12 +248,7 @@ public class ToolbarImpl extends BaseHasWidgets {
 		}
 
 		public ToolbarExt() {
-			
 			super();
-			
-			
-			
-			
 			
 		}
 		
@@ -341,7 +336,44 @@ public class ToolbarImpl extends BaseHasWidgets {
         	super.drawableStateChanged();
         	ViewImpl.drawableStateChanged(ToolbarImpl.this);
         }
-		@Override
+        private Map<String, IWidget> templates;
+    	@Override
+    	public r.android.view.View inflateView(java.lang.String layout) {
+    		if (templates == null) {
+    			templates = new java.util.HashMap<String, IWidget>();
+    		}
+    		IWidget template = templates.get(layout);
+    		if (template == null) {
+    			template = (IWidget) quickConvert(layout, "template");
+    			templates.put(layout, template);
+    		}
+    		IWidget widget = template.loadLazyWidgets(ToolbarImpl.this.getParent());
+    		return (View) widget.asWidget();
+    	}        
+        
+    	@Override
+		public void remeasure() {
+			getFragment().remeasure();
+		}
+    	
+        @Override
+		public void removeFromParent() {
+        	ToolbarImpl.this.getParent().remove(ToolbarImpl.this);
+		}
+        @Override
+        public void getLocationOnScreen(int[] appScreenLocation) {
+        	appScreenLocation[0] = ViewImpl.getLocationXOnScreen(asNativeWidget());
+        	appScreenLocation[1] = ViewImpl.getLocationYOnScreen(asNativeWidget());
+        }
+        @Override
+        public void getWindowVisibleDisplayFrame(r.android.graphics.Rect displayFrame){
+        	
+        	displayFrame.left = ViewImpl.getLocationXOnScreen(asNativeWidget());
+        	displayFrame.top = ViewImpl.getLocationYOnScreen(asNativeWidget());
+        	displayFrame.right = displayFrame.left + getWidth();
+        	displayFrame.bottom = displayFrame.top + getHeight();
+        }
+        @Override
 		public void offsetTopAndBottom(int offset) {
 			super.offsetTopAndBottom(offset);
 			ViewImpl.nativeMakeFrame(asNativeWidget(), getLeft(), getTop(), getRight(), getBottom());
@@ -351,6 +383,10 @@ public class ToolbarImpl extends BaseHasWidgets {
 			super.offsetLeftAndRight(offset);
 			ViewImpl.nativeMakeFrame(asNativeWidget(), getLeft(), getTop(), getRight(), getBottom());
 		}
+		@Override
+		public void setMyAttribute(String name, Object value) {
+			ToolbarImpl.this.setAttribute(name, value, true);
+		}
         @Override
         public void setVisibility(int visibility) {
             super.setVisibility(visibility);
@@ -358,99 +394,17 @@ public class ToolbarImpl extends BaseHasWidgets {
             
         }
 	}
-	
-	public void updateMeasuredDimension(int width, int height) {
-		((ToolbarExt) toolbar).updateMeasuredDimension(width, height);
+	@Override
+	public Class getViewClass() {
+		return ToolbarExt.class;
 	}
 	
-
 	@SuppressLint("NewApi")
 	@Override
 	public void setAttribute(WidgetAttribute key, String strValue, Object objValue, ILifeCycleDecorator decorator) {
 		ViewGroupImpl.setAttribute(this, key, strValue, objValue, decorator);
 		Object nativeWidget = asNativeWidget();
 		switch (key.getAttributeName()) {
-			case "title": {
-
-
-		setTitle(key, strValue, objValue, decorator);
-
-
-
-			}
-			break;
-			case "titleTextColor": {
-
-
-		setTitleTextColor(key, strValue, objValue, decorator);
-
-
-
-			}
-			break;
-			case "subtitle": {
-
-
-		setSubtitle(key, strValue, objValue, decorator);
-
-
-
-			}
-			break;
-			case "subtitleTextColor": {
-
-
-		setSubtitleColor(key, strValue, objValue, decorator);
-
-
-
-			}
-			break;
-			case "logo": {
-
-
-		setLogo(key, strValue, objValue, decorator);
-
-
-
-			}
-			break;
-			case "navigationIcon": {
-
-
-		setNavigationIcon(key, strValue, objValue, decorator);
-
-
-
-			}
-			break;
-			case "overflowIcon": {
-
-
-		setOverflowIcon(key, strValue, objValue, decorator);
-
-
-
-			}
-			break;
-			case "onNavigationIconClick": {
-
-
-		setNavigationOnClickListener(new OnClickListener(this, strValue));
-
-
-
-			}
-			break;
-			case "onMenuItemClick": {
-
-
-		setOnMenuItemClickListener(strValue, objValue);
-
-
-
-			}
-			break;
 			case "gravity": {
 
 
@@ -590,6 +544,87 @@ public class ToolbarImpl extends BaseHasWidgets {
 
 
 		setMenu(objValue);
+
+
+
+			}
+			break;
+			case "title": {
+
+
+		setTitle(key, strValue, objValue, decorator);
+
+
+
+			}
+			break;
+			case "titleTextColor": {
+
+
+		setTitleTextColor(key, strValue, objValue, decorator);
+
+
+
+			}
+			break;
+			case "subtitle": {
+
+
+		setSubtitle(key, strValue, objValue, decorator);
+
+
+
+			}
+			break;
+			case "subtitleTextColor": {
+
+
+		setSubtitleColor(key, strValue, objValue, decorator);
+
+
+
+			}
+			break;
+			case "logo": {
+
+
+		setLogo(key, strValue, objValue, decorator);
+
+
+
+			}
+			break;
+			case "navigationIcon": {
+
+
+		setNavigationIcon(key, strValue, objValue, decorator);
+
+
+
+			}
+			break;
+			case "overflowIcon": {
+
+
+		setOverflowIcon(key, strValue, objValue, decorator);
+
+
+
+			}
+			break;
+			case "onNavigationIconClick": {
+
+
+		setNavigationOnClickListener(new OnClickListener(this, strValue));
+
+
+
+			}
+			break;
+			case "onMenuItemClick": {
+
+
+		setOnMenuItemClickListener(strValue, objValue);
 
 
 
@@ -748,7 +783,7 @@ public class ToolbarImpl extends BaseHasWidgets {
 			IWidget overFlowButton = ((ActionMenuViewImpl) actionMenuView).getOverFlowButtonWidget();
 			
 			if (overFlowButton != null && overflowIcon != null) {
-				overFlowButton.setAttribute(WidgetFactory.getAttribute("ImageView", "src"), overflowIcon, false);
+				overFlowButton.setAttribute("src", overflowIcon, false);
 			}
 			
 			actionMenuView.initialized();
@@ -775,7 +810,7 @@ public class ToolbarImpl extends BaseHasWidgets {
 		IWidget overFlowButton = ((ActionMenuViewImpl) actionMenuView).getOverFlowButtonWidget();
 		
 		if (overFlowButton != null && overflowIcon != null) {
-			overFlowButton.setAttribute(WidgetFactory.getAttribute("ImageView", "src"), objValue, true);
+			overFlowButton.setAttribute("src", objValue, true);
 		}
 		
 		if (isInitialised()) {
@@ -986,6 +1021,10 @@ public java.util.Map<String, Object> getOnMenuItemClickEventObj(MenuItem item) {
 	}
 	
     
+    @Override
+    public void setVisible(boolean b) {
+        ((View)asWidget()).setVisibility(b ? View.VISIBLE : View.GONE);
+    }
 
 	
 private ToolbarCommandBuilder builder;
@@ -1019,78 +1058,6 @@ public  class ToolbarCommandBuilder extends com.ashera.layout.ViewGroupImpl.View
 		executeCommand(command, null, IWidget.COMMAND_EXEC_GETTER_METHOD);
 return this;	}
 
-public ToolbarCommandBuilder setTitle(String value) {
-	Map<String, Object> attrs = initCommand("title");
-	attrs.put("type", "attribute");
-	attrs.put("setter", true);
-	attrs.put("orderSet", ++orderSet);
-
-	attrs.put("value", value);
-return this;}
-public ToolbarCommandBuilder setTitleTextColor(String value) {
-	Map<String, Object> attrs = initCommand("titleTextColor");
-	attrs.put("type", "attribute");
-	attrs.put("setter", true);
-	attrs.put("orderSet", ++orderSet);
-
-	attrs.put("value", value);
-return this;}
-public ToolbarCommandBuilder setSubtitle(String value) {
-	Map<String, Object> attrs = initCommand("subtitle");
-	attrs.put("type", "attribute");
-	attrs.put("setter", true);
-	attrs.put("orderSet", ++orderSet);
-
-	attrs.put("value", value);
-return this;}
-public ToolbarCommandBuilder setSubtitleTextColor(String value) {
-	Map<String, Object> attrs = initCommand("subtitleTextColor");
-	attrs.put("type", "attribute");
-	attrs.put("setter", true);
-	attrs.put("orderSet", ++orderSet);
-
-	attrs.put("value", value);
-return this;}
-public ToolbarCommandBuilder setLogo(String value) {
-	Map<String, Object> attrs = initCommand("logo");
-	attrs.put("type", "attribute");
-	attrs.put("setter", true);
-	attrs.put("orderSet", ++orderSet);
-
-	attrs.put("value", value);
-return this;}
-public ToolbarCommandBuilder setNavigationIcon(String value) {
-	Map<String, Object> attrs = initCommand("navigationIcon");
-	attrs.put("type", "attribute");
-	attrs.put("setter", true);
-	attrs.put("orderSet", ++orderSet);
-
-	attrs.put("value", value);
-return this;}
-public ToolbarCommandBuilder setOverflowIcon(String value) {
-	Map<String, Object> attrs = initCommand("overflowIcon");
-	attrs.put("type", "attribute");
-	attrs.put("setter", true);
-	attrs.put("orderSet", ++orderSet);
-
-	attrs.put("value", value);
-return this;}
-public ToolbarCommandBuilder setOnNavigationIconClick(String value) {
-	Map<String, Object> attrs = initCommand("onNavigationIconClick");
-	attrs.put("type", "attribute");
-	attrs.put("setter", true);
-	attrs.put("orderSet", ++orderSet);
-
-	attrs.put("value", value);
-return this;}
-public ToolbarCommandBuilder setOnMenuItemClick(String value) {
-	Map<String, Object> attrs = initCommand("onMenuItemClick");
-	attrs.put("type", "attribute");
-	attrs.put("setter", true);
-	attrs.put("orderSet", ++orderSet);
-
-	attrs.put("value", value);
-return this;}
 public ToolbarCommandBuilder setGravity(String value) {
 	Map<String, Object> attrs = initCommand("gravity");
 	attrs.put("type", "attribute");
@@ -1219,47 +1186,83 @@ public ToolbarCommandBuilder setMenu(String value) {
 
 	attrs.put("value", value);
 return this;}
+public ToolbarCommandBuilder setTitle(String value) {
+	Map<String, Object> attrs = initCommand("title");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
+public ToolbarCommandBuilder setTitleTextColor(String value) {
+	Map<String, Object> attrs = initCommand("titleTextColor");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
+public ToolbarCommandBuilder setSubtitle(String value) {
+	Map<String, Object> attrs = initCommand("subtitle");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
+public ToolbarCommandBuilder setSubtitleTextColor(String value) {
+	Map<String, Object> attrs = initCommand("subtitleTextColor");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
+public ToolbarCommandBuilder setLogo(String value) {
+	Map<String, Object> attrs = initCommand("logo");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
+public ToolbarCommandBuilder setNavigationIcon(String value) {
+	Map<String, Object> attrs = initCommand("navigationIcon");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
+public ToolbarCommandBuilder setOverflowIcon(String value) {
+	Map<String, Object> attrs = initCommand("overflowIcon");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
+public ToolbarCommandBuilder setOnNavigationIconClick(String value) {
+	Map<String, Object> attrs = initCommand("onNavigationIconClick");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
+public ToolbarCommandBuilder setOnMenuItemClick(String value) {
+	Map<String, Object> attrs = initCommand("onMenuItemClick");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
 }
 public class ToolbarBean extends com.ashera.layout.ViewGroupImpl.ViewGroupBean{
 		public ToolbarBean() {
 			super(ToolbarImpl.this);
 		}
-public void setTitle(String value) {
-	getBuilder().reset().setTitle(value).execute(true);
-}
-
-public void setTitleTextColor(String value) {
-	getBuilder().reset().setTitleTextColor(value).execute(true);
-}
-
-public void setSubtitle(String value) {
-	getBuilder().reset().setSubtitle(value).execute(true);
-}
-
-public void setSubtitleTextColor(String value) {
-	getBuilder().reset().setSubtitleTextColor(value).execute(true);
-}
-
-public void setLogo(String value) {
-	getBuilder().reset().setLogo(value).execute(true);
-}
-
-public void setNavigationIcon(String value) {
-	getBuilder().reset().setNavigationIcon(value).execute(true);
-}
-
-public void setOverflowIcon(String value) {
-	getBuilder().reset().setOverflowIcon(value).execute(true);
-}
-
-public void setOnNavigationIconClick(String value) {
-	getBuilder().reset().setOnNavigationIconClick(value).execute(true);
-}
-
-public void setOnMenuItemClick(String value) {
-	getBuilder().reset().setOnMenuItemClick(value).execute(true);
-}
-
 public void setGravity(String value) {
 	getBuilder().reset().setGravity(value).execute(true);
 }
@@ -1322,6 +1325,42 @@ public void setButtonGravity(String value) {
 
 public void setMenu(String value) {
 	getBuilder().reset().setMenu(value).execute(true);
+}
+
+public void setTitle(String value) {
+	getBuilder().reset().setTitle(value).execute(true);
+}
+
+public void setTitleTextColor(String value) {
+	getBuilder().reset().setTitleTextColor(value).execute(true);
+}
+
+public void setSubtitle(String value) {
+	getBuilder().reset().setSubtitle(value).execute(true);
+}
+
+public void setSubtitleTextColor(String value) {
+	getBuilder().reset().setSubtitleTextColor(value).execute(true);
+}
+
+public void setLogo(String value) {
+	getBuilder().reset().setLogo(value).execute(true);
+}
+
+public void setNavigationIcon(String value) {
+	getBuilder().reset().setNavigationIcon(value).execute(true);
+}
+
+public void setOverflowIcon(String value) {
+	getBuilder().reset().setOverflowIcon(value).execute(true);
+}
+
+public void setOnNavigationIconClick(String value) {
+	getBuilder().reset().setOnNavigationIconClick(value).execute(true);
+}
+
+public void setOnMenuItemClick(String value) {
+	getBuilder().reset().setOnMenuItemClick(value).execute(true);
 }
 
 }

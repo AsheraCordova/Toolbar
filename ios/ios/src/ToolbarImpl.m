@@ -15,6 +15,7 @@
 #include "EventExpressionParser.h"
 #include "Gravity.h"
 #include "GravityCompat.h"
+#include "HasWidgets.h"
 #include "IActivity.h"
 #include "IAttributable.h"
 #include "IFragment.h"
@@ -22,6 +23,7 @@
 #include "IListener.h"
 #include "IOSClass.h"
 #include "IOSObjectArray.h"
+#include "IOSPrimitiveArray.h"
 #include "IWidget.h"
 #include "IWidgetLifeCycleListener.h"
 #include "IdGenerator.h"
@@ -32,6 +34,7 @@
 #include "MenuParser.h"
 #include "OnLayoutEvent.h"
 #include "PluginInvoker.h"
+#include "Rect.h"
 #include "ResourceBundleUtils.h"
 #include "Toolbar.h"
 #include "ToolbarImpl.h"
@@ -44,6 +47,7 @@
 #include "java/lang/Boolean.h"
 #include "java/lang/Integer.h"
 #include "java/lang/UnsupportedOperationException.h"
+#include "java/util/HashMap.h"
 #include "java/util/List.h"
 #include "java/util/Map.h"
 
@@ -228,12 +232,14 @@ __attribute__((unused)) static void ASToolbarImpl_setNavigationOnClickListenerWi
   ASOnLayoutEvent *onLayoutEvent_;
   jint mMaxWidth_;
   jint mMaxHeight_;
+  id<JavaUtilMap> templates_;
 }
 
 @end
 
 J2OBJC_FIELD_SETTER(ASToolbarImpl_ToolbarExt, measureFinished_, ASMeasureEvent *)
 J2OBJC_FIELD_SETTER(ASToolbarImpl_ToolbarExt, onLayoutEvent_, ASOnLayoutEvent *)
+J2OBJC_FIELD_SETTER(ASToolbarImpl_ToolbarExt, templates_, id<JavaUtilMap>)
 
 @interface ASToolbarImpl_OnClickListener : NSObject < ADView_OnClickListener, ASIListener > {
  @public
@@ -350,15 +356,6 @@ NSString *ASToolbarImpl_GROUP_NAME = @"androidx.appcompat.widget.Toolbar";
 
 - (void)loadAttributesWithNSString:(NSString *)localName {
   ASViewGroupImpl_register__WithNSString_(localName);
-  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"title"])) withTypeWithNSString:@"resourcestring"]);
-  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"titleTextColor"])) withTypeWithNSString:@"color"]);
-  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"subtitle"])) withTypeWithNSString:@"resourcestring"]);
-  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"subtitleTextColor"])) withTypeWithNSString:@"color"]);
-  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"logo"])) withTypeWithNSString:@"drawable"]);
-  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"navigationIcon"])) withTypeWithNSString:@"drawable"]);
-  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"overflowIcon"])) withTypeWithNSString:@"drawable"])) withOrderWithInt:10]);
-  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"onNavigationIconClick"])) withTypeWithNSString:@"string"]);
-  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"onMenuItemClick"])) withTypeWithNSString:@"string"])) withOrderWithInt:-1]);
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"gravity"])) withTypeWithNSString:@"gravity"])) withUiFlagWithInt:ASIWidget_UPDATE_UI_REQUEST_LAYOUT]);
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"titleMargin"])) withTypeWithNSString:@"dimension"]);
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"titleMarginStart"])) withTypeWithNSString:@"dimension"]);
@@ -375,6 +372,15 @@ NSString *ASToolbarImpl_GROUP_NAME = @"androidx.appcompat.widget.Toolbar";
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"maxButtonHeight"])) withTypeWithNSString:@"dimension"])) withUiFlagWithInt:ASIWidget_UPDATE_UI_REQUEST_LAYOUT]);
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"buttonGravity"])) withTypeWithNSString:@"gravity"])) withUiFlagWithInt:ASIWidget_UPDATE_UI_REQUEST_LAYOUT]);
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"menu"])) withTypeWithNSString:@"string"]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"title"])) withTypeWithNSString:@"resourcestring"]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"titleTextColor"])) withTypeWithNSString:@"color"]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"subtitle"])) withTypeWithNSString:@"resourcestring"]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"subtitleTextColor"])) withTypeWithNSString:@"color"]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"logo"])) withTypeWithNSString:@"drawable"]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"navigationIcon"])) withTypeWithNSString:@"drawable"]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"overflowIcon"])) withTypeWithNSString:@"drawable"])) withOrderWithInt:10]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"onNavigationIconClick"])) withTypeWithNSString:@"string"]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"onMenuItemClick"])) withTypeWithNSString:@"string"])) withOrderWithInt:-1]);
 }
 
 J2OBJC_IGNORE_DESIGNATED_BEGIN
@@ -396,7 +402,7 @@ J2OBJC_IGNORE_DESIGNATED_END
 }
 
 - (id<ASIWidget>)newInstance {
-  return new_ASToolbarImpl_init();
+  return new_ASToolbarImpl_initWithNSString_withNSString_(groupName_, localName_);
 }
 
 - (void)createWithASIFragment:(id<ASIFragment>)fragment
@@ -495,9 +501,8 @@ J2OBJC_IGNORE_DESIGNATED_END
   return nil;
 }
 
-- (void)updateMeasuredDimensionWithInt:(jint)width
-                               withInt:(jint)height {
-  [((ASToolbarImpl_ToolbarExt *) nil_chk(((ASToolbarImpl_ToolbarExt *) cast_chk(toolbar_, [ASToolbarImpl_ToolbarExt class])))) updateMeasuredDimensionWithInt:width withInt:height];
+- (IOSClass *)getViewClass {
+  return ASToolbarImpl_ToolbarExt_class_();
 }
 
 - (void)setAttributeWithASWidgetAttribute:(ASWidgetAttribute *)key
@@ -506,130 +511,130 @@ J2OBJC_IGNORE_DESIGNATED_END
                 withASILifeCycleDecorator:(id<ASILifeCycleDecorator>)decorator {
   ASViewGroupImpl_setAttributeWithASIWidget_withASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
   id nativeWidget = [self asNativeWidget];
-  switch (JreIndexOfStr([((ASWidgetAttribute *) nil_chk(key)) getAttributeName], (id[]){ @"title", @"titleTextColor", @"subtitle", @"subtitleTextColor", @"logo", @"navigationIcon", @"overflowIcon", @"onNavigationIconClick", @"onMenuItemClick", @"gravity", @"titleMargin", @"titleMarginStart", @"titleMarginEnd", @"titleMarginTop", @"titleMarginBottom", @"titleMargins", @"contentInsetStart", @"contentInsetEnd", @"contentInsetLeft", @"contentInsetRight", @"contentInsetStartWithNavigation", @"contentInsetEndWithActions", @"maxButtonHeight", @"buttonGravity", @"menu" }, 25)) {
+  switch (JreIndexOfStr([((ASWidgetAttribute *) nil_chk(key)) getAttributeName], (id[]){ @"gravity", @"titleMargin", @"titleMarginStart", @"titleMarginEnd", @"titleMarginTop", @"titleMarginBottom", @"titleMargins", @"contentInsetStart", @"contentInsetEnd", @"contentInsetLeft", @"contentInsetRight", @"contentInsetStartWithNavigation", @"contentInsetEndWithActions", @"maxButtonHeight", @"buttonGravity", @"menu", @"title", @"titleTextColor", @"subtitle", @"subtitleTextColor", @"logo", @"navigationIcon", @"overflowIcon", @"onNavigationIconClick", @"onMenuItemClick" }, 25)) {
     case 0:
-    {
-      ASToolbarImpl_setTitleWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
-    }
-    break;
-    case 1:
-    {
-      ASToolbarImpl_setTitleTextColorWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
-    }
-    break;
-    case 2:
-    {
-      ASToolbarImpl_setSubtitleWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
-    }
-    break;
-    case 3:
-    {
-      ASToolbarImpl_setSubtitleColorWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
-    }
-    break;
-    case 4:
-    {
-      ASToolbarImpl_setLogoWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
-    }
-    break;
-    case 5:
-    {
-      ASToolbarImpl_setNavigationIconWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
-    }
-    break;
-    case 6:
-    {
-      ASToolbarImpl_setOverflowIconWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
-    }
-    break;
-    case 7:
-    {
-      ASToolbarImpl_setNavigationOnClickListenerWithASToolbarImpl_OnClickListener_(self, new_ASToolbarImpl_OnClickListener_initWithASIWidget_withNSString_(self, strValue));
-    }
-    break;
-    case 8:
-    {
-      ASToolbarImpl_setOnMenuItemClickListenerWithNSString_withId_(self, strValue, objValue);
-    }
-    break;
-    case 9:
     {
       ASToolbarImpl_setGravityWithId_(self, objValue);
     }
     break;
-    case 10:
+    case 1:
     {
       ASToolbarImpl_setTitleMarginWithId_(self, objValue);
     }
     break;
-    case 11:
+    case 2:
     {
       [((ADXToolbar *) nil_chk(toolbar_)) setTitleMarginStartWithInt:[((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk(objValue, [JavaLangInteger class]))) intValue]];
     }
     break;
-    case 12:
+    case 3:
     {
       [((ADXToolbar *) nil_chk(toolbar_)) setTitleMarginEndWithInt:[((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk(objValue, [JavaLangInteger class]))) intValue]];
     }
     break;
-    case 13:
+    case 4:
     {
       [((ADXToolbar *) nil_chk(toolbar_)) setTitleMarginTopWithInt:[((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk(objValue, [JavaLangInteger class]))) intValue]];
     }
     break;
-    case 14:
+    case 5:
     {
       [((ADXToolbar *) nil_chk(toolbar_)) setTitleMarginBottomWithInt:[((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk(objValue, [JavaLangInteger class]))) intValue]];
     }
     break;
-    case 15:
+    case 6:
     {
       ASToolbarImpl_setTitleMarginWithId_(self, objValue);
     }
     break;
-    case 16:
+    case 7:
     {
       ASToolbarImpl_setContentInsetStartWithId_(self, objValue);
     }
     break;
-    case 17:
+    case 8:
     {
       ASToolbarImpl_setContentInsetEndWithId_(self, objValue);
     }
     break;
-    case 18:
+    case 9:
     {
       ASToolbarImpl_setContentInsetStartWithId_(self, objValue);
     }
     break;
-    case 19:
+    case 10:
     {
       ASToolbarImpl_setContentInsetEndWithId_(self, objValue);
     }
     break;
-    case 20:
+    case 11:
     {
       [((ADXToolbar *) nil_chk(toolbar_)) setContentInsetStartWithNavigationWithInt:[((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk(objValue, [JavaLangInteger class]))) intValue]];
     }
     break;
-    case 21:
+    case 12:
     {
       [((ADXToolbar *) nil_chk(toolbar_)) setContentInsetEndWithActionsWithInt:[((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk(objValue, [JavaLangInteger class]))) intValue]];
     }
     break;
-    case 22:
+    case 13:
     {
       ASToolbarImpl_setMaxButtonHeightWithId_(self, objValue);
     }
     break;
-    case 23:
+    case 14:
     {
       ASToolbarImpl_setButtonGravityWithId_(self, objValue);
     }
     break;
-    case 24:
+    case 15:
     {
       ASToolbarImpl_setMenuWithId_(self, objValue);
+    }
+    break;
+    case 16:
+    {
+      ASToolbarImpl_setTitleWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
+    }
+    break;
+    case 17:
+    {
+      ASToolbarImpl_setTitleTextColorWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
+    }
+    break;
+    case 18:
+    {
+      ASToolbarImpl_setSubtitleWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
+    }
+    break;
+    case 19:
+    {
+      ASToolbarImpl_setSubtitleColorWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
+    }
+    break;
+    case 20:
+    {
+      ASToolbarImpl_setLogoWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
+    }
+    break;
+    case 21:
+    {
+      ASToolbarImpl_setNavigationIconWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
+    }
+    break;
+    case 22:
+    {
+      ASToolbarImpl_setOverflowIconWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
+    }
+    break;
+    case 23:
+    {
+      ASToolbarImpl_setNavigationOnClickListenerWithASToolbarImpl_OnClickListener_(self, new_ASToolbarImpl_OnClickListener_initWithASIWidget_withNSString_(self, strValue));
+    }
+    break;
+    case 24:
+    {
+      ASToolbarImpl_setOnMenuItemClickListenerWithNSString_withId_(self, strValue, objValue);
     }
     break;
     default:
@@ -784,6 +789,10 @@ J2OBJC_IGNORE_DESIGNATED_END
   }
 }
 
+- (void)setVisibleWithBoolean:(jboolean)b {
+  [((ADView *) nil_chk(((ADView *) cast_chk([self asWidget], [ADView class])))) setVisibilityWithInt:b ? ADView_VISIBLE : ADView_GONE];
+}
+
 - (id)getPluginWithNSString:(NSString *)plugin {
   return [((id<ASIAttributable>) nil_chk(ASWidgetFactory_getAttributableWithNSString_(plugin))) newInstanceWithASIWidget:self];
 }
@@ -838,35 +847,36 @@ J2OBJC_IGNORE_DESIGNATED_END
     { NULL, "LADXToolbar_LayoutParams;", 0x2, 13, 12, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 14, 15, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, 16, 17, -1, -1, -1, -1 },
+    { NULL, "LIOSClass;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 18, 19, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 20, 21, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, 22, 23, -1, -1, -1, -1 },
+    { NULL, "LNSObject;", 0x1, 20, 21, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "Z", 0x101, 24, 1, -1, -1, -1, -1 },
-    { NULL, "V", 0x101, 25, 26, -1, 27, -1, -1 },
+    { NULL, "Z", 0x101, 22, 1, -1, -1, -1, -1 },
+    { NULL, "V", 0x101, 23, 24, -1, 25, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 28, 21, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 26, 19, -1, -1, -1, -1 },
     { NULL, "V", 0x2, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 29, 21, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 30, 21, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 31, 21, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 27, 19, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 28, 19, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 29, 19, -1, -1, -1, -1 },
     { NULL, "V", 0x2, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 32, 21, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 33, 21, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 34, 35, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 30, 19, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 31, 19, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 32, 33, -1, -1, -1, -1 },
     { NULL, "V", 0x2, -1, -1, -1, -1, -1, -1 },
     { NULL, "LADXToolbar_OnMenuItemClickListener;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 36, 37, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 38, 21, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 39, 35, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 40, 35, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 41, 35, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 42, 35, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 43, 35, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 44, 35, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 45, 35, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 46, 1, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 34, 35, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 36, 19, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 37, 33, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 38, 33, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 39, 33, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 40, 33, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 41, 33, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 42, 33, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 43, 33, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 44, 1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 45, 46, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, 47, 1, -1, -1, -1, -1 },
     { NULL, "LASToolbarImpl_ToolbarBean;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LASToolbarImpl_ToolbarCommandBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
@@ -893,7 +903,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   methods[13].selector = @selector(getLayoutParamsWithADView:);
   methods[14].selector = @selector(setChildAttributeWithASIWidget:withASWidgetAttribute:withNSString:withId:);
   methods[15].selector = @selector(getChildAttributeWithASIWidget:withASWidgetAttribute:);
-  methods[16].selector = @selector(updateMeasuredDimensionWithInt:withInt:);
+  methods[16].selector = @selector(getViewClass);
   methods[17].selector = @selector(setAttributeWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
   methods[18].selector = @selector(getAttributeWithASWidgetAttribute:withASILifeCycleDecorator:);
   methods[19].selector = @selector(asNativeWidget);
@@ -922,12 +932,13 @@ J2OBJC_IGNORE_DESIGNATED_END
   methods[42].selector = @selector(setContentInsetStartWithId:);
   methods[43].selector = @selector(setTitleMarginWithId:);
   methods[44].selector = @selector(setIdWithNSString:);
-  methods[45].selector = @selector(getPluginWithNSString:);
-  methods[46].selector = @selector(getBean);
-  methods[47].selector = @selector(getBuilder);
-  methods[48].selector = @selector(getParamsBean);
-  methods[49].selector = @selector(getParamsBuilder);
-  methods[50].selector = @selector(setNavigationOnClickListenerWithASToolbarImpl_OnClickListener:);
+  methods[45].selector = @selector(setVisibleWithBoolean:);
+  methods[46].selector = @selector(getPluginWithNSString:);
+  methods[47].selector = @selector(getBean);
+  methods[48].selector = @selector(getBuilder);
+  methods[49].selector = @selector(getParamsBean);
+  methods[50].selector = @selector(getParamsBuilder);
+  methods[51].selector = @selector(setNavigationOnClickListenerWithASToolbarImpl_OnClickListener:);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "uiView_", "LNSObject;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
@@ -950,8 +961,8 @@ J2OBJC_IGNORE_DESIGNATED_END
     { "paramsBuilder_", "LASToolbarImpl_ToolbarCommandParamsBuilder;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "paramsBean_", "LASToolbarImpl_ToolbarParamsBean;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
   };
-  static const void *ptrTable[] = { "loadAttributes", "LNSString;", "LNSString;LNSString;", "create", "LASIFragment;LJavaUtilMap;", "(Lcom/ashera/core/IFragment;Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "remove", "LASIWidget;", "I", "add", "LASIWidget;I", "createLayoutParams", "LADView;", "getLayoutParams", "setChildAttribute", "LASIWidget;LASWidgetAttribute;LNSString;LNSObject;", "getChildAttribute", "LASIWidget;LASWidgetAttribute;", "updateMeasuredDimension", "II", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;LASILifeCycleDecorator;", "getAttribute", "LASWidgetAttribute;LASILifeCycleDecorator;", "checkIosVersion", "nativeCreate", "LJavaUtilMap;", "(Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "setTitle", "setSubtitleColor", "setTitleTextColor", "setSubtitle", "setLogo", "setNavigationIcon", "setMenu", "LNSObject;", "setOnMenuItemClickListener", "LNSString;LNSObject;", "setOverflowIcon", "setGravity", "setMaxButtonHeight", "setButtonGravity", "handlePreMeasure", "setContentInsetEnd", "setContentInsetStart", "setTitleMargin", "setId", "getPlugin", "setNavigationOnClickListener", "LASToolbarImpl_OnClickListener;", &ASToolbarImpl_LOCAL_NAME, &ASToolbarImpl_GROUP_NAME, "LASToolbarImpl_PreMeasureHandler;LASToolbarImpl_ToolbarExt;LASToolbarImpl_OnClickListener;LASToolbarImpl_OnMenuItemClickListener;LASToolbarImpl_ToolbarCommandBuilder;LASToolbarImpl_ToolbarBean;LASToolbarImpl_ToolbarParamsBean;LASToolbarImpl_ToolbarCommandParamsBuilder;" };
-  static const J2ObjcClassInfo _ASToolbarImpl = { "ToolbarImpl", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 51, 19, -1, 52, -1, -1, -1 };
+  static const void *ptrTable[] = { "loadAttributes", "LNSString;", "LNSString;LNSString;", "create", "LASIFragment;LJavaUtilMap;", "(Lcom/ashera/core/IFragment;Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "remove", "LASIWidget;", "I", "add", "LASIWidget;I", "createLayoutParams", "LADView;", "getLayoutParams", "setChildAttribute", "LASIWidget;LASWidgetAttribute;LNSString;LNSObject;", "getChildAttribute", "LASIWidget;LASWidgetAttribute;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;LASILifeCycleDecorator;", "getAttribute", "LASWidgetAttribute;LASILifeCycleDecorator;", "checkIosVersion", "nativeCreate", "LJavaUtilMap;", "(Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "setTitle", "setSubtitleColor", "setTitleTextColor", "setSubtitle", "setLogo", "setNavigationIcon", "setMenu", "LNSObject;", "setOnMenuItemClickListener", "LNSString;LNSObject;", "setOverflowIcon", "setGravity", "setMaxButtonHeight", "setButtonGravity", "handlePreMeasure", "setContentInsetEnd", "setContentInsetStart", "setTitleMargin", "setId", "setVisible", "Z", "getPlugin", "setNavigationOnClickListener", "LASToolbarImpl_OnClickListener;", &ASToolbarImpl_LOCAL_NAME, &ASToolbarImpl_GROUP_NAME, "LASToolbarImpl_PreMeasureHandler;LASToolbarImpl_ToolbarExt;LASToolbarImpl_OnClickListener;LASToolbarImpl_OnMenuItemClickListener;LASToolbarImpl_ToolbarCommandBuilder;LASToolbarImpl_ToolbarBean;LASToolbarImpl_ToolbarParamsBean;LASToolbarImpl_ToolbarCommandParamsBuilder;" };
+  static const J2ObjcClassInfo _ASToolbarImpl = { "ToolbarImpl", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 52, 19, -1, 52, -1, -1, -1 };
   return &_ASToolbarImpl;
 }
 
@@ -1113,7 +1124,7 @@ void ASToolbarImpl_createMenu(ASToolbarImpl *self) {
     [actionMenu updateMenuView];
     id<ASIWidget> overFlowButton = [((ASActionMenuViewImpl *) nil_chk(((ASActionMenuViewImpl *) cast_chk(self->actionMenuView_, [ASActionMenuViewImpl class])))) getOverFlowButtonWidget];
     if (overFlowButton != nil && self->overflowIcon_ != nil) {
-      [overFlowButton setAttributeWithASWidgetAttribute:ASWidgetFactory_getAttributeWithNSString_withNSString_(@"ImageView", @"src") withId:self->overflowIcon_ withBoolean:false];
+      [overFlowButton setAttributeWithNSString:@"src" withId:self->overflowIcon_ withBoolean:false];
     }
     [((id<ASIWidget>) nil_chk(self->actionMenuView_)) initialized];
   }
@@ -1132,7 +1143,7 @@ void ASToolbarImpl_setOverflowIconWithASWidgetAttribute_withNSString_withId_with
   self->overflowIcon_ = strValue;
   id<ASIWidget> overFlowButton = [((ASActionMenuViewImpl *) nil_chk(((ASActionMenuViewImpl *) cast_chk(self->actionMenuView_, [ASActionMenuViewImpl class])))) getOverFlowButtonWidget];
   if (overFlowButton != nil && self->overflowIcon_ != nil) {
-    [overFlowButton setAttributeWithASWidgetAttribute:ASWidgetFactory_getAttributeWithNSString_withNSString_(@"ImageView", @"src") withId:objValue withBoolean:true];
+    [overFlowButton setAttributeWithNSString:@"src" withId:objValue withBoolean:true];
   }
   if ([self isInitialised]) {
     [((id<ASIWidget>) nil_chk(overFlowButton)) requestLayout];
@@ -1332,6 +1343,39 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_PreMeasureHandler)
   ASViewImpl_drawableStateChangedWithASIWidget_(this$0_);
 }
 
+- (ADView *)inflateViewWithNSString:(NSString *)layout {
+  if (templates_ == nil) {
+    templates_ = new_JavaUtilHashMap_init();
+  }
+  id<ASIWidget> template_ = [templates_ getWithId:layout];
+  if (template_ == nil) {
+    template_ = (id<ASIWidget>) cast_check([this$0_ quickConvertWithId:layout withNSString:@"template"], ASIWidget_class_());
+    (void) [((id<JavaUtilMap>) nil_chk(templates_)) putWithId:layout withId:template_];
+  }
+  id<ASIWidget> widget = [((id<ASIWidget>) nil_chk(template_)) loadLazyWidgetsWithASHasWidgets:[this$0_ getParent]];
+  return (ADView *) cast_chk([((id<ASIWidget>) nil_chk(widget)) asWidget], [ADView class]);
+}
+
+- (void)remeasure {
+  [((id<ASIFragment>) nil_chk([this$0_ getFragment])) remeasure];
+}
+
+- (void)removeFromParent {
+  [((id<ASHasWidgets>) nil_chk([this$0_ getParent])) removeWithASIWidget:this$0_];
+}
+
+- (void)getLocationOnScreenWithIntArray:(IOSIntArray *)appScreenLocation {
+  *IOSIntArray_GetRef(nil_chk(appScreenLocation), 0) = ASViewImpl_getLocationXOnScreenWithId_([this$0_ asNativeWidget]);
+  *IOSIntArray_GetRef(appScreenLocation, 1) = ASViewImpl_getLocationYOnScreenWithId_([this$0_ asNativeWidget]);
+}
+
+- (void)getWindowVisibleDisplayFrameWithADRect:(ADRect *)displayFrame {
+  ((ADRect *) nil_chk(displayFrame))->left_ = ASViewImpl_getLocationXOnScreenWithId_([this$0_ asNativeWidget]);
+  displayFrame->top_ = ASViewImpl_getLocationYOnScreenWithId_([this$0_ asNativeWidget]);
+  displayFrame->right_ = displayFrame->left_ + [self getWidth];
+  displayFrame->bottom_ = displayFrame->top_ + [self getHeight];
+}
+
 - (void)offsetTopAndBottomWithInt:(jint)offset {
   [super offsetTopAndBottomWithInt:offset];
   ASViewImpl_nativeMakeFrameWithId_withInt_withInt_withInt_withInt_([this$0_ asNativeWidget], [self getLeft], [self getTop], [self getRight], [self getBottom]);
@@ -1340,6 +1384,11 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_PreMeasureHandler)
 - (void)offsetLeftAndRightWithInt:(jint)offset {
   [super offsetLeftAndRightWithInt:offset];
   ASViewImpl_nativeMakeFrameWithId_withInt_withInt_withInt_withInt_([this$0_ asNativeWidget], [self getLeft], [self getTop], [self getRight], [self getBottom]);
+}
+
+- (void)setMyAttributeWithNSString:(NSString *)name
+                            withId:(id)value {
+  [this$0_ setAttributeWithNSString:name withId:value withBoolean:true];
 }
 
 - (void)setVisibilityWithInt:(jint)visibility {
@@ -1369,9 +1418,15 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_PreMeasureHandler)
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, 16, 17, -1, -1, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 18, 1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 19, 1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 20, 1, -1, -1, -1, -1 },
+    { NULL, "LADView;", 0x1, 18, 19, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 20, 21, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 22, 23, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 24, 1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 25, 1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 26, 27, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 28, 1, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
@@ -1391,9 +1446,15 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_PreMeasureHandler)
   methods[12].selector = @selector(initialized);
   methods[13].selector = @selector(getAttributeWithASWidgetAttribute:);
   methods[14].selector = @selector(drawableStateChanged);
-  methods[15].selector = @selector(offsetTopAndBottomWithInt:);
-  methods[16].selector = @selector(offsetLeftAndRightWithInt:);
-  methods[17].selector = @selector(setVisibilityWithInt:);
+  methods[15].selector = @selector(inflateViewWithNSString:);
+  methods[16].selector = @selector(remeasure);
+  methods[17].selector = @selector(removeFromParent);
+  methods[18].selector = @selector(getLocationOnScreenWithIntArray:);
+  methods[19].selector = @selector(getWindowVisibleDisplayFrameWithADRect:);
+  methods[20].selector = @selector(offsetTopAndBottomWithInt:);
+  methods[21].selector = @selector(offsetLeftAndRightWithInt:);
+  methods[22].selector = @selector(setMyAttributeWithNSString:withId:);
+  methods[23].selector = @selector(setVisibilityWithInt:);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "this$0_", "LASToolbarImpl;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
@@ -1401,9 +1462,10 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_PreMeasureHandler)
     { "onLayoutEvent_", "LASOnLayoutEvent;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mMaxWidth_", "I", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mMaxHeight_", "I", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
+    { "templates_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 29, -1 },
   };
-  static const void *ptrTable[] = { "setMaxWidth", "I", "setMaxHeight", "LASToolbarImpl;", "onMeasure", "II", "onLayout", "ZIIII", "execute", "LNSString;[LNSObject;", "updateMeasuredDimension", "newInstance", "LASIWidget;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;", "()Ljava/util/List<Ljava/lang/String;>;", "getAttribute", "LASWidgetAttribute;", "offsetTopAndBottom", "offsetLeftAndRight", "setVisibility" };
-  static const J2ObjcClassInfo _ASToolbarImpl_ToolbarExt = { "ToolbarExt", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 18, 5, 3, -1, -1, -1, -1 };
+  static const void *ptrTable[] = { "setMaxWidth", "I", "setMaxHeight", "LASToolbarImpl;", "onMeasure", "II", "onLayout", "ZIIII", "execute", "LNSString;[LNSObject;", "updateMeasuredDimension", "newInstance", "LASIWidget;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;", "()Ljava/util/List<Ljava/lang/String;>;", "getAttribute", "LASWidgetAttribute;", "inflateView", "LNSString;", "getLocationOnScreen", "[I", "getWindowVisibleDisplayFrame", "LADRect;", "offsetTopAndBottom", "offsetLeftAndRight", "setMyAttribute", "LNSString;LNSObject;", "setVisibility", "Ljava/util/Map<Ljava/lang/String;Lcom/ashera/widget/IWidget;>;" };
+  static const J2ObjcClassInfo _ASToolbarImpl_ToolbarExt = { "ToolbarExt", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 24, 6, 3, -1, -1, -1, -1 };
   return &_ASToolbarImpl_ToolbarExt;
 }
 
@@ -1707,87 +1769,6 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_OnMenuItemClickListener)
   return self;
 }
 
-- (ASToolbarImpl_ToolbarCommandBuilder *)setTitleWithNSString:(NSString *)value {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"title"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
-  (void) [attrs putWithId:@"value" withId:value];
-  return self;
-}
-
-- (ASToolbarImpl_ToolbarCommandBuilder *)setTitleTextColorWithNSString:(NSString *)value {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"titleTextColor"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
-  (void) [attrs putWithId:@"value" withId:value];
-  return self;
-}
-
-- (ASToolbarImpl_ToolbarCommandBuilder *)setSubtitleWithNSString:(NSString *)value {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"subtitle"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
-  (void) [attrs putWithId:@"value" withId:value];
-  return self;
-}
-
-- (ASToolbarImpl_ToolbarCommandBuilder *)setSubtitleTextColorWithNSString:(NSString *)value {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"subtitleTextColor"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
-  (void) [attrs putWithId:@"value" withId:value];
-  return self;
-}
-
-- (ASToolbarImpl_ToolbarCommandBuilder *)setLogoWithNSString:(NSString *)value {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"logo"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
-  (void) [attrs putWithId:@"value" withId:value];
-  return self;
-}
-
-- (ASToolbarImpl_ToolbarCommandBuilder *)setNavigationIconWithNSString:(NSString *)value {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"navigationIcon"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
-  (void) [attrs putWithId:@"value" withId:value];
-  return self;
-}
-
-- (ASToolbarImpl_ToolbarCommandBuilder *)setOverflowIconWithNSString:(NSString *)value {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"overflowIcon"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
-  (void) [attrs putWithId:@"value" withId:value];
-  return self;
-}
-
-- (ASToolbarImpl_ToolbarCommandBuilder *)setOnNavigationIconClickWithNSString:(NSString *)value {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"onNavigationIconClick"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
-  (void) [attrs putWithId:@"value" withId:value];
-  return self;
-}
-
-- (ASToolbarImpl_ToolbarCommandBuilder *)setOnMenuItemClickWithNSString:(NSString *)value {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"onMenuItemClick"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
-  (void) [attrs putWithId:@"value" withId:value];
-  return self;
-}
-
 - (ASToolbarImpl_ToolbarCommandBuilder *)setGravityWithNSString:(NSString *)value {
   id<JavaUtilMap> attrs = [self initCommandWithNSString:@"gravity"];
   (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
@@ -1932,6 +1913,87 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_OnMenuItemClickListener)
   return self;
 }
 
+- (ASToolbarImpl_ToolbarCommandBuilder *)setTitleWithNSString:(NSString *)value {
+  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"title"];
+  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
+  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
+  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
+  (void) [attrs putWithId:@"value" withId:value];
+  return self;
+}
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setTitleTextColorWithNSString:(NSString *)value {
+  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"titleTextColor"];
+  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
+  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
+  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
+  (void) [attrs putWithId:@"value" withId:value];
+  return self;
+}
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setSubtitleWithNSString:(NSString *)value {
+  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"subtitle"];
+  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
+  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
+  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
+  (void) [attrs putWithId:@"value" withId:value];
+  return self;
+}
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setSubtitleTextColorWithNSString:(NSString *)value {
+  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"subtitleTextColor"];
+  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
+  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
+  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
+  (void) [attrs putWithId:@"value" withId:value];
+  return self;
+}
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setLogoWithNSString:(NSString *)value {
+  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"logo"];
+  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
+  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
+  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
+  (void) [attrs putWithId:@"value" withId:value];
+  return self;
+}
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setNavigationIconWithNSString:(NSString *)value {
+  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"navigationIcon"];
+  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
+  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
+  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
+  (void) [attrs putWithId:@"value" withId:value];
+  return self;
+}
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setOverflowIconWithNSString:(NSString *)value {
+  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"overflowIcon"];
+  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
+  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
+  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
+  (void) [attrs putWithId:@"value" withId:value];
+  return self;
+}
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setOnNavigationIconClickWithNSString:(NSString *)value {
+  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"onNavigationIconClick"];
+  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
+  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
+  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
+  (void) [attrs putWithId:@"value" withId:value];
+  return self;
+}
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setOnMenuItemClickWithNSString:(NSString *)value {
+  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"onMenuItemClick"];
+  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
+  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
+  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
+  (void) [attrs putWithId:@"value" withId:value];
+  return self;
+}
+
 + (const J2ObjcClassInfo *)__metadata {
   static J2ObjcMethodInfo methods[] = {
     { NULL, NULL, 0x1, -1, 0, -1, -1, -1, -1 },
@@ -1967,36 +2029,36 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_OnMenuItemClickListener)
   #pragma clang diagnostic ignored "-Wundeclared-selector"
   methods[0].selector = @selector(initWithASToolbarImpl:);
   methods[1].selector = @selector(executeWithBoolean:);
-  methods[2].selector = @selector(setTitleWithNSString:);
-  methods[3].selector = @selector(setTitleTextColorWithNSString:);
-  methods[4].selector = @selector(setSubtitleWithNSString:);
-  methods[5].selector = @selector(setSubtitleTextColorWithNSString:);
-  methods[6].selector = @selector(setLogoWithNSString:);
-  methods[7].selector = @selector(setNavigationIconWithNSString:);
-  methods[8].selector = @selector(setOverflowIconWithNSString:);
-  methods[9].selector = @selector(setOnNavigationIconClickWithNSString:);
-  methods[10].selector = @selector(setOnMenuItemClickWithNSString:);
-  methods[11].selector = @selector(setGravityWithNSString:);
-  methods[12].selector = @selector(setTitleMarginWithNSString:);
-  methods[13].selector = @selector(setTitleMarginStartWithNSString:);
-  methods[14].selector = @selector(setTitleMarginEndWithNSString:);
-  methods[15].selector = @selector(setTitleMarginTopWithNSString:);
-  methods[16].selector = @selector(setTitleMarginBottomWithNSString:);
-  methods[17].selector = @selector(setTitleMarginsWithNSString:);
-  methods[18].selector = @selector(setContentInsetStartWithNSString:);
-  methods[19].selector = @selector(setContentInsetEndWithNSString:);
-  methods[20].selector = @selector(setContentInsetLeftWithNSString:);
-  methods[21].selector = @selector(setContentInsetRightWithNSString:);
-  methods[22].selector = @selector(setContentInsetStartWithNavigationWithNSString:);
-  methods[23].selector = @selector(setContentInsetEndWithActionsWithNSString:);
-  methods[24].selector = @selector(setMaxButtonHeightWithNSString:);
-  methods[25].selector = @selector(setButtonGravityWithNSString:);
-  methods[26].selector = @selector(setMenuWithNSString:);
+  methods[2].selector = @selector(setGravityWithNSString:);
+  methods[3].selector = @selector(setTitleMarginWithNSString:);
+  methods[4].selector = @selector(setTitleMarginStartWithNSString:);
+  methods[5].selector = @selector(setTitleMarginEndWithNSString:);
+  methods[6].selector = @selector(setTitleMarginTopWithNSString:);
+  methods[7].selector = @selector(setTitleMarginBottomWithNSString:);
+  methods[8].selector = @selector(setTitleMarginsWithNSString:);
+  methods[9].selector = @selector(setContentInsetStartWithNSString:);
+  methods[10].selector = @selector(setContentInsetEndWithNSString:);
+  methods[11].selector = @selector(setContentInsetLeftWithNSString:);
+  methods[12].selector = @selector(setContentInsetRightWithNSString:);
+  methods[13].selector = @selector(setContentInsetStartWithNavigationWithNSString:);
+  methods[14].selector = @selector(setContentInsetEndWithActionsWithNSString:);
+  methods[15].selector = @selector(setMaxButtonHeightWithNSString:);
+  methods[16].selector = @selector(setButtonGravityWithNSString:);
+  methods[17].selector = @selector(setMenuWithNSString:);
+  methods[18].selector = @selector(setTitleWithNSString:);
+  methods[19].selector = @selector(setTitleTextColorWithNSString:);
+  methods[20].selector = @selector(setSubtitleWithNSString:);
+  methods[21].selector = @selector(setSubtitleTextColorWithNSString:);
+  methods[22].selector = @selector(setLogoWithNSString:);
+  methods[23].selector = @selector(setNavigationIconWithNSString:);
+  methods[24].selector = @selector(setOverflowIconWithNSString:);
+  methods[25].selector = @selector(setOnNavigationIconClickWithNSString:);
+  methods[26].selector = @selector(setOnMenuItemClickWithNSString:);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "this$0_", "LASToolbarImpl;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
   };
-  static const void *ptrTable[] = { "LASToolbarImpl;", "execute", "Z", "setTitle", "LNSString;", "setTitleTextColor", "setSubtitle", "setSubtitleTextColor", "setLogo", "setNavigationIcon", "setOverflowIcon", "setOnNavigationIconClick", "setOnMenuItemClick", "setGravity", "setTitleMargin", "setTitleMarginStart", "setTitleMarginEnd", "setTitleMarginTop", "setTitleMarginBottom", "setTitleMargins", "setContentInsetStart", "setContentInsetEnd", "setContentInsetLeft", "setContentInsetRight", "setContentInsetStartWithNavigation", "setContentInsetEndWithActions", "setMaxButtonHeight", "setButtonGravity", "setMenu", "Lcom/ashera/layout/ViewGroupImpl$ViewGroupCommandBuilder<Lcom/ashera/toolbar/ToolbarImpl$ToolbarCommandBuilder;>;" };
+  static const void *ptrTable[] = { "LASToolbarImpl;", "execute", "Z", "setGravity", "LNSString;", "setTitleMargin", "setTitleMarginStart", "setTitleMarginEnd", "setTitleMarginTop", "setTitleMarginBottom", "setTitleMargins", "setContentInsetStart", "setContentInsetEnd", "setContentInsetLeft", "setContentInsetRight", "setContentInsetStartWithNavigation", "setContentInsetEndWithActions", "setMaxButtonHeight", "setButtonGravity", "setMenu", "setTitle", "setTitleTextColor", "setSubtitle", "setSubtitleTextColor", "setLogo", "setNavigationIcon", "setOverflowIcon", "setOnNavigationIconClick", "setOnMenuItemClick", "Lcom/ashera/layout/ViewGroupImpl$ViewGroupCommandBuilder<Lcom/ashera/toolbar/ToolbarImpl$ToolbarCommandBuilder;>;" };
   static const J2ObjcClassInfo _ASToolbarImpl_ToolbarCommandBuilder = { "ToolbarCommandBuilder", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 27, 1, 0, -1, -1, 29, -1 };
   return &_ASToolbarImpl_ToolbarCommandBuilder;
 }
@@ -2023,42 +2085,6 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_ToolbarCommandBuilder)
 - (instancetype)initWithASToolbarImpl:(ASToolbarImpl *)outer$ {
   ASToolbarImpl_ToolbarBean_initWithASToolbarImpl_(self, outer$);
   return self;
-}
-
-- (void)setTitleWithNSString:(NSString *)value {
-  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setTitleWithNSString:value])) executeWithBoolean:true];
-}
-
-- (void)setTitleTextColorWithNSString:(NSString *)value {
-  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setTitleTextColorWithNSString:value])) executeWithBoolean:true];
-}
-
-- (void)setSubtitleWithNSString:(NSString *)value {
-  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setSubtitleWithNSString:value])) executeWithBoolean:true];
-}
-
-- (void)setSubtitleTextColorWithNSString:(NSString *)value {
-  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setSubtitleTextColorWithNSString:value])) executeWithBoolean:true];
-}
-
-- (void)setLogoWithNSString:(NSString *)value {
-  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setLogoWithNSString:value])) executeWithBoolean:true];
-}
-
-- (void)setNavigationIconWithNSString:(NSString *)value {
-  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setNavigationIconWithNSString:value])) executeWithBoolean:true];
-}
-
-- (void)setOverflowIconWithNSString:(NSString *)value {
-  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setOverflowIconWithNSString:value])) executeWithBoolean:true];
-}
-
-- (void)setOnNavigationIconClickWithNSString:(NSString *)value {
-  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setOnNavigationIconClickWithNSString:value])) executeWithBoolean:true];
-}
-
-- (void)setOnMenuItemClickWithNSString:(NSString *)value {
-  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setOnMenuItemClickWithNSString:value])) executeWithBoolean:true];
 }
 
 - (void)setGravityWithNSString:(NSString *)value {
@@ -2125,6 +2151,42 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_ToolbarCommandBuilder)
   (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setMenuWithNSString:value])) executeWithBoolean:true];
 }
 
+- (void)setTitleWithNSString:(NSString *)value {
+  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setTitleWithNSString:value])) executeWithBoolean:true];
+}
+
+- (void)setTitleTextColorWithNSString:(NSString *)value {
+  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setTitleTextColorWithNSString:value])) executeWithBoolean:true];
+}
+
+- (void)setSubtitleWithNSString:(NSString *)value {
+  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setSubtitleWithNSString:value])) executeWithBoolean:true];
+}
+
+- (void)setSubtitleTextColorWithNSString:(NSString *)value {
+  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setSubtitleTextColorWithNSString:value])) executeWithBoolean:true];
+}
+
+- (void)setLogoWithNSString:(NSString *)value {
+  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setLogoWithNSString:value])) executeWithBoolean:true];
+}
+
+- (void)setNavigationIconWithNSString:(NSString *)value {
+  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setNavigationIconWithNSString:value])) executeWithBoolean:true];
+}
+
+- (void)setOverflowIconWithNSString:(NSString *)value {
+  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setOverflowIconWithNSString:value])) executeWithBoolean:true];
+}
+
+- (void)setOnNavigationIconClickWithNSString:(NSString *)value {
+  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setOnNavigationIconClickWithNSString:value])) executeWithBoolean:true];
+}
+
+- (void)setOnMenuItemClickWithNSString:(NSString *)value {
+  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setOnMenuItemClickWithNSString:value])) executeWithBoolean:true];
+}
+
 + (const J2ObjcClassInfo *)__metadata {
   static J2ObjcMethodInfo methods[] = {
     { NULL, NULL, 0x1, -1, 0, -1, -1, -1, -1 },
@@ -2158,36 +2220,36 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_ToolbarCommandBuilder)
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
   #pragma clang diagnostic ignored "-Wundeclared-selector"
   methods[0].selector = @selector(initWithASToolbarImpl:);
-  methods[1].selector = @selector(setTitleWithNSString:);
-  methods[2].selector = @selector(setTitleTextColorWithNSString:);
-  methods[3].selector = @selector(setSubtitleWithNSString:);
-  methods[4].selector = @selector(setSubtitleTextColorWithNSString:);
-  methods[5].selector = @selector(setLogoWithNSString:);
-  methods[6].selector = @selector(setNavigationIconWithNSString:);
-  methods[7].selector = @selector(setOverflowIconWithNSString:);
-  methods[8].selector = @selector(setOnNavigationIconClickWithNSString:);
-  methods[9].selector = @selector(setOnMenuItemClickWithNSString:);
-  methods[10].selector = @selector(setGravityWithNSString:);
-  methods[11].selector = @selector(setTitleMarginWithNSString:);
-  methods[12].selector = @selector(setTitleMarginStartWithNSString:);
-  methods[13].selector = @selector(setTitleMarginEndWithNSString:);
-  methods[14].selector = @selector(setTitleMarginTopWithNSString:);
-  methods[15].selector = @selector(setTitleMarginBottomWithNSString:);
-  methods[16].selector = @selector(setTitleMarginsWithNSString:);
-  methods[17].selector = @selector(setContentInsetStartWithNSString:);
-  methods[18].selector = @selector(setContentInsetEndWithNSString:);
-  methods[19].selector = @selector(setContentInsetLeftWithNSString:);
-  methods[20].selector = @selector(setContentInsetRightWithNSString:);
-  methods[21].selector = @selector(setContentInsetStartWithNavigationWithNSString:);
-  methods[22].selector = @selector(setContentInsetEndWithActionsWithNSString:);
-  methods[23].selector = @selector(setMaxButtonHeightWithNSString:);
-  methods[24].selector = @selector(setButtonGravityWithNSString:);
-  methods[25].selector = @selector(setMenuWithNSString:);
+  methods[1].selector = @selector(setGravityWithNSString:);
+  methods[2].selector = @selector(setTitleMarginWithNSString:);
+  methods[3].selector = @selector(setTitleMarginStartWithNSString:);
+  methods[4].selector = @selector(setTitleMarginEndWithNSString:);
+  methods[5].selector = @selector(setTitleMarginTopWithNSString:);
+  methods[6].selector = @selector(setTitleMarginBottomWithNSString:);
+  methods[7].selector = @selector(setTitleMarginsWithNSString:);
+  methods[8].selector = @selector(setContentInsetStartWithNSString:);
+  methods[9].selector = @selector(setContentInsetEndWithNSString:);
+  methods[10].selector = @selector(setContentInsetLeftWithNSString:);
+  methods[11].selector = @selector(setContentInsetRightWithNSString:);
+  methods[12].selector = @selector(setContentInsetStartWithNavigationWithNSString:);
+  methods[13].selector = @selector(setContentInsetEndWithActionsWithNSString:);
+  methods[14].selector = @selector(setMaxButtonHeightWithNSString:);
+  methods[15].selector = @selector(setButtonGravityWithNSString:);
+  methods[16].selector = @selector(setMenuWithNSString:);
+  methods[17].selector = @selector(setTitleWithNSString:);
+  methods[18].selector = @selector(setTitleTextColorWithNSString:);
+  methods[19].selector = @selector(setSubtitleWithNSString:);
+  methods[20].selector = @selector(setSubtitleTextColorWithNSString:);
+  methods[21].selector = @selector(setLogoWithNSString:);
+  methods[22].selector = @selector(setNavigationIconWithNSString:);
+  methods[23].selector = @selector(setOverflowIconWithNSString:);
+  methods[24].selector = @selector(setOnNavigationIconClickWithNSString:);
+  methods[25].selector = @selector(setOnMenuItemClickWithNSString:);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "this$0_", "LASToolbarImpl;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
   };
-  static const void *ptrTable[] = { "LASToolbarImpl;", "setTitle", "LNSString;", "setTitleTextColor", "setSubtitle", "setSubtitleTextColor", "setLogo", "setNavigationIcon", "setOverflowIcon", "setOnNavigationIconClick", "setOnMenuItemClick", "setGravity", "setTitleMargin", "setTitleMarginStart", "setTitleMarginEnd", "setTitleMarginTop", "setTitleMarginBottom", "setTitleMargins", "setContentInsetStart", "setContentInsetEnd", "setContentInsetLeft", "setContentInsetRight", "setContentInsetStartWithNavigation", "setContentInsetEndWithActions", "setMaxButtonHeight", "setButtonGravity", "setMenu" };
+  static const void *ptrTable[] = { "LASToolbarImpl;", "setGravity", "LNSString;", "setTitleMargin", "setTitleMarginStart", "setTitleMarginEnd", "setTitleMarginTop", "setTitleMarginBottom", "setTitleMargins", "setContentInsetStart", "setContentInsetEnd", "setContentInsetLeft", "setContentInsetRight", "setContentInsetStartWithNavigation", "setContentInsetEndWithActions", "setMaxButtonHeight", "setButtonGravity", "setMenu", "setTitle", "setTitleTextColor", "setSubtitle", "setSubtitleTextColor", "setLogo", "setNavigationIcon", "setOverflowIcon", "setOnNavigationIconClick", "setOnMenuItemClick" };
   static const J2ObjcClassInfo _ASToolbarImpl_ToolbarBean = { "ToolbarBean", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 26, 1, 0, -1, -1, -1, -1 };
   return &_ASToolbarImpl_ToolbarBean;
 }

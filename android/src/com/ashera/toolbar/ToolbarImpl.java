@@ -89,7 +89,7 @@ public class ToolbarImpl extends BaseHasWidgets {
 
 	@Override
 	public IWidget newInstance() {
-		return new ToolbarImpl();
+		return new ToolbarImpl(groupName, localName);
 	}
 	
 	@SuppressLint("NewApi")
@@ -134,7 +134,7 @@ Context context = (Context) fragment.getRootActivity();
 	}
 
 	@Override
-	public boolean remove(IWidget w) {
+	public boolean remove(IWidget w) {		
 		boolean remove = super.remove(w);
 		toolbar.removeView((View) w.asWidget());
 		return remove;
@@ -257,11 +257,6 @@ Context context = (Context) fragment.getRootActivity();
 		public ToolbarExt(Context context) {
 			super(context);
 			
-			
-			
-			
-			
-			
 		}
 		
 		@Override
@@ -373,12 +368,11 @@ Context context = (Context) fragment.getRootActivity();
         	ViewImpl.drawableStateChanged(ToolbarImpl.this);
         }
 	}
-	
-	public void updateMeasuredDimension(int width, int height) {
-		((ToolbarExt) toolbar).updateMeasuredDimension(width, height);
+	@Override
+	public Class getViewClass() {
+		return ToolbarExt.class;
 	}
 	
-
 	@SuppressLint("NewApi")
 	@Override
 	public void setAttribute(WidgetAttribute key, String strValue, Object objValue, ILifeCycleDecorator decorator) {

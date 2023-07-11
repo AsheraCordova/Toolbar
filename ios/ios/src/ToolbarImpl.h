@@ -25,6 +25,7 @@
 @class ASToolbarImpl_ToolbarCommandParamsBuilder;
 @class ASToolbarImpl_ToolbarParamsBean;
 @class ASWidgetAttribute;
+@class IOSClass;
 @protocol ADXToolbar_OnMenuItemClickListener;
 @protocol ASIFragment;
 @protocol ASILifeCycleDecorator;
@@ -73,6 +74,8 @@
 
 - (id)getPluginWithNSString:(NSString *)plugin;
 
+- (IOSClass *)getViewClass;
+
 - (void)invalidate;
 
 - (void)loadAttributesWithNSString:(NSString *)localName;
@@ -99,8 +102,7 @@
 
 - (void)setIdWithNSString:(NSString *)id_;
 
-- (void)updateMeasuredDimensionWithInt:(jint)width
-                               withInt:(jint)height;
+- (void)setVisibleWithBoolean:(jboolean)b;
 
 @end
 
@@ -193,8 +195,11 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_PreMeasureHandler)
 #define INCLUDE_ASIMaxDimension 1
 #include "IMaxDimension.h"
 
+@class ADRect;
+@class ADView;
 @class ASToolbarImpl;
 @class ASWidgetAttribute;
+@class IOSIntArray;
 @class IOSObjectArray;
 @protocol ASIWidget;
 @protocol JavaUtilList;
@@ -212,11 +217,17 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_PreMeasureHandler)
 
 - (id)getAttributeWithASWidgetAttribute:(ASWidgetAttribute *)widgetAttribute;
 
+- (void)getLocationOnScreenWithIntArray:(IOSIntArray *)appScreenLocation;
+
 - (jint)getMaxHeight;
 
 - (jint)getMaxWidth;
 
 - (id<JavaUtilList>)getMethods;
+
+- (void)getWindowVisibleDisplayFrameWithADRect:(ADRect *)displayFrame;
+
+- (ADView *)inflateViewWithNSString:(NSString *)layout;
 
 - (void)initialized OBJC_METHOD_FAMILY_NONE;
 
@@ -229,6 +240,10 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_PreMeasureHandler)
 - (void)onMeasureWithInt:(jint)widthMeasureSpec
                  withInt:(jint)heightMeasureSpec;
 
+- (void)remeasure;
+
+- (void)removeFromParent;
+
 - (void)setAttributeWithASWidgetAttribute:(ASWidgetAttribute *)widgetAttribute
                              withNSString:(NSString *)strValue
                                    withId:(id)objValue;
@@ -236,6 +251,9 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_PreMeasureHandler)
 - (void)setMaxHeightWithInt:(jint)height;
 
 - (void)setMaxWidthWithInt:(jint)width;
+
+- (void)setMyAttributeWithNSString:(NSString *)name
+                            withId:(id)value;
 
 - (void)setVisibilityWithInt:(jint)visibility;
 
@@ -460,6 +478,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setMinWidthWithNSString:(NSString *)arg0;
 
+- (ASToolbarImpl_ToolbarCommandBuilder *)setModelDescPathWithNSString:(NSString *)arg0;
+
 - (ASToolbarImpl_ToolbarCommandBuilder *)setModelForWithNSString:(NSString *)arg0;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setModelIdPathWithNSString:(NSString *)arg0;
@@ -494,7 +514,11 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setOnNavigationIconClickWithNSString:(NSString *)value;
 
+- (ASToolbarImpl_ToolbarCommandBuilder *)setOnSwipedWithNSString:(NSString *)arg0;
+
 - (ASToolbarImpl_ToolbarCommandBuilder *)setOnTouchWithNSString:(NSString *)arg0;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setOutsideTouchableWithBoolean:(jboolean)arg0;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setOverflowIconWithNSString:(NSString *)value;
 
@@ -691,6 +715,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 - (ASToolbarImpl_ToolbarCommandBuilder *)tryGetMinHeight;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)tryGetMinWidth;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)tryGetModelDescPath;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)tryGetModelIdPath;
 

@@ -37,23 +37,6 @@ public class ActionMenuViewImpl extends BaseHasWidgets {
 
 	
 		@SuppressLint("NewApi")
-		final static class Orientation extends AbstractEnumToIntConverter{
-		private Map<String, Integer> mapping = new HashMap<>();
-				{
-				mapping.put("horizontal",  0x0);
-				mapping.put("vertical",  0x1);
-				}
-		@Override
-		public Map<String, Integer> getMapping() {
-				return mapping;
-				}
-
-		@Override
-		public Integer getDefault() {
-				return 0;
-				}
-				}
-		@SuppressLint("NewApi")
 		final static class Divider  extends AbstractBitFlagConverter{
 		private Map<String, Integer> mapping = new HashMap<>();
 				{
@@ -72,12 +55,27 @@ public class ActionMenuViewImpl extends BaseHasWidgets {
 				return 0;
 				}
 				}
+		@SuppressLint("NewApi")
+		final static class Orientation extends AbstractEnumToIntConverter{
+		private Map<String, Integer> mapping = new HashMap<>();
+				{
+				mapping.put("horizontal",  0x0);
+				mapping.put("vertical",  0x1);
+				}
+		@Override
+		public Map<String, Integer> getMapping() {
+				return mapping;
+				}
+
+		@Override
+		public Integer getDefault() {
+				return 0;
+				}
+				}
 	@Override
 	public void loadAttributes(String localName) {
 		ViewGroupImpl.register(localName);
 
-		ConverterFactory.register("androidx.appcompat.widget.ActionMenuView.orientation", new Orientation());
-		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("orientation").withType("androidx.appcompat.widget.ActionMenuView.orientation"));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("baselineAligned").withType("boolean"));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("baselineAlignedChildIndex").withType("int"));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("divider").withType("drawable"));
@@ -87,6 +85,8 @@ public class ActionMenuViewImpl extends BaseHasWidgets {
 		ConverterFactory.register("androidx.appcompat.widget.ActionMenuView.divider", new Divider());
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("showDividers").withType("androidx.appcompat.widget.ActionMenuView.divider"));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("dividerPadding").withType("dimension"));
+		ConverterFactory.register("androidx.appcompat.widget.ActionMenuView.orientation", new Orientation());
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("orientation").withType("androidx.appcompat.widget.ActionMenuView.orientation"));
 	
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("layout_gravity").withType("gravity").forChild());
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("layout_weight").withType("float").forChild());
@@ -105,7 +105,7 @@ public class ActionMenuViewImpl extends BaseHasWidgets {
 
 	@Override
 	public IWidget newInstance() {
-		return new ActionMenuViewImpl();
+		return new ActionMenuViewImpl(groupName, localName);
 	}
 	
 	@SuppressLint("NewApi")
@@ -127,7 +127,7 @@ public class ActionMenuViewImpl extends BaseHasWidgets {
 	}
 
 	@Override
-	public boolean remove(IWidget w) {
+	public boolean remove(IWidget w) {		
 		boolean remove = super.remove(w);
 		actionMenuView.removeView((View) w.asWidget());
          ViewGroupImpl.nativeRemoveView(w);            
@@ -264,12 +264,7 @@ return layoutParams.weight;			}
 		}
 
 		public ActionMenuViewExt() {
-			
-			
-			
-			
 			super();
-			
 			
 		}
 		
@@ -359,7 +354,45 @@ return layoutParams.weight;			}
         	super.drawableStateChanged();
         	ViewImpl.drawableStateChanged(ActionMenuViewImpl.this);
         }
-		@Override
+        private Map<String, IWidget> templates;
+    	@Override
+    	public r.android.view.View inflateView(java.lang.String layout) {
+    		if (templates == null) {
+    			templates = new java.util.HashMap<String, IWidget>();
+    		}
+    		IWidget template = templates.get(layout);
+    		if (template == null) {
+    			template = (IWidget) quickConvert(layout, "template");
+    			templates.put(layout, template);
+    		}
+    		IWidget widget = template.loadLazyWidgets(ActionMenuViewImpl.this.getParent());
+    		return (View) widget.asWidget();
+    	}        
+        
+    	@Override
+		public void remeasure() {
+			getFragment().remeasure();
+		}
+    	
+        @Override
+		public void removeFromParent() {
+        	ActionMenuViewImpl.this.getParent().remove(ActionMenuViewImpl.this);
+		}
+        @Override
+        public void getLocationOnScreen(int[] appScreenLocation) {
+        	appScreenLocation[0] = htmlElement.getBoundingClientRect().getLeft();
+        	appScreenLocation[1] = htmlElement.getBoundingClientRect().getTop();
+        }
+        @Override
+        public void getWindowVisibleDisplayFrame(r.android.graphics.Rect displayFrame){
+        	
+        	org.teavm.jso.dom.html.TextRectangle boundingClientRect = htmlElement.getBoundingClientRect();
+			displayFrame.top = boundingClientRect.getTop();
+        	displayFrame.left = boundingClientRect.getLeft();
+        	displayFrame.bottom = boundingClientRect.getBottom();
+        	displayFrame.right = boundingClientRect.getRight();
+        }
+        @Override
 		public void offsetTopAndBottom(int offset) {
 			super.offsetTopAndBottom(offset);
 			ViewImpl.nativeMakeFrame(asNativeWidget(), getLeft(), getTop(), getRight(), getBottom());
@@ -368,6 +401,10 @@ return layoutParams.weight;			}
 		public void offsetLeftAndRight(int offset) {
 			super.offsetLeftAndRight(offset);
 			ViewImpl.nativeMakeFrame(asNativeWidget(), getLeft(), getTop(), getRight(), getBottom());
+		}
+		@Override
+		public void setMyAttribute(String name, Object value) {
+			ActionMenuViewImpl.this.setAttribute(name, value, true);
 		}
         @Override
         public void setVisibility(int visibility) {
@@ -385,27 +422,17 @@ return layoutParams.weight;			}
         	return ActionMenuViewImpl.this.getOverFlowButton();
         }
 	}
-	
-	public void updateMeasuredDimension(int width, int height) {
-		((ActionMenuViewExt) actionMenuView).updateMeasuredDimension(width, height);
+	@Override
+	public Class getViewClass() {
+		return ActionMenuViewExt.class;
 	}
 	
-
 	@SuppressLint("NewApi")
 	@Override
 	public void setAttribute(WidgetAttribute key, String strValue, Object objValue, ILifeCycleDecorator decorator) {
 		ViewGroupImpl.setAttribute(this, key, strValue, objValue, decorator);
 		Object nativeWidget = asNativeWidget();
 		switch (key.getAttributeName()) {
-			case "orientation": {
-
-
-		actionMenuView.setOrientation((int) objValue);
-
-
-
-			}
-			break;
 			case "baselineAligned": {
 
 
@@ -473,6 +500,15 @@ if (Build.VERSION.SDK_INT >= 11) {
 
 
 		setDividerPadding(objValue);
+
+
+
+			}
+			break;
+			case "orientation": {
+
+
+		actionMenuView.setOrientation((int) objValue);
 
 
 
@@ -603,14 +639,11 @@ return getDividerPadding();			}
 				drawable.setMinimumWidth(width);
 		
 				resizeImageIfRequired(drawable, width, height);
-				widget.setAttribute(WidgetFactory.getAttribute("TextView", "drawableStart"), drawable, true);
+				widget.setAttribute("drawableStart", drawable, true);
 			}
-			WidgetAttribute tooltipAttr = WidgetFactory.getAttribute("TextView", "tooltipText");
-			if (tooltipAttr != null) {
-				widget.setAttribute(tooltipAttr, item.getTitle(), true);
-			}
+			widget.setAttribute("tooltipText", item.getTitle(), true);
 			if (shouldAllowTextWithIcon() || drawable == null) {
-				widget.setAttribute(WidgetFactory.getAttribute("TextView", "text"), item.getTitle(), true);
+				widget.setAttribute("text", item.getTitle(), true);
 			}
 
 			ToolbarImpl toolbar = (ToolbarImpl) getParent();
@@ -682,38 +715,52 @@ return getDividerPadding();			}
 	
 
 
-
-
-	private void createCanvas() {
-		canvas= new r.android.graphics.Canvas() {
-	    	List<HTMLElement> dividers = new java.util.ArrayList<>();
-			@Override
-			public void draw(r.android.graphics.drawable.Drawable mDivider) {
-				HTMLElement imageElement = org.teavm.jso.dom.html.HTMLDocument.current().createElement("img");
-				dividers.add(imageElement);
-				ViewImpl.nativeMakeFrame(imageElement, mDivider.getLeft(), mDivider.getTop(), mDivider.getRight(), mDivider.getBottom());
-				ViewGroupImpl.nativeAddView((HTMLElement) asNativeWidget(), imageElement);
-				Object drawable = mDivider.getDrawable();
-				if (drawable instanceof String) {
-					String drawableStr = (String) drawable;
-					if (drawableStr.startsWith("#")) {
-						imageElement.removeAttribute("src");
-						imageElement.getStyle().setProperty("background-color", drawableStr);
-					} else {
-						imageElement.setAttribute("src", drawableStr);
-						imageElement.getStyle().removeProperty("background-color");
-					}
+	
+	private final static class CanvasImpl implements r.android.graphics.Canvas {
+		private boolean canvasReset = true;
+		private List<HTMLElement> dividers = new java.util.ArrayList<>();
+		private IWidget widget;
+		public CanvasImpl(IWidget widget) {
+			this.widget = widget;
+		}
+		@Override
+		public void draw(r.android.graphics.drawable.Drawable mDivider) {
+			for (HTMLElement divider : dividers) {
+				if (ViewImpl.getPropertyValueAsInt(divider, "left") == mDivider.getLeft() && ViewImpl.getPropertyValueAsInt(divider, "top") == mDivider.getTop()) {
+					return;
 				}
 			}
-	
-			@Override
-			public void reset() {
+			HTMLElement imageElement = org.teavm.jso.dom.html.HTMLDocument.current().createElement("img");
+			dividers.add(imageElement);
+			ViewImpl.nativeMakeFrame(imageElement, mDivider.getLeft(), mDivider.getTop(), mDivider.getRight(),
+					mDivider.getBottom());
+			ViewGroupImpl.nativeAddView((HTMLElement) widget.asNativeWidget(), imageElement);
+			Object drawable = mDivider.getDrawable();
+			if (drawable instanceof String) {
+				String drawableStr = (String) drawable;
+				if (drawableStr.startsWith("#")) {
+					imageElement.removeAttribute("src");
+					imageElement.getStyle().setProperty("background-color", drawableStr);
+				} else {
+					imageElement.setAttribute("src", drawableStr);
+					imageElement.getStyle().removeProperty("background-color");
+				}
+			}
+		}
+
+		@Override
+		public void reset() {
+			if (canvasReset) {
 				for (HTMLElement divider : dividers) {
 					divider.getParentNode().removeChild(divider);
 				}
 				dividers.clear();
 			}
-		};
+		}
+	}
+
+	private void createCanvas() {
+		canvas= new CanvasImpl(this);
 	}
 	
 
@@ -727,6 +774,10 @@ return getDividerPadding();			}
 	}
 	
     
+    @Override
+    public void setVisible(boolean b) {
+        ((View)asWidget()).setVisibility(b ? View.VISIBLE : View.GONE);
+    }
 
 	
 private ActionMenuViewCommandBuilder builder;
@@ -760,14 +811,6 @@ public  class ActionMenuViewCommandBuilder extends com.ashera.layout.ViewGroupIm
 		executeCommand(command, null, IWidget.COMMAND_EXEC_GETTER_METHOD);
 return this;	}
 
-public ActionMenuViewCommandBuilder setOrientation(String value) {
-	Map<String, Object> attrs = initCommand("orientation");
-	attrs.put("type", "attribute");
-	attrs.put("setter", true);
-	attrs.put("orderSet", ++orderSet);
-
-	attrs.put("value", value);
-return this;}
 public ActionMenuViewCommandBuilder tryGetBaselineAligned() {
 	Map<String, Object> attrs = initCommand("baselineAligned");
 	attrs.put("type", "attribute");
@@ -920,15 +963,19 @@ public ActionMenuViewCommandBuilder setDividerPadding(String value) {
 
 	attrs.put("value", value);
 return this;}
+public ActionMenuViewCommandBuilder setOrientation(String value) {
+	Map<String, Object> attrs = initCommand("orientation");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
 }
 public class ActionMenuViewBean extends com.ashera.layout.ViewGroupImpl.ViewGroupBean{
 		public ActionMenuViewBean() {
 			super(ActionMenuViewImpl.this);
 		}
-public void setOrientation(String value) {
-	getBuilder().reset().setOrientation(value).execute(true);
-}
-
 public Object isBaselineAligned() {
 	return getBuilder().reset().tryGetBaselineAligned().execute(false).isBaselineAligned(); 
 }
@@ -983,6 +1030,10 @@ public Object getDividerPadding() {
 }
 public void setDividerPadding(String value) {
 	getBuilder().reset().setDividerPadding(value).execute(true);
+}
+
+public void setOrientation(String value) {
+	getBuilder().reset().setOrientation(value).execute(true);
 }
 
 }
@@ -1190,7 +1241,7 @@ return this;}
 	@org.teavm.jso.JSBody(params = { "element", "className" }, script = "return element.querySelectorAll(className);")
 	private static native HTMLElement[] querySelectorAll(HTMLElement element, String className);
 
-	@org.teavm.jso.JSBody(params = { "event", "className" }, script = "return event.path[0].matches(className);")
+	@org.teavm.jso.JSBody(params = { "event", "className" }, script = "return event.path && event.path[0].matches(className);")
 	private static native boolean matchesTarget(org.teavm.jso.dom.events.Event event, String className);
 	private String OVERFLOW_BUTTON_TYPE= "ImageView";
 }

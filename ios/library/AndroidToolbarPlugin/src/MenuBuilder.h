@@ -165,42 +165,4 @@ J2OBJC_TYPE_LITERAL_HEADER(ADXMenuBuilder_ContextMenu)
 
 #endif
 
-#if !defined (ADXMenuBuilder_CopyOnWriteArrayList_) && (INCLUDE_ALL_MenuBuilder || defined(INCLUDE_ADXMenuBuilder_CopyOnWriteArrayList))
-#define ADXMenuBuilder_CopyOnWriteArrayList_
-
-#define RESTRICT_JavaUtilArrayList 1
-#define INCLUDE_JavaUtilArrayList 1
-#include "java/util/ArrayList.h"
-
-@class ADXMenuBuilder;
-@protocol JavaUtilCollection;
-
-@interface ADXMenuBuilder_CopyOnWriteArrayList : JavaUtilArrayList
-
-#pragma mark Package-Private
-
-- (instancetype)initWithADXMenuBuilder:(ADXMenuBuilder *)outer$;
-
-// Disallowed inherited constructors, do not use.
-
-- (instancetype)init NS_UNAVAILABLE;
-
-- (instancetype)initWithInt:(jint)arg0 NS_UNAVAILABLE;
-
-- (instancetype)initWithJavaUtilCollection:(id<JavaUtilCollection>)arg0 NS_UNAVAILABLE;
-
-@end
-
-J2OBJC_EMPTY_STATIC_INIT(ADXMenuBuilder_CopyOnWriteArrayList)
-
-FOUNDATION_EXPORT void ADXMenuBuilder_CopyOnWriteArrayList_initWithADXMenuBuilder_(ADXMenuBuilder_CopyOnWriteArrayList *self, ADXMenuBuilder *outer$);
-
-FOUNDATION_EXPORT ADXMenuBuilder_CopyOnWriteArrayList *new_ADXMenuBuilder_CopyOnWriteArrayList_initWithADXMenuBuilder_(ADXMenuBuilder *outer$) NS_RETURNS_RETAINED;
-
-FOUNDATION_EXPORT ADXMenuBuilder_CopyOnWriteArrayList *create_ADXMenuBuilder_CopyOnWriteArrayList_initWithADXMenuBuilder_(ADXMenuBuilder *outer$);
-
-J2OBJC_TYPE_LITERAL_HEADER(ADXMenuBuilder_CopyOnWriteArrayList)
-
-#endif
-
 #pragma pop_macro("INCLUDE_ALL_MenuBuilder")

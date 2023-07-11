@@ -47,23 +47,6 @@ public class ActionMenuViewImpl extends BaseHasWidgets {
 
 	
 		@SuppressLint("NewApi")
-		final static class Orientation extends AbstractEnumToIntConverter{
-		private Map<String, Integer> mapping = new HashMap<>();
-				{
-				mapping.put("horizontal",  0x0);
-				mapping.put("vertical",  0x1);
-				}
-		@Override
-		public Map<String, Integer> getMapping() {
-				return mapping;
-				}
-
-		@Override
-		public Integer getDefault() {
-				return 0;
-				}
-				}
-		@SuppressLint("NewApi")
 		final static class Divider  extends AbstractBitFlagConverter{
 		private Map<String, Integer> mapping = new HashMap<>();
 				{
@@ -82,12 +65,27 @@ public class ActionMenuViewImpl extends BaseHasWidgets {
 				return 0;
 				}
 				}
+		@SuppressLint("NewApi")
+		final static class Orientation extends AbstractEnumToIntConverter{
+		private Map<String, Integer> mapping = new HashMap<>();
+				{
+				mapping.put("horizontal",  0x0);
+				mapping.put("vertical",  0x1);
+				}
+		@Override
+		public Map<String, Integer> getMapping() {
+				return mapping;
+				}
+
+		@Override
+		public Integer getDefault() {
+				return 0;
+				}
+				}
 	@Override
 	public void loadAttributes(String localName) {
 		ViewGroupImpl.register(localName);
 
-		ConverterFactory.register("androidx.appcompat.widget.ActionMenuView.orientation", new Orientation());
-		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("orientation").withType("androidx.appcompat.widget.ActionMenuView.orientation"));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("baselineAligned").withType("boolean"));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("baselineAlignedChildIndex").withType("int"));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("divider").withType("drawable"));
@@ -97,6 +95,8 @@ public class ActionMenuViewImpl extends BaseHasWidgets {
 		ConverterFactory.register("androidx.appcompat.widget.ActionMenuView.divider", new Divider());
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("showDividers").withType("androidx.appcompat.widget.ActionMenuView.divider"));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("dividerPadding").withType("dimension"));
+		ConverterFactory.register("androidx.appcompat.widget.ActionMenuView.orientation", new Orientation());
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("orientation").withType("androidx.appcompat.widget.ActionMenuView.orientation"));
 	
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("layout_gravity").withType("gravity").forChild());
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("layout_weight").withType("float").forChild());
@@ -115,7 +115,7 @@ public class ActionMenuViewImpl extends BaseHasWidgets {
 
 	@Override
 	public IWidget newInstance() {
-		return new ActionMenuViewImpl();
+		return new ActionMenuViewImpl(groupName, localName);
 	}
 	
 	@SuppressLint("NewApi")
@@ -141,7 +141,7 @@ public class ActionMenuViewImpl extends BaseHasWidgets {
 	}
 
 	@Override
-	public boolean remove(IWidget w) {
+	public boolean remove(IWidget w) {		
 		boolean remove = super.remove(w);
 		actionMenuView.removeView((View) w.asWidget());
          ViewGroupImpl.nativeRemoveView(w);            
@@ -278,12 +278,7 @@ return layoutParams.weight;			}
 		}
 
 		public ActionMenuViewExt() {
-			
 			super();
-			
-			
-			
-			
 			
 		}
 		
@@ -373,7 +368,44 @@ return layoutParams.weight;			}
         	super.drawableStateChanged();
         	ViewImpl.drawableStateChanged(ActionMenuViewImpl.this);
         }
-		@Override
+        private Map<String, IWidget> templates;
+    	@Override
+    	public r.android.view.View inflateView(java.lang.String layout) {
+    		if (templates == null) {
+    			templates = new java.util.HashMap<String, IWidget>();
+    		}
+    		IWidget template = templates.get(layout);
+    		if (template == null) {
+    			template = (IWidget) quickConvert(layout, "template");
+    			templates.put(layout, template);
+    		}
+    		IWidget widget = template.loadLazyWidgets(ActionMenuViewImpl.this.getParent());
+    		return (View) widget.asWidget();
+    	}        
+        
+    	@Override
+		public void remeasure() {
+			getFragment().remeasure();
+		}
+    	
+        @Override
+		public void removeFromParent() {
+        	ActionMenuViewImpl.this.getParent().remove(ActionMenuViewImpl.this);
+		}
+        @Override
+        public void getLocationOnScreen(int[] appScreenLocation) {
+        	appScreenLocation[0] = ViewImpl.getLocationXOnScreen(asNativeWidget());
+        	appScreenLocation[1] = ViewImpl.getLocationYOnScreen(asNativeWidget());
+        }
+        @Override
+        public void getWindowVisibleDisplayFrame(r.android.graphics.Rect displayFrame){
+        	
+        	displayFrame.left = ViewImpl.getLocationXOnScreen(asNativeWidget());
+        	displayFrame.top = ViewImpl.getLocationYOnScreen(asNativeWidget());
+        	displayFrame.right = displayFrame.left + getWidth();
+        	displayFrame.bottom = displayFrame.top + getHeight();
+        }
+        @Override
 		public void offsetTopAndBottom(int offset) {
 			super.offsetTopAndBottom(offset);
 			ViewImpl.nativeMakeFrame(asNativeWidget(), getLeft(), getTop(), getRight(), getBottom());
@@ -382,6 +414,10 @@ return layoutParams.weight;			}
 		public void offsetLeftAndRight(int offset) {
 			super.offsetLeftAndRight(offset);
 			ViewImpl.nativeMakeFrame(asNativeWidget(), getLeft(), getTop(), getRight(), getBottom());
+		}
+		@Override
+		public void setMyAttribute(String name, Object value) {
+			ActionMenuViewImpl.this.setAttribute(name, value, true);
 		}
         @Override
         public void setVisibility(int visibility) {
@@ -399,27 +435,17 @@ return layoutParams.weight;			}
         	return ActionMenuViewImpl.this.getOverFlowButton();
         }
 	}
-	
-	public void updateMeasuredDimension(int width, int height) {
-		((ActionMenuViewExt) actionMenuView).updateMeasuredDimension(width, height);
+	@Override
+	public Class getViewClass() {
+		return ActionMenuViewExt.class;
 	}
 	
-
 	@SuppressLint("NewApi")
 	@Override
 	public void setAttribute(WidgetAttribute key, String strValue, Object objValue, ILifeCycleDecorator decorator) {
 		ViewGroupImpl.setAttribute(this, key, strValue, objValue, decorator);
 		Object nativeWidget = asNativeWidget();
 		switch (key.getAttributeName()) {
-			case "orientation": {
-
-
-		actionMenuView.setOrientation((int) objValue);
-
-
-
-			}
-			break;
 			case "baselineAligned": {
 
 
@@ -487,6 +513,15 @@ if (Build.VERSION.SDK_INT >= 11) {
 
 
 		setDividerPadding(objValue);
+
+
+
+			}
+			break;
+			case "orientation": {
+
+
+		actionMenuView.setOrientation((int) objValue);
 
 
 
@@ -621,14 +656,11 @@ return getDividerPadding();			}
 				drawable.setMinimumWidth(width);
 		
 				resizeImageIfRequired(drawable, width, height);
-				widget.setAttribute(WidgetFactory.getAttribute("TextView", "drawableStart"), drawable, true);
+				widget.setAttribute("drawableStart", drawable, true);
 			}
-			WidgetAttribute tooltipAttr = WidgetFactory.getAttribute("TextView", "tooltipText");
-			if (tooltipAttr != null) {
-				widget.setAttribute(tooltipAttr, item.getTitle(), true);
-			}
+			widget.setAttribute("tooltipText", item.getTitle(), true);
 			if (shouldAllowTextWithIcon() || drawable == null) {
-				widget.setAttribute(WidgetFactory.getAttribute("TextView", "text"), item.getTitle(), true);
+				widget.setAttribute("text", item.getTitle(), true);
 			}
 
 			ToolbarImpl toolbar = (ToolbarImpl) getParent();
@@ -701,29 +733,37 @@ return getDividerPadding();			}
 
 
 	@com.google.j2objc.annotations.WeakOuter
-	private static final class LLCanvas implements r.android.graphics.Canvas {
+	private static final class CanvasImpl implements r.android.graphics.Canvas {
+		private boolean canvasReset = true;
 		private List<Object> imageViews = new java.util.ArrayList<Object>();
 		@com.google.j2objc.annotations.Weak private IWidget widget;
-		public LLCanvas(IWidget widget) {
+		public CanvasImpl(IWidget widget) {
 			this.widget = widget;
 		}
 
 		@Override
 		public void draw(r.android.graphics.drawable.Drawable mDivider) {
+			for (Object divider : imageViews) {
+				if (ViewImpl.getX(divider) == mDivider.getLeft() && ViewImpl.getY(divider) == mDivider.getTop()) {
+					return;
+				}
+			}
 			if (mDivider.getDrawable() != null) {
 				Object imageView = nativeCreateImageView(mDivider.getDrawable());
 				ViewImpl.nativeMakeFrame(imageView, mDivider.getLeft(), mDivider.getTop(), mDivider.getRight(), mDivider.getBottom());
-				imageViews.add(imageView);
+				imageViews.add(imageView);				
 				ViewGroupImpl.nativeAddView(widget.asNativeWidget(), imageView);
 			}
 		}
 
 		@Override
 		public void reset() {
-			for (Object imageView : imageViews) {
-				ViewGroupImpl.removeView(imageView);
+			if (canvasReset) {
+				for (Object imageView : imageViews) {
+					ViewGroupImpl.removeView(imageView);
+				}
+				imageViews.clear();
 			}
-			imageViews.clear();
 		}
 		
 		public native Object nativeCreateImageView(Object image)/*-[
@@ -740,7 +780,7 @@ return getDividerPadding();			}
 	}
 
 	private void createCanvas() {
-		canvas = new LLCanvas(this);
+		canvas = new CanvasImpl(this);
 		
 	}
 	
@@ -755,6 +795,10 @@ return getDividerPadding();			}
 	}
 	
     
+    @Override
+    public void setVisible(boolean b) {
+        ((View)asWidget()).setVisibility(b ? View.VISIBLE : View.GONE);
+    }
 
 	
 private ActionMenuViewCommandBuilder builder;
@@ -788,14 +832,6 @@ public  class ActionMenuViewCommandBuilder extends com.ashera.layout.ViewGroupIm
 		executeCommand(command, null, IWidget.COMMAND_EXEC_GETTER_METHOD);
 return this;	}
 
-public ActionMenuViewCommandBuilder setOrientation(String value) {
-	Map<String, Object> attrs = initCommand("orientation");
-	attrs.put("type", "attribute");
-	attrs.put("setter", true);
-	attrs.put("orderSet", ++orderSet);
-
-	attrs.put("value", value);
-return this;}
 public ActionMenuViewCommandBuilder tryGetBaselineAligned() {
 	Map<String, Object> attrs = initCommand("baselineAligned");
 	attrs.put("type", "attribute");
@@ -948,15 +984,19 @@ public ActionMenuViewCommandBuilder setDividerPadding(String value) {
 
 	attrs.put("value", value);
 return this;}
+public ActionMenuViewCommandBuilder setOrientation(String value) {
+	Map<String, Object> attrs = initCommand("orientation");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
 }
 public class ActionMenuViewBean extends com.ashera.layout.ViewGroupImpl.ViewGroupBean{
 		public ActionMenuViewBean() {
 			super(ActionMenuViewImpl.this);
 		}
-public void setOrientation(String value) {
-	getBuilder().reset().setOrientation(value).execute(true);
-}
-
 public Object isBaselineAligned() {
 	return getBuilder().reset().tryGetBaselineAligned().execute(false).isBaselineAligned(); 
 }
@@ -1011,6 +1051,10 @@ public Object getDividerPadding() {
 }
 public void setDividerPadding(String value) {
 	getBuilder().reset().setDividerPadding(value).execute(true);
+}
+
+public void setOrientation(String value) {
+	getBuilder().reset().setOrientation(value).execute(true);
 }
 
 }

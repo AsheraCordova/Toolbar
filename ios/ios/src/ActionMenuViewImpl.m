@@ -16,6 +16,7 @@
 #include "IAttributable.h"
 #include "IFragment.h"
 #include "ILifeCycleDecorator.h"
+#include "IOSClass.h"
 #include "IOSObjectArray.h"
 #include "IOSPrimitiveArray.h"
 #include "IWidget.h"
@@ -28,6 +29,7 @@
 #include "MenuItemImpl.h"
 #include "OnLayoutEvent.h"
 #include "PluginInvoker.h"
+#include "Rect.h"
 #include "Toolbar.h"
 #include "ToolbarImpl.h"
 #include "View.h"
@@ -201,15 +203,6 @@ __attribute__((unused)) static id ASActionMenuViewImpl_getActionWithASToolbarImp
 
 __attribute__((unused)) static void ASActionMenuViewImpl_handleOnMenuItemClickWithASToolbarImpl_withADXMenuItemImpl_(ASActionMenuViewImpl *self, ASToolbarImpl *toolbar, ADXMenuItemImpl *menuItem);
 
-@interface ASActionMenuViewImpl_Orientation () {
- @public
-  id<JavaUtilMap> mapping_;
-}
-
-@end
-
-J2OBJC_FIELD_SETTER(ASActionMenuViewImpl_Orientation, mapping_, id<JavaUtilMap>)
-
 @interface ASActionMenuViewImpl_Divider () {
  @public
   id<JavaUtilMap> mapping_;
@@ -219,6 +212,15 @@ J2OBJC_FIELD_SETTER(ASActionMenuViewImpl_Orientation, mapping_, id<JavaUtilMap>)
 
 J2OBJC_FIELD_SETTER(ASActionMenuViewImpl_Divider, mapping_, id<JavaUtilMap>)
 
+@interface ASActionMenuViewImpl_Orientation () {
+ @public
+  id<JavaUtilMap> mapping_;
+}
+
+@end
+
+J2OBJC_FIELD_SETTER(ASActionMenuViewImpl_Orientation, mapping_, id<JavaUtilMap>)
+
 @interface ASActionMenuViewImpl_ActionMenuViewExt () {
  @public
   __unsafe_unretained ASActionMenuViewImpl *this$0_;
@@ -226,12 +228,14 @@ J2OBJC_FIELD_SETTER(ASActionMenuViewImpl_Divider, mapping_, id<JavaUtilMap>)
   ASOnLayoutEvent *onLayoutEvent_;
   jint mMaxWidth_;
   jint mMaxHeight_;
+  id<JavaUtilMap> templates_;
 }
 
 @end
 
 J2OBJC_FIELD_SETTER(ASActionMenuViewImpl_ActionMenuViewExt, measureFinished_, ASMeasureEvent *)
 J2OBJC_FIELD_SETTER(ASActionMenuViewImpl_ActionMenuViewExt, onLayoutEvent_, ASOnLayoutEvent *)
+J2OBJC_FIELD_SETTER(ASActionMenuViewImpl_ActionMenuViewExt, templates_, id<JavaUtilMap>)
 
 @interface ASActionMenuViewImpl_ShowAsAction () {
  @public
@@ -242,8 +246,9 @@ J2OBJC_FIELD_SETTER(ASActionMenuViewImpl_ActionMenuViewExt, onLayoutEvent_, ASOn
 
 J2OBJC_FIELD_SETTER(ASActionMenuViewImpl_ShowAsAction, mapping_, id<JavaUtilMap>)
 
-@interface ASActionMenuViewImpl_LLCanvas : NSObject < ADCanvas > {
+@interface ASActionMenuViewImpl_CanvasImpl : NSObject < ADCanvas > {
  @public
+  jboolean canvasReset_;
   id<JavaUtilList> imageViews_;
   __unsafe_unretained id<ASIWidget> widget_;
 }
@@ -258,17 +263,17 @@ J2OBJC_FIELD_SETTER(ASActionMenuViewImpl_ShowAsAction, mapping_, id<JavaUtilMap>
 
 @end
 
-J2OBJC_EMPTY_STATIC_INIT(ASActionMenuViewImpl_LLCanvas)
+J2OBJC_EMPTY_STATIC_INIT(ASActionMenuViewImpl_CanvasImpl)
 
-J2OBJC_FIELD_SETTER(ASActionMenuViewImpl_LLCanvas, imageViews_, id<JavaUtilList>)
+J2OBJC_FIELD_SETTER(ASActionMenuViewImpl_CanvasImpl, imageViews_, id<JavaUtilList>)
 
-__attribute__((unused)) static void ASActionMenuViewImpl_LLCanvas_initWithASIWidget_(ASActionMenuViewImpl_LLCanvas *self, id<ASIWidget> widget);
+__attribute__((unused)) static void ASActionMenuViewImpl_CanvasImpl_initWithASIWidget_(ASActionMenuViewImpl_CanvasImpl *self, id<ASIWidget> widget);
 
-__attribute__((unused)) static ASActionMenuViewImpl_LLCanvas *new_ASActionMenuViewImpl_LLCanvas_initWithASIWidget_(id<ASIWidget> widget) NS_RETURNS_RETAINED;
+__attribute__((unused)) static ASActionMenuViewImpl_CanvasImpl *new_ASActionMenuViewImpl_CanvasImpl_initWithASIWidget_(id<ASIWidget> widget) NS_RETURNS_RETAINED;
 
-__attribute__((unused)) static ASActionMenuViewImpl_LLCanvas *create_ASActionMenuViewImpl_LLCanvas_initWithASIWidget_(id<ASIWidget> widget);
+__attribute__((unused)) static ASActionMenuViewImpl_CanvasImpl *create_ASActionMenuViewImpl_CanvasImpl_initWithASIWidget_(id<ASIWidget> widget);
 
-J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_LLCanvas)
+J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_CanvasImpl)
 
 @interface ASActionMenuViewImpl_ActionMenuViewCommandBuilder () {
  @public
@@ -348,8 +353,6 @@ NSString *ASActionMenuViewImpl_GROUP_NAME = @"androidx.appcompat.widget.ActionMe
 
 - (void)loadAttributesWithNSString:(NSString *)localName {
   ASViewGroupImpl_register__WithNSString_(localName);
-  ASConverterFactory_register__WithNSString_withASIConverter_(@"androidx.appcompat.widget.ActionMenuView.orientation", new_ASActionMenuViewImpl_Orientation_init());
-  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"orientation"])) withTypeWithNSString:@"androidx.appcompat.widget.ActionMenuView.orientation"]);
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"baselineAligned"])) withTypeWithNSString:@"boolean"]);
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"baselineAlignedChildIndex"])) withTypeWithNSString:@"int"]);
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"divider"])) withTypeWithNSString:@"drawable"]);
@@ -359,6 +362,8 @@ NSString *ASActionMenuViewImpl_GROUP_NAME = @"androidx.appcompat.widget.ActionMe
   ASConverterFactory_register__WithNSString_withASIConverter_(@"androidx.appcompat.widget.ActionMenuView.divider", new_ASActionMenuViewImpl_Divider_init());
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"showDividers"])) withTypeWithNSString:@"androidx.appcompat.widget.ActionMenuView.divider"]);
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"dividerPadding"])) withTypeWithNSString:@"dimension"]);
+  ASConverterFactory_register__WithNSString_withASIConverter_(@"androidx.appcompat.widget.ActionMenuView.orientation", new_ASActionMenuViewImpl_Orientation_init());
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"orientation"])) withTypeWithNSString:@"androidx.appcompat.widget.ActionMenuView.orientation"]);
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"layout_gravity"])) withTypeWithNSString:@"gravity"])) forChild]);
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"layout_weight"])) withTypeWithNSString:@"float"])) forChild]);
   ASActionMenuViewImpl_loadCustomAttributesWithNSString_(self, localName);
@@ -383,7 +388,7 @@ J2OBJC_IGNORE_DESIGNATED_END
 }
 
 - (id<ASIWidget>)newInstance {
-  return new_ASActionMenuViewImpl_init();
+  return new_ASActionMenuViewImpl_initWithNSString_withNSString_(groupName_, localName_);
 }
 
 - (void)createWithASIFragment:(id<ASIFragment>)fragment
@@ -500,9 +505,8 @@ J2OBJC_IGNORE_DESIGNATED_END
   return nil;
 }
 
-- (void)updateMeasuredDimensionWithInt:(jint)width
-                               withInt:(jint)height {
-  [((ASActionMenuViewImpl_ActionMenuViewExt *) nil_chk(((ASActionMenuViewImpl_ActionMenuViewExt *) cast_chk(actionMenuView_, [ASActionMenuViewImpl_ActionMenuViewExt class])))) updateMeasuredDimensionWithInt:width withInt:height];
+- (IOSClass *)getViewClass {
+  return ASActionMenuViewImpl_ActionMenuViewExt_class_();
 }
 
 - (void)setAttributeWithASWidgetAttribute:(ASWidgetAttribute *)key
@@ -511,54 +515,54 @@ J2OBJC_IGNORE_DESIGNATED_END
                 withASILifeCycleDecorator:(id<ASILifeCycleDecorator>)decorator {
   ASViewGroupImpl_setAttributeWithASIWidget_withASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
   id nativeWidget = [self asNativeWidget];
-  switch (JreIndexOfStr([((ASWidgetAttribute *) nil_chk(key)) getAttributeName], (id[]){ @"orientation", @"baselineAligned", @"baselineAlignedChildIndex", @"divider", @"gravity", @"measureWithLargestChild", @"weightSum", @"showDividers", @"dividerPadding" }, 9)) {
+  switch (JreIndexOfStr([((ASWidgetAttribute *) nil_chk(key)) getAttributeName], (id[]){ @"baselineAligned", @"baselineAlignedChildIndex", @"divider", @"gravity", @"measureWithLargestChild", @"weightSum", @"showDividers", @"dividerPadding", @"orientation" }, 9)) {
     case 0:
-    {
-      [((ADXActionMenuView *) nil_chk(actionMenuView_)) setOrientationWithInt:[((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk(objValue, [JavaLangInteger class]))) intValue]];
-    }
-    break;
-    case 1:
     {
       [((ADXActionMenuView *) nil_chk(actionMenuView_)) setBaselineAlignedWithBoolean:[((JavaLangBoolean *) nil_chk((JavaLangBoolean *) cast_chk(objValue, [JavaLangBoolean class]))) booleanValue]];
     }
     break;
-    case 2:
+    case 1:
     {
       [((ADXActionMenuView *) nil_chk(actionMenuView_)) setBaselineAlignedChildIndexWithInt:[((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk(objValue, [JavaLangInteger class]))) intValue]];
     }
     break;
-    case 3:
+    case 2:
     {
       {
         [((ADXActionMenuView *) nil_chk(actionMenuView_)) setDividerDrawableWithADDrawable:(ADDrawable *) cast_chk(objValue, [ADDrawable class])];
       }
     }
     break;
-    case 4:
+    case 3:
     {
       [((ADXActionMenuView *) nil_chk(actionMenuView_)) setGravityWithInt:[((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk(objValue, [JavaLangInteger class]))) intValue]];
     }
     break;
-    case 5:
+    case 4:
     {
       {
         [((ADXActionMenuView *) nil_chk(actionMenuView_)) setMeasureWithLargestChildEnabledWithBoolean:[((JavaLangBoolean *) nil_chk((JavaLangBoolean *) cast_chk(objValue, [JavaLangBoolean class]))) booleanValue]];
       }
     }
     break;
-    case 6:
+    case 5:
     {
       [((ADXActionMenuView *) nil_chk(actionMenuView_)) setWeightSumWithFloat:[((JavaLangFloat *) nil_chk((JavaLangFloat *) cast_chk(objValue, [JavaLangFloat class]))) floatValue]];
     }
     break;
-    case 7:
+    case 6:
     {
       ASActionMenuViewImpl_setShowDividersWithId_(self, objValue);
     }
     break;
-    case 8:
+    case 7:
     {
       ASActionMenuViewImpl_setDividerPaddingWithId_(self, objValue);
+    }
+    break;
+    case 8:
+    {
+      [((ADXActionMenuView *) nil_chk(actionMenuView_)) setOrientationWithInt:[((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk(objValue, [JavaLangInteger class]))) intValue]];
     }
     break;
     default:
@@ -670,20 +674,17 @@ J2OBJC_IGNORE_DESIGNATED_END
       [drawable setMinimumHeightWithInt:height];
       [drawable setMinimumWidthWithInt:width];
       ASActionMenuViewImpl_resizeImageIfRequiredWithADDrawable_withInt_withInt_(self, drawable, width, height);
-      [((id<ASIWidget>) nil_chk(widget)) setAttributeWithASWidgetAttribute:ASWidgetFactory_getAttributeWithNSString_withNSString_(@"TextView", @"drawableStart") withId:drawable withBoolean:true];
+      [((id<ASIWidget>) nil_chk(widget)) setAttributeWithNSString:@"drawableStart" withId:drawable withBoolean:true];
     }
-    ASWidgetAttribute *tooltipAttr = ASWidgetFactory_getAttributeWithNSString_withNSString_(@"TextView", @"tooltipText");
-    if (tooltipAttr != nil) {
-      [((id<ASIWidget>) nil_chk(widget)) setAttributeWithASWidgetAttribute:tooltipAttr withId:[item getTitle] withBoolean:true];
-    }
+    [((id<ASIWidget>) nil_chk(widget)) setAttributeWithNSString:@"tooltipText" withId:[item getTitle] withBoolean:true];
     if (ASActionMenuViewImpl_shouldAllowTextWithIcon(self) || drawable == nil) {
-      [((id<ASIWidget>) nil_chk(widget)) setAttributeWithASWidgetAttribute:ASWidgetFactory_getAttributeWithNSString_withNSString_(@"TextView", @"text") withId:[item getTitle] withBoolean:true];
+      [widget setAttributeWithNSString:@"text" withId:[item getTitle] withBoolean:true];
     }
     ASToolbarImpl *toolbar = (ASToolbarImpl *) cast_chk([self getParent], [ASToolbarImpl class]);
     if ([((ASToolbarImpl *) nil_chk(toolbar)) getOnMenuItemClickListener] != nil) {
       ASActionMenuViewImpl_addMenuClickListenerWithADMenuItem_withASIWidget_withASToolbarImpl_(self, item, widget, toolbar);
     }
-    ASBaseMeasurableView *view = (ASBaseMeasurableView *) cast_chk([((id<ASIWidget>) nil_chk(widget)) asWidget], [ASBaseMeasurableView class]);
+    ASBaseMeasurableView *view = (ASBaseMeasurableView *) cast_chk([widget asWidget], [ASBaseMeasurableView class]);
     [((ASBaseMeasurableView *) nil_chk(view)) setLayoutParamsWithADViewGroup_LayoutParams:new_ADXActionMenuView_LayoutParams_initWithInt_withInt_(ADViewGroup_LayoutParams_WRAP_CONTENT, ADViewGroup_LayoutParams_WRAP_CONTENT)];
   }
   ASBaseMeasurableView *view = (ASBaseMeasurableView *) cast_chk([widget asWidget], [ASBaseMeasurableView class]);
@@ -727,6 +728,10 @@ J2OBJC_IGNORE_DESIGNATED_END
     [super setIdWithNSString:id_];
     [((ADXActionMenuView *) nil_chk(actionMenuView_)) setIdWithInt:ASIdGenerator_getIdWithNSString_(id_)];
   }
+}
+
+- (void)setVisibleWithBoolean:(jboolean)b {
+  [((ADView *) nil_chk(((ADView *) cast_chk([self asWidget], [ADView class])))) setVisibilityWithInt:b ? ADView_VISIBLE : ADView_GONE];
 }
 
 - (id)getPluginWithNSString:(NSString *)plugin {
@@ -871,25 +876,26 @@ J2OBJC_IGNORE_DESIGNATED_END
     { NULL, "LADXActionMenuView_LayoutParams;", 0x2, 13, 12, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 14, 15, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, 16, 17, -1, -1, -1, -1 },
+    { NULL, "LIOSClass;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 18, 19, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 20, 21, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, 22, 23, -1, -1, -1, -1 },
+    { NULL, "LNSObject;", 0x1, 20, 21, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "Z", 0x101, 24, 1, -1, -1, -1, -1 },
-    { NULL, "V", 0x101, 25, 26, -1, 27, -1, -1 },
+    { NULL, "Z", 0x101, 22, 1, -1, -1, -1, -1 },
+    { NULL, "V", 0x101, 23, 24, -1, 25, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 28, 1, -1, -1, -1, -1 },
-    { NULL, "LADView;", 0x1, 29, 30, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 26, 1, -1, -1, -1, -1 },
+    { NULL, "LADView;", 0x1, 27, 28, -1, -1, -1, -1 },
     { NULL, "Z", 0x2, -1, -1, -1, -1, -1, -1 },
     { NULL, "LASIWidget;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LADView;", 0x2, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 31, 32, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 33, 32, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 29, 30, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 31, 30, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x2, -1, -1, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x2, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x2, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 34, 1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 32, 1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 33, 34, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, 35, 1, -1, -1, -1, -1 },
     { NULL, "LASActionMenuViewImpl_ActionMenuViewBean;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
@@ -903,7 +909,7 @@ J2OBJC_IGNORE_DESIGNATED_END
     { NULL, "V", 0x102, 44, 45, -1, -1, -1, -1 },
     { NULL, "V", 0x102, 46, 47, -1, 48, -1, -1 },
     { NULL, "LNSObject;", 0x102, 49, 50, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 51, 32, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 51, 30, -1, -1, -1, -1 },
     { NULL, "Z", 0x2, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x102, 52, 47, -1, 48, -1, -1 },
     { NULL, "LNSObject;", 0x102, 53, 50, -1, -1, -1, -1 },
@@ -928,7 +934,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   methods[12].selector = @selector(getLayoutParamsWithADView:);
   methods[13].selector = @selector(setChildAttributeWithASIWidget:withASWidgetAttribute:withNSString:withId:);
   methods[14].selector = @selector(getChildAttributeWithASIWidget:withASWidgetAttribute:);
-  methods[15].selector = @selector(updateMeasuredDimensionWithInt:withInt:);
+  methods[15].selector = @selector(getViewClass);
   methods[16].selector = @selector(setAttributeWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
   methods[17].selector = @selector(getAttributeWithASWidgetAttribute:withASILifeCycleDecorator:);
   methods[18].selector = @selector(asNativeWidget);
@@ -947,25 +953,26 @@ J2OBJC_IGNORE_DESIGNATED_END
   methods[31].selector = @selector(getShowDividers);
   methods[32].selector = @selector(createCanvas);
   methods[33].selector = @selector(setIdWithNSString:);
-  methods[34].selector = @selector(getPluginWithNSString:);
-  methods[35].selector = @selector(getBean);
-  methods[36].selector = @selector(getBuilder);
-  methods[37].selector = @selector(getParamsBean);
-  methods[38].selector = @selector(getParamsBuilder);
-  methods[39].selector = @selector(addMenuClickListenerWithADMenuItem:withASIWidget:withASToolbarImpl:);
-  methods[40].selector = @selector(getImageDimensionWithADDrawable:);
-  methods[41].selector = @selector(resizeImageIfRequiredWithADDrawable:withInt:withInt:);
-  methods[42].selector = @selector(isLandScape);
-  methods[43].selector = @selector(createPopUpMenuWithASToolbarImpl:);
-  methods[44].selector = @selector(nativeShowKxMenuWithId:withId:);
-  methods[45].selector = @selector(setKxMenuOnButtonWithId:withJavaUtilList:);
-  methods[46].selector = @selector(getKXMenuWithASToolbarImpl:withADXMenuItemImpl:);
-  methods[47].selector = @selector(handleOnKxMenuItemClickWithId:);
-  methods[48].selector = @selector(isKxMenuToBeShown);
-  methods[49].selector = @selector(setMenuOnButtonWithId:withJavaUtilList:);
-  methods[50].selector = @selector(getActionWithASToolbarImpl:withADXMenuItemImpl:);
-  methods[51].selector = @selector(handleOnMenuItemClickWithASToolbarImpl:withADXMenuItemImpl:);
-  methods[52].selector = @selector(initialized);
+  methods[34].selector = @selector(setVisibleWithBoolean:);
+  methods[35].selector = @selector(getPluginWithNSString:);
+  methods[36].selector = @selector(getBean);
+  methods[37].selector = @selector(getBuilder);
+  methods[38].selector = @selector(getParamsBean);
+  methods[39].selector = @selector(getParamsBuilder);
+  methods[40].selector = @selector(addMenuClickListenerWithADMenuItem:withASIWidget:withASToolbarImpl:);
+  methods[41].selector = @selector(getImageDimensionWithADDrawable:);
+  methods[42].selector = @selector(resizeImageIfRequiredWithADDrawable:withInt:withInt:);
+  methods[43].selector = @selector(isLandScape);
+  methods[44].selector = @selector(createPopUpMenuWithASToolbarImpl:);
+  methods[45].selector = @selector(nativeShowKxMenuWithId:withId:);
+  methods[46].selector = @selector(setKxMenuOnButtonWithId:withJavaUtilList:);
+  methods[47].selector = @selector(getKXMenuWithASToolbarImpl:withADXMenuItemImpl:);
+  methods[48].selector = @selector(handleOnKxMenuItemClickWithId:);
+  methods[49].selector = @selector(isKxMenuToBeShown);
+  methods[50].selector = @selector(setMenuOnButtonWithId:withJavaUtilList:);
+  methods[51].selector = @selector(getActionWithASToolbarImpl:withADXMenuItemImpl:);
+  methods[52].selector = @selector(handleOnMenuItemClickWithASToolbarImpl:withADXMenuItemImpl:);
+  methods[53].selector = @selector(initialized);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "uiView_", "LNSObject;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
@@ -985,8 +992,8 @@ J2OBJC_IGNORE_DESIGNATED_END
     { "OVERFLOW_BUTTON_TYPE_", "LNSString;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "menuItemToNativeMenuItemMap_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 59, -1 },
   };
-  static const void *ptrTable[] = { "loadAttributes", "LNSString;", "LNSString;LNSString;", "create", "LASIFragment;LJavaUtilMap;", "(Lcom/ashera/core/IFragment;Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "remove", "LASIWidget;", "I", "add", "LASIWidget;I", "createLayoutParams", "LADView;", "getLayoutParams", "setChildAttribute", "LASIWidget;LASWidgetAttribute;LNSString;LNSObject;", "getChildAttribute", "LASIWidget;LASWidgetAttribute;", "updateMeasuredDimension", "II", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;LASILifeCycleDecorator;", "getAttribute", "LASWidgetAttribute;LASILifeCycleDecorator;", "checkIosVersion", "nativeCreate", "LJavaUtilMap;", "(Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "loadCustomAttributes", "getItemView", "LADMenuItem;", "setDividerPadding", "LNSObject;", "setShowDividers", "setId", "getPlugin", "addMenuClickListener", "LADMenuItem;LASIWidget;LASToolbarImpl;", "getImageDimension", "LADDrawable;", "resizeImageIfRequired", "LADDrawable;II", "createPopUpMenu", "LASToolbarImpl;", "nativeShowKxMenu", "LNSObject;LNSObject;", "setKxMenuOnButton", "LNSObject;LJavaUtilList;", "(Ljava/lang/Object;Ljava/util/List<Ljava/lang/Object;>;)V", "getKXMenu", "LASToolbarImpl;LADXMenuItemImpl;", "handleOnKxMenuItemClick", "setMenuOnButton", "getAction", "handleOnMenuItemClick", &ASActionMenuViewImpl_LOCAL_NAME, &ASActionMenuViewImpl_GROUP_NAME, &ASActionMenuViewImpl_MAX_ICON_SIZE, "Ljava/util/Map<Lr/android/view/MenuItem;Lcom/ashera/widget/IWidget;>;", "Ljava/util/Map<Ljava/lang/Object;Landroidx/appcompat/view/menu/MenuItemImpl;>;", "LASActionMenuViewImpl_Orientation;LASActionMenuViewImpl_Divider;LASActionMenuViewImpl_ActionMenuViewExt;LASActionMenuViewImpl_ShowAsAction;LASActionMenuViewImpl_LLCanvas;LASActionMenuViewImpl_ActionMenuViewCommandBuilder;LASActionMenuViewImpl_ActionMenuViewBean;LASActionMenuViewImpl_ActionMenuViewParamsBean;LASActionMenuViewImpl_ActionMenuViewCommandParamsBuilder;LASActionMenuViewImpl_MenuOnClickListener;LASActionMenuViewImpl_MenuClickListener;" };
-  static const J2ObjcClassInfo _ASActionMenuViewImpl = { "ActionMenuViewImpl", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 53, 16, -1, 60, -1, -1, -1 };
+  static const void *ptrTable[] = { "loadAttributes", "LNSString;", "LNSString;LNSString;", "create", "LASIFragment;LJavaUtilMap;", "(Lcom/ashera/core/IFragment;Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "remove", "LASIWidget;", "I", "add", "LASIWidget;I", "createLayoutParams", "LADView;", "getLayoutParams", "setChildAttribute", "LASIWidget;LASWidgetAttribute;LNSString;LNSObject;", "getChildAttribute", "LASIWidget;LASWidgetAttribute;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;LASILifeCycleDecorator;", "getAttribute", "LASWidgetAttribute;LASILifeCycleDecorator;", "checkIosVersion", "nativeCreate", "LJavaUtilMap;", "(Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "loadCustomAttributes", "getItemView", "LADMenuItem;", "setDividerPadding", "LNSObject;", "setShowDividers", "setId", "setVisible", "Z", "getPlugin", "addMenuClickListener", "LADMenuItem;LASIWidget;LASToolbarImpl;", "getImageDimension", "LADDrawable;", "resizeImageIfRequired", "LADDrawable;II", "createPopUpMenu", "LASToolbarImpl;", "nativeShowKxMenu", "LNSObject;LNSObject;", "setKxMenuOnButton", "LNSObject;LJavaUtilList;", "(Ljava/lang/Object;Ljava/util/List<Ljava/lang/Object;>;)V", "getKXMenu", "LASToolbarImpl;LADXMenuItemImpl;", "handleOnKxMenuItemClick", "setMenuOnButton", "getAction", "handleOnMenuItemClick", &ASActionMenuViewImpl_LOCAL_NAME, &ASActionMenuViewImpl_GROUP_NAME, &ASActionMenuViewImpl_MAX_ICON_SIZE, "Ljava/util/Map<Lr/android/view/MenuItem;Lcom/ashera/widget/IWidget;>;", "Ljava/util/Map<Ljava/lang/Object;Landroidx/appcompat/view/menu/MenuItemImpl;>;", "LASActionMenuViewImpl_Divider;LASActionMenuViewImpl_Orientation;LASActionMenuViewImpl_ActionMenuViewExt;LASActionMenuViewImpl_ShowAsAction;LASActionMenuViewImpl_CanvasImpl;LASActionMenuViewImpl_ActionMenuViewCommandBuilder;LASActionMenuViewImpl_ActionMenuViewBean;LASActionMenuViewImpl_ActionMenuViewParamsBean;LASActionMenuViewImpl_ActionMenuViewCommandParamsBuilder;LASActionMenuViewImpl_MenuOnClickListener;LASActionMenuViewImpl_MenuClickListener;" };
+  static const J2ObjcClassInfo _ASActionMenuViewImpl = { "ActionMenuViewImpl", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 54, 16, -1, 60, -1, -1, -1 };
   return &_ASActionMenuViewImpl;
 }
 
@@ -1100,7 +1107,7 @@ id ASActionMenuViewImpl_getShowDividers(ASActionMenuViewImpl *self) {
 }
 
 void ASActionMenuViewImpl_createCanvas(ASActionMenuViewImpl *self) {
-  self->canvas_ = new_ASActionMenuViewImpl_LLCanvas_initWithASIWidget_(self);
+  self->canvas_ = new_ASActionMenuViewImpl_CanvasImpl_initWithASIWidget_(self);
 }
 
 void ASActionMenuViewImpl_addMenuClickListenerWithADMenuItem_withASIWidget_withASToolbarImpl_(ASActionMenuViewImpl *self, id<ADMenuItem> item, id<ASIWidget> widget, ASToolbarImpl *toolbar) {
@@ -1179,65 +1186,6 @@ void ASActionMenuViewImpl_handleOnMenuItemClickWithASToolbarImpl_withADXMenuItem
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl)
 
-@implementation ASActionMenuViewImpl_Orientation
-
-J2OBJC_IGNORE_DESIGNATED_BEGIN
-- (instancetype)init {
-  ASActionMenuViewImpl_Orientation_init(self);
-  return self;
-}
-J2OBJC_IGNORE_DESIGNATED_END
-
-- (id<JavaUtilMap>)getMapping {
-  return mapping_;
-}
-
-- (JavaLangInteger *)getDefault {
-  return JavaLangInteger_valueOfWithInt_(0);
-}
-
-+ (const J2ObjcClassInfo *)__metadata {
-  static J2ObjcMethodInfo methods[] = {
-    { NULL, NULL, 0x0, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LJavaUtilMap;", 0x1, -1, -1, -1, 0, -1, -1 },
-    { NULL, "LJavaLangInteger;", 0x1, -1, -1, -1, -1, -1, -1 },
-  };
-  #pragma clang diagnostic push
-  #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
-  #pragma clang diagnostic ignored "-Wundeclared-selector"
-  methods[0].selector = @selector(init);
-  methods[1].selector = @selector(getMapping);
-  methods[2].selector = @selector(getDefault);
-  #pragma clang diagnostic pop
-  static const J2ObjcFieldInfo fields[] = {
-    { "mapping_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 1, -1 },
-  };
-  static const void *ptrTable[] = { "()Ljava/util/Map<Ljava/lang/String;Ljava/lang/Integer;>;", "Ljava/util/Map<Ljava/lang/String;Ljava/lang/Integer;>;", "LASActionMenuViewImpl;" };
-  static const J2ObjcClassInfo _ASActionMenuViewImpl_Orientation = { "Orientation", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x18, 3, 1, 2, -1, -1, -1, -1 };
-  return &_ASActionMenuViewImpl_Orientation;
-}
-
-@end
-
-void ASActionMenuViewImpl_Orientation_init(ASActionMenuViewImpl_Orientation *self) {
-  ASAbstractEnumToIntConverter_init(self);
-  self->mapping_ = new_JavaUtilHashMap_init();
-  {
-    (void) [self->mapping_ putWithId:@"horizontal" withId:JavaLangInteger_valueOfWithInt_((jint) 0x0)];
-    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"vertical" withId:JavaLangInteger_valueOfWithInt_((jint) 0x1)];
-  }
-}
-
-ASActionMenuViewImpl_Orientation *new_ASActionMenuViewImpl_Orientation_init() {
-  J2OBJC_NEW_IMPL(ASActionMenuViewImpl_Orientation, init)
-}
-
-ASActionMenuViewImpl_Orientation *create_ASActionMenuViewImpl_Orientation_init() {
-  J2OBJC_CREATE_IMPL(ASActionMenuViewImpl_Orientation, init)
-}
-
-J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Orientation)
-
 @implementation ASActionMenuViewImpl_Divider
 
 J2OBJC_IGNORE_DESIGNATED_BEGIN
@@ -1298,6 +1246,65 @@ ASActionMenuViewImpl_Divider *create_ASActionMenuViewImpl_Divider_init() {
 }
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Divider)
+
+@implementation ASActionMenuViewImpl_Orientation
+
+J2OBJC_IGNORE_DESIGNATED_BEGIN
+- (instancetype)init {
+  ASActionMenuViewImpl_Orientation_init(self);
+  return self;
+}
+J2OBJC_IGNORE_DESIGNATED_END
+
+- (id<JavaUtilMap>)getMapping {
+  return mapping_;
+}
+
+- (JavaLangInteger *)getDefault {
+  return JavaLangInteger_valueOfWithInt_(0);
+}
+
++ (const J2ObjcClassInfo *)__metadata {
+  static J2ObjcMethodInfo methods[] = {
+    { NULL, NULL, 0x0, -1, -1, -1, -1, -1, -1 },
+    { NULL, "LJavaUtilMap;", 0x1, -1, -1, -1, 0, -1, -1 },
+    { NULL, "LJavaLangInteger;", 0x1, -1, -1, -1, -1, -1, -1 },
+  };
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
+  #pragma clang diagnostic ignored "-Wundeclared-selector"
+  methods[0].selector = @selector(init);
+  methods[1].selector = @selector(getMapping);
+  methods[2].selector = @selector(getDefault);
+  #pragma clang diagnostic pop
+  static const J2ObjcFieldInfo fields[] = {
+    { "mapping_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 1, -1 },
+  };
+  static const void *ptrTable[] = { "()Ljava/util/Map<Ljava/lang/String;Ljava/lang/Integer;>;", "Ljava/util/Map<Ljava/lang/String;Ljava/lang/Integer;>;", "LASActionMenuViewImpl;" };
+  static const J2ObjcClassInfo _ASActionMenuViewImpl_Orientation = { "Orientation", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x18, 3, 1, 2, -1, -1, -1, -1 };
+  return &_ASActionMenuViewImpl_Orientation;
+}
+
+@end
+
+void ASActionMenuViewImpl_Orientation_init(ASActionMenuViewImpl_Orientation *self) {
+  ASAbstractEnumToIntConverter_init(self);
+  self->mapping_ = new_JavaUtilHashMap_init();
+  {
+    (void) [self->mapping_ putWithId:@"horizontal" withId:JavaLangInteger_valueOfWithInt_((jint) 0x0)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"vertical" withId:JavaLangInteger_valueOfWithInt_((jint) 0x1)];
+  }
+}
+
+ASActionMenuViewImpl_Orientation *new_ASActionMenuViewImpl_Orientation_init() {
+  J2OBJC_NEW_IMPL(ASActionMenuViewImpl_Orientation, init)
+}
+
+ASActionMenuViewImpl_Orientation *create_ASActionMenuViewImpl_Orientation_init() {
+  J2OBJC_CREATE_IMPL(ASActionMenuViewImpl_Orientation, init)
+}
+
+J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Orientation)
 
 @implementation ASActionMenuViewImpl_ActionMenuViewExt
 
@@ -1401,6 +1408,39 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Divider)
   ASViewImpl_drawableStateChangedWithASIWidget_(this$0_);
 }
 
+- (ADView *)inflateViewWithNSString:(NSString *)layout {
+  if (templates_ == nil) {
+    templates_ = new_JavaUtilHashMap_init();
+  }
+  id<ASIWidget> template_ = [templates_ getWithId:layout];
+  if (template_ == nil) {
+    template_ = (id<ASIWidget>) cast_check([this$0_ quickConvertWithId:layout withNSString:@"template"], ASIWidget_class_());
+    (void) [((id<JavaUtilMap>) nil_chk(templates_)) putWithId:layout withId:template_];
+  }
+  id<ASIWidget> widget = [((id<ASIWidget>) nil_chk(template_)) loadLazyWidgetsWithASHasWidgets:[this$0_ getParent]];
+  return (ADView *) cast_chk([((id<ASIWidget>) nil_chk(widget)) asWidget], [ADView class]);
+}
+
+- (void)remeasure {
+  [((id<ASIFragment>) nil_chk([this$0_ getFragment])) remeasure];
+}
+
+- (void)removeFromParent {
+  [((id<ASHasWidgets>) nil_chk([this$0_ getParent])) removeWithASIWidget:this$0_];
+}
+
+- (void)getLocationOnScreenWithIntArray:(IOSIntArray *)appScreenLocation {
+  *IOSIntArray_GetRef(nil_chk(appScreenLocation), 0) = ASViewImpl_getLocationXOnScreenWithId_([this$0_ asNativeWidget]);
+  *IOSIntArray_GetRef(appScreenLocation, 1) = ASViewImpl_getLocationYOnScreenWithId_([this$0_ asNativeWidget]);
+}
+
+- (void)getWindowVisibleDisplayFrameWithADRect:(ADRect *)displayFrame {
+  ((ADRect *) nil_chk(displayFrame))->left_ = ASViewImpl_getLocationXOnScreenWithId_([this$0_ asNativeWidget]);
+  displayFrame->top_ = ASViewImpl_getLocationYOnScreenWithId_([this$0_ asNativeWidget]);
+  displayFrame->right_ = displayFrame->left_ + [self getWidth];
+  displayFrame->bottom_ = displayFrame->top_ + [self getHeight];
+}
+
 - (void)offsetTopAndBottomWithInt:(jint)offset {
   [super offsetTopAndBottomWithInt:offset];
   ASViewImpl_nativeMakeFrameWithId_withInt_withInt_withInt_withInt_([this$0_ asNativeWidget], [self getLeft], [self getTop], [self getRight], [self getBottom]);
@@ -1409,6 +1449,11 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Divider)
 - (void)offsetLeftAndRightWithInt:(jint)offset {
   [super offsetLeftAndRightWithInt:offset];
   ASViewImpl_nativeMakeFrameWithId_withInt_withInt_withInt_withInt_([this$0_ asNativeWidget], [self getLeft], [self getTop], [self getRight], [self getBottom]);
+}
+
+- (void)setMyAttributeWithNSString:(NSString *)name
+                            withId:(id)value {
+  [this$0_ setAttributeWithNSString:name withId:value withBoolean:true];
 }
 
 - (void)setVisibilityWithInt:(jint)visibility {
@@ -1446,10 +1491,16 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Divider)
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, 16, 17, -1, -1, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 18, 1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 19, 1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 20, 1, -1, -1, -1, -1 },
-    { NULL, "LADView;", 0x1, 21, 22, -1, -1, -1, -1 },
+    { NULL, "LADView;", 0x1, 18, 19, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 20, 21, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 22, 23, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 24, 1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 25, 1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 26, 27, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 28, 1, -1, -1, -1, -1 },
+    { NULL, "LADView;", 0x1, 29, 30, -1, -1, -1, -1 },
     { NULL, "LADView;", 0x1, -1, -1, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
@@ -1470,11 +1521,17 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Divider)
   methods[12].selector = @selector(initialized);
   methods[13].selector = @selector(getAttributeWithASWidgetAttribute:);
   methods[14].selector = @selector(drawableStateChanged);
-  methods[15].selector = @selector(offsetTopAndBottomWithInt:);
-  methods[16].selector = @selector(offsetLeftAndRightWithInt:);
-  methods[17].selector = @selector(setVisibilityWithInt:);
-  methods[18].selector = @selector(getItemViewWithADMenuItem:);
-  methods[19].selector = @selector(getOverFlowButton);
+  methods[15].selector = @selector(inflateViewWithNSString:);
+  methods[16].selector = @selector(remeasure);
+  methods[17].selector = @selector(removeFromParent);
+  methods[18].selector = @selector(getLocationOnScreenWithIntArray:);
+  methods[19].selector = @selector(getWindowVisibleDisplayFrameWithADRect:);
+  methods[20].selector = @selector(offsetTopAndBottomWithInt:);
+  methods[21].selector = @selector(offsetLeftAndRightWithInt:);
+  methods[22].selector = @selector(setMyAttributeWithNSString:withId:);
+  methods[23].selector = @selector(setVisibilityWithInt:);
+  methods[24].selector = @selector(getItemViewWithADMenuItem:);
+  methods[25].selector = @selector(getOverFlowButton);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "this$0_", "LASActionMenuViewImpl;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
@@ -1482,9 +1539,10 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Divider)
     { "onLayoutEvent_", "LASOnLayoutEvent;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mMaxWidth_", "I", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mMaxHeight_", "I", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
+    { "templates_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 31, -1 },
   };
-  static const void *ptrTable[] = { "setMaxWidth", "I", "setMaxHeight", "LASActionMenuViewImpl;", "onMeasure", "II", "onLayout", "ZIIII", "execute", "LNSString;[LNSObject;", "updateMeasuredDimension", "newInstance", "LASIWidget;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;", "()Ljava/util/List<Ljava/lang/String;>;", "getAttribute", "LASWidgetAttribute;", "offsetTopAndBottom", "offsetLeftAndRight", "setVisibility", "getItemView", "LADMenuItem;" };
-  static const J2ObjcClassInfo _ASActionMenuViewImpl_ActionMenuViewExt = { "ActionMenuViewExt", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 20, 5, 3, -1, -1, -1, -1 };
+  static const void *ptrTable[] = { "setMaxWidth", "I", "setMaxHeight", "LASActionMenuViewImpl;", "onMeasure", "II", "onLayout", "ZIIII", "execute", "LNSString;[LNSObject;", "updateMeasuredDimension", "newInstance", "LASIWidget;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;", "()Ljava/util/List<Ljava/lang/String;>;", "getAttribute", "LASWidgetAttribute;", "inflateView", "LNSString;", "getLocationOnScreen", "[I", "getWindowVisibleDisplayFrame", "LADRect;", "offsetTopAndBottom", "offsetLeftAndRight", "setMyAttribute", "LNSString;LNSObject;", "setVisibility", "getItemView", "LADMenuItem;", "Ljava/util/Map<Ljava/lang/String;Lcom/ashera/widget/IWidget;>;" };
+  static const J2ObjcClassInfo _ASActionMenuViewImpl_ActionMenuViewExt = { "ActionMenuViewExt", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 26, 6, 3, -1, -1, -1, -1 };
   return &_ASActionMenuViewImpl_ActionMenuViewExt;
 }
 
@@ -1571,14 +1629,19 @@ ASActionMenuViewImpl_ShowAsAction *create_ASActionMenuViewImpl_ShowAsAction_init
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_ShowAsAction)
 
-@implementation ASActionMenuViewImpl_LLCanvas
+@implementation ASActionMenuViewImpl_CanvasImpl
 
 - (instancetype)initWithASIWidget:(id<ASIWidget>)widget {
-  ASActionMenuViewImpl_LLCanvas_initWithASIWidget_(self, widget);
+  ASActionMenuViewImpl_CanvasImpl_initWithASIWidget_(self, widget);
   return self;
 }
 
 - (void)drawWithADDrawable:(ADDrawable *)mDivider {
+  for (id __strong divider in nil_chk(imageViews_)) {
+    if (ASViewImpl_getXWithId_(divider) == [((ADDrawable *) nil_chk(mDivider)) getLeft] && ASViewImpl_getYWithId_(divider) == [mDivider getTop]) {
+      return;
+    }
+  }
   if ([((ADDrawable *) nil_chk(mDivider)) getDrawable] != nil) {
     id imageView = [self nativeCreateImageViewWithId:[mDivider getDrawable]];
     ASViewImpl_nativeMakeFrameWithId_withInt_withInt_withInt_withInt_(imageView, [mDivider getLeft], [mDivider getTop], [mDivider getRight], [mDivider getBottom]);
@@ -1588,10 +1651,12 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_ShowAsAction)
 }
 
 - (void)reset {
-  for (id __strong imageView in nil_chk(imageViews_)) {
-    ASViewGroupImpl_removeViewWithId_(imageView);
+  if (canvasReset_) {
+    for (id __strong imageView in nil_chk(imageViews_)) {
+      ASViewGroupImpl_removeViewWithId_(imageView);
+    }
+    [imageViews_ clear];
   }
-  [imageViews_ clear];
 }
 
 - (id)nativeCreateImageViewWithId:(id)image {
@@ -1611,7 +1676,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_ShowAsAction)
   ADCanvas_translateWithInt_withInt_(self, arg0, arg1);
 }
 
-- (void)__javaClone:(ASActionMenuViewImpl_LLCanvas *)original {
+- (void)__javaClone:(ASActionMenuViewImpl_CanvasImpl *)original {
   [super __javaClone:original];
   JreRelease(widget_);
 }
@@ -1632,31 +1697,33 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_ShowAsAction)
   methods[3].selector = @selector(nativeCreateImageViewWithId:);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
+    { "canvasReset_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "imageViews_", "LJavaUtilList;", .constantValue.asLong = 0, 0x2, -1, -1, 5, -1 },
     { "widget_", "LASIWidget;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
   };
   static const void *ptrTable[] = { "LASIWidget;", "draw", "LADDrawable;", "nativeCreateImageView", "LNSObject;", "Ljava/util/List<Ljava/lang/Object;>;", "LASActionMenuViewImpl;" };
-  static const J2ObjcClassInfo _ASActionMenuViewImpl_LLCanvas = { "LLCanvas", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1a, 4, 2, 6, -1, -1, -1, -1 };
-  return &_ASActionMenuViewImpl_LLCanvas;
+  static const J2ObjcClassInfo _ASActionMenuViewImpl_CanvasImpl = { "CanvasImpl", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1a, 4, 3, 6, -1, -1, -1, -1 };
+  return &_ASActionMenuViewImpl_CanvasImpl;
 }
 
 @end
 
-void ASActionMenuViewImpl_LLCanvas_initWithASIWidget_(ASActionMenuViewImpl_LLCanvas *self, id<ASIWidget> widget) {
+void ASActionMenuViewImpl_CanvasImpl_initWithASIWidget_(ASActionMenuViewImpl_CanvasImpl *self, id<ASIWidget> widget) {
   NSObject_init(self);
+  self->canvasReset_ = true;
   self->imageViews_ = new_JavaUtilArrayList_init();
   self->widget_ = widget;
 }
 
-ASActionMenuViewImpl_LLCanvas *new_ASActionMenuViewImpl_LLCanvas_initWithASIWidget_(id<ASIWidget> widget) {
-  J2OBJC_NEW_IMPL(ASActionMenuViewImpl_LLCanvas, initWithASIWidget_, widget)
+ASActionMenuViewImpl_CanvasImpl *new_ASActionMenuViewImpl_CanvasImpl_initWithASIWidget_(id<ASIWidget> widget) {
+  J2OBJC_NEW_IMPL(ASActionMenuViewImpl_CanvasImpl, initWithASIWidget_, widget)
 }
 
-ASActionMenuViewImpl_LLCanvas *create_ASActionMenuViewImpl_LLCanvas_initWithASIWidget_(id<ASIWidget> widget) {
-  J2OBJC_CREATE_IMPL(ASActionMenuViewImpl_LLCanvas, initWithASIWidget_, widget)
+ASActionMenuViewImpl_CanvasImpl *create_ASActionMenuViewImpl_CanvasImpl_initWithASIWidget_(id<ASIWidget> widget) {
+  J2OBJC_CREATE_IMPL(ASActionMenuViewImpl_CanvasImpl, initWithASIWidget_, widget)
 }
 
-J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_LLCanvas)
+J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_CanvasImpl)
 
 @implementation ASActionMenuViewImpl_ActionMenuViewCommandBuilder
 
@@ -1671,15 +1738,6 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_LLCanvas)
     [((id<ASIFragment>) nil_chk([this$0_ getFragment])) remeasure];
   }
   [this$0_ executeCommandWithJavaUtilMap:command_ withASIWidget_CommandCallBack:nil withInt:ASIWidget_COMMAND_EXEC_GETTER_METHOD];
-  return self;
-}
-
-- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setOrientationWithNSString:(NSString *)value {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"orientation"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
-  (void) [attrs putWithId:@"value" withId:value];
   return self;
 }
 
@@ -1859,71 +1917,80 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_LLCanvas)
   return self;
 }
 
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setOrientationWithNSString:(NSString *)value {
+  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"orientation"];
+  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
+  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
+  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
+  (void) [attrs putWithId:@"value" withId:value];
+  return self;
+}
+
 + (const J2ObjcClassInfo *)__metadata {
   static J2ObjcMethodInfo methods[] = {
     { NULL, NULL, 0x1, -1, 0, -1, -1, -1, -1 },
     { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, 1, 2, -1, -1, -1, -1 },
-    { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, 3, 4, -1, -1, -1, -1 },
     { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, 5, 2, -1, -1, -1, -1 },
+    { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, 3, 2, -1, -1, -1, -1 },
+    { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, 4, 5, -1, -1, -1, -1 },
     { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, 6, 7, -1, -1, -1, -1 },
     { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, 8, 4, -1, -1, -1, -1 },
+    { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, 8, 7, -1, -1, -1, -1 },
     { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, 9, 4, -1, -1, -1, -1 },
+    { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, 9, 2, -1, -1, -1, -1 },
     { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, 10, 2, -1, -1, -1, -1 },
+    { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, 10, 11, -1, -1, -1, -1 },
     { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, 11, 12, -1, -1, -1, -1 },
+    { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, 12, 7, -1, -1, -1, -1 },
     { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, 13, 4, -1, -1, -1, -1 },
-    { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, 14, 4, -1, -1, -1, -1 },
+    { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, 13, 7, -1, -1, -1, -1 },
+    { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, 14, 7, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
   #pragma clang diagnostic ignored "-Wundeclared-selector"
   methods[0].selector = @selector(initWithASActionMenuViewImpl:);
   methods[1].selector = @selector(executeWithBoolean:);
-  methods[2].selector = @selector(setOrientationWithNSString:);
-  methods[3].selector = @selector(tryGetBaselineAligned);
-  methods[4].selector = @selector(isBaselineAligned);
-  methods[5].selector = @selector(setBaselineAlignedWithBoolean:);
-  methods[6].selector = @selector(tryGetBaselineAlignedChildIndex);
-  methods[7].selector = @selector(getBaselineAlignedChildIndex);
-  methods[8].selector = @selector(setBaselineAlignedChildIndexWithInt:);
-  methods[9].selector = @selector(tryGetDivider);
-  methods[10].selector = @selector(getDivider);
-  methods[11].selector = @selector(setDividerWithNSString:);
-  methods[12].selector = @selector(tryGetGravity);
-  methods[13].selector = @selector(getGravity);
-  methods[14].selector = @selector(setGravityWithNSString:);
-  methods[15].selector = @selector(tryGetMeasureWithLargestChild);
-  methods[16].selector = @selector(isMeasureWithLargestChild);
-  methods[17].selector = @selector(setMeasureWithLargestChildWithBoolean:);
-  methods[18].selector = @selector(tryGetWeightSum);
-  methods[19].selector = @selector(getWeightSum);
-  methods[20].selector = @selector(setWeightSumWithFloat:);
-  methods[21].selector = @selector(tryGetShowDividers);
-  methods[22].selector = @selector(getShowDividers);
-  methods[23].selector = @selector(setShowDividersWithNSString:);
-  methods[24].selector = @selector(tryGetDividerPadding);
-  methods[25].selector = @selector(getDividerPadding);
-  methods[26].selector = @selector(setDividerPaddingWithNSString:);
+  methods[2].selector = @selector(tryGetBaselineAligned);
+  methods[3].selector = @selector(isBaselineAligned);
+  methods[4].selector = @selector(setBaselineAlignedWithBoolean:);
+  methods[5].selector = @selector(tryGetBaselineAlignedChildIndex);
+  methods[6].selector = @selector(getBaselineAlignedChildIndex);
+  methods[7].selector = @selector(setBaselineAlignedChildIndexWithInt:);
+  methods[8].selector = @selector(tryGetDivider);
+  methods[9].selector = @selector(getDivider);
+  methods[10].selector = @selector(setDividerWithNSString:);
+  methods[11].selector = @selector(tryGetGravity);
+  methods[12].selector = @selector(getGravity);
+  methods[13].selector = @selector(setGravityWithNSString:);
+  methods[14].selector = @selector(tryGetMeasureWithLargestChild);
+  methods[15].selector = @selector(isMeasureWithLargestChild);
+  methods[16].selector = @selector(setMeasureWithLargestChildWithBoolean:);
+  methods[17].selector = @selector(tryGetWeightSum);
+  methods[18].selector = @selector(getWeightSum);
+  methods[19].selector = @selector(setWeightSumWithFloat:);
+  methods[20].selector = @selector(tryGetShowDividers);
+  methods[21].selector = @selector(getShowDividers);
+  methods[22].selector = @selector(setShowDividersWithNSString:);
+  methods[23].selector = @selector(tryGetDividerPadding);
+  methods[24].selector = @selector(getDividerPadding);
+  methods[25].selector = @selector(setDividerPaddingWithNSString:);
+  methods[26].selector = @selector(setOrientationWithNSString:);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "this$0_", "LASActionMenuViewImpl;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
   };
-  static const void *ptrTable[] = { "LASActionMenuViewImpl;", "execute", "Z", "setOrientation", "LNSString;", "setBaselineAligned", "setBaselineAlignedChildIndex", "I", "setDivider", "setGravity", "setMeasureWithLargestChild", "setWeightSum", "F", "setShowDividers", "setDividerPadding", "Lcom/ashera/layout/ViewGroupImpl$ViewGroupCommandBuilder<Lcom/ashera/toolbar/ActionMenuViewImpl$ActionMenuViewCommandBuilder;>;" };
+  static const void *ptrTable[] = { "LASActionMenuViewImpl;", "execute", "Z", "setBaselineAligned", "setBaselineAlignedChildIndex", "I", "setDivider", "LNSString;", "setGravity", "setMeasureWithLargestChild", "setWeightSum", "F", "setShowDividers", "setDividerPadding", "setOrientation", "Lcom/ashera/layout/ViewGroupImpl$ViewGroupCommandBuilder<Lcom/ashera/toolbar/ActionMenuViewImpl$ActionMenuViewCommandBuilder;>;" };
   static const J2ObjcClassInfo _ASActionMenuViewImpl_ActionMenuViewCommandBuilder = { "ActionMenuViewCommandBuilder", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 27, 1, 0, -1, -1, 15, -1 };
   return &_ASActionMenuViewImpl_ActionMenuViewCommandBuilder;
 }
@@ -1950,10 +2017,6 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_ActionMenuViewCommandBuild
 - (instancetype)initWithASActionMenuViewImpl:(ASActionMenuViewImpl *)outer$ {
   ASActionMenuViewImpl_ActionMenuViewBean_initWithASActionMenuViewImpl_(self, outer$);
   return self;
-}
-
-- (void)setOrientationWithNSString:(NSString *)value {
-  (void) [((ASActionMenuViewImpl_ActionMenuViewCommandBuilder *) nil_chk([((ASActionMenuViewImpl_ActionMenuViewCommandBuilder *) nil_chk([((ASActionMenuViewImpl_ActionMenuViewCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setOrientationWithNSString:value])) executeWithBoolean:true];
 }
 
 - (id)isBaselineAligned {
@@ -2020,53 +2083,57 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_ActionMenuViewCommandBuild
   (void) [((ASActionMenuViewImpl_ActionMenuViewCommandBuilder *) nil_chk([((ASActionMenuViewImpl_ActionMenuViewCommandBuilder *) nil_chk([((ASActionMenuViewImpl_ActionMenuViewCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setDividerPaddingWithNSString:value])) executeWithBoolean:true];
 }
 
+- (void)setOrientationWithNSString:(NSString *)value {
+  (void) [((ASActionMenuViewImpl_ActionMenuViewCommandBuilder *) nil_chk([((ASActionMenuViewImpl_ActionMenuViewCommandBuilder *) nil_chk([((ASActionMenuViewImpl_ActionMenuViewCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setOrientationWithNSString:value])) executeWithBoolean:true];
+}
+
 + (const J2ObjcClassInfo *)__metadata {
   static J2ObjcMethodInfo methods[] = {
     { NULL, NULL, 0x1, -1, 0, -1, -1, -1, -1 },
+    { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 1, 2, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 3, 4, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 5, 6, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 7, 2, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 7, 6, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 8, 2, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 9, 4, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 9, 10, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 10, 11, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 11, 6, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 12, 2, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 13, 2, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 12, 6, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 13, 6, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
   #pragma clang diagnostic ignored "-Wundeclared-selector"
   methods[0].selector = @selector(initWithASActionMenuViewImpl:);
-  methods[1].selector = @selector(setOrientationWithNSString:);
-  methods[2].selector = @selector(isBaselineAligned);
-  methods[3].selector = @selector(setBaselineAlignedWithBoolean:);
-  methods[4].selector = @selector(getBaselineAlignedChildIndex);
-  methods[5].selector = @selector(setBaselineAlignedChildIndexWithInt:);
-  methods[6].selector = @selector(getDivider);
-  methods[7].selector = @selector(setDividerWithNSString:);
-  methods[8].selector = @selector(getGravity);
-  methods[9].selector = @selector(setGravityWithNSString:);
-  methods[10].selector = @selector(isMeasureWithLargestChild);
-  methods[11].selector = @selector(setMeasureWithLargestChildWithBoolean:);
-  methods[12].selector = @selector(getWeightSum);
-  methods[13].selector = @selector(setWeightSumWithFloat:);
-  methods[14].selector = @selector(getShowDividers);
-  methods[15].selector = @selector(setShowDividersWithNSString:);
-  methods[16].selector = @selector(getDividerPadding);
-  methods[17].selector = @selector(setDividerPaddingWithNSString:);
+  methods[1].selector = @selector(isBaselineAligned);
+  methods[2].selector = @selector(setBaselineAlignedWithBoolean:);
+  methods[3].selector = @selector(getBaselineAlignedChildIndex);
+  methods[4].selector = @selector(setBaselineAlignedChildIndexWithInt:);
+  methods[5].selector = @selector(getDivider);
+  methods[6].selector = @selector(setDividerWithNSString:);
+  methods[7].selector = @selector(getGravity);
+  methods[8].selector = @selector(setGravityWithNSString:);
+  methods[9].selector = @selector(isMeasureWithLargestChild);
+  methods[10].selector = @selector(setMeasureWithLargestChildWithBoolean:);
+  methods[11].selector = @selector(getWeightSum);
+  methods[12].selector = @selector(setWeightSumWithFloat:);
+  methods[13].selector = @selector(getShowDividers);
+  methods[14].selector = @selector(setShowDividersWithNSString:);
+  methods[15].selector = @selector(getDividerPadding);
+  methods[16].selector = @selector(setDividerPaddingWithNSString:);
+  methods[17].selector = @selector(setOrientationWithNSString:);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "this$0_", "LASActionMenuViewImpl;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
   };
-  static const void *ptrTable[] = { "LASActionMenuViewImpl;", "setOrientation", "LNSString;", "setBaselineAligned", "Z", "setBaselineAlignedChildIndex", "I", "setDivider", "setGravity", "setMeasureWithLargestChild", "setWeightSum", "F", "setShowDividers", "setDividerPadding" };
+  static const void *ptrTable[] = { "LASActionMenuViewImpl;", "setBaselineAligned", "Z", "setBaselineAlignedChildIndex", "I", "setDivider", "LNSString;", "setGravity", "setMeasureWithLargestChild", "setWeightSum", "F", "setShowDividers", "setDividerPadding", "setOrientation" };
   static const J2ObjcClassInfo _ASActionMenuViewImpl_ActionMenuViewBean = { "ActionMenuViewBean", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 18, 1, 0, -1, -1, -1, -1 };
   return &_ASActionMenuViewImpl_ActionMenuViewBean;
 }

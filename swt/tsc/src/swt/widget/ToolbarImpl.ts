@@ -48,33 +48,6 @@ export abstract class ToolbarImpl<T> extends ViewGroupImpl<T>{
 	static initialize() {
     }	
 	@Type(() => CommandAttr)
-	@Expose({ name: "title" })
-	title!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "titleTextColor" })
-	titleTextColor!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "subtitle" })
-	subtitle!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "subtitleTextColor" })
-	subtitleTextColor!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "logo" })
-	logo!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "navigationIcon" })
-	navigationIcon!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "overflowIcon" })
-	overflowIcon!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "onNavigationIconClick" })
-	onNavigationIconClick!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "onMenuItemClick" })
-	onMenuItemClick!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
 	@Expose({ name: "gravity" })
 	gravity!:CommandAttr<Gravity[]>| undefined;
 	@Type(() => CommandAttr)
@@ -122,21 +95,39 @@ export abstract class ToolbarImpl<T> extends ViewGroupImpl<T>{
 	@Type(() => CommandAttr)
 	@Expose({ name: "menu" })
 	menu!:CommandAttr<string>| undefined;
+	@Type(() => CommandAttr)
+	@Expose({ name: "title" })
+	title!:CommandAttr<string>| undefined;
+	@Type(() => CommandAttr)
+	@Expose({ name: "titleTextColor" })
+	titleTextColor!:CommandAttr<string>| undefined;
+	@Type(() => CommandAttr)
+	@Expose({ name: "subtitle" })
+	subtitle!:CommandAttr<string>| undefined;
+	@Type(() => CommandAttr)
+	@Expose({ name: "subtitleTextColor" })
+	subtitleTextColor!:CommandAttr<string>| undefined;
+	@Type(() => CommandAttr)
+	@Expose({ name: "logo" })
+	logo!:CommandAttr<string>| undefined;
+	@Type(() => CommandAttr)
+	@Expose({ name: "navigationIcon" })
+	navigationIcon!:CommandAttr<string>| undefined;
+	@Type(() => CommandAttr)
+	@Expose({ name: "overflowIcon" })
+	overflowIcon!:CommandAttr<string>| undefined;
+	@Type(() => CommandAttr)
+	@Expose({ name: "onNavigationIconClick" })
+	onNavigationIconClick!:CommandAttr<string>| undefined;
+	@Type(() => CommandAttr)
+	@Expose({ name: "onMenuItemClick" })
+	onMenuItemClick!:CommandAttr<string>| undefined;
 
 	@Exclude()
 	protected thisPointer: T;	
 	protected abstract getThisPointer(): T;
 	reset() : T {	
 		super.reset();
-		this.title = undefined;
-		this.titleTextColor = undefined;
-		this.subtitle = undefined;
-		this.subtitleTextColor = undefined;
-		this.logo = undefined;
-		this.navigationIcon = undefined;
-		this.overflowIcon = undefined;
-		this.onNavigationIconClick = undefined;
-		this.onMenuItemClick = undefined;
 		this.gravity = undefined;
 		this.titleMargin = undefined;
 		this.titleMarginStart = undefined;
@@ -153,6 +144,15 @@ export abstract class ToolbarImpl<T> extends ViewGroupImpl<T>{
 		this.maxButtonHeight = undefined;
 		this.buttonGravity = undefined;
 		this.menu = undefined;
+		this.title = undefined;
+		this.titleTextColor = undefined;
+		this.subtitle = undefined;
+		this.subtitleTextColor = undefined;
+		this.logo = undefined;
+		this.navigationIcon = undefined;
+		this.overflowIcon = undefined;
+		this.onNavigationIconClick = undefined;
+		this.onMenuItemClick = undefined;
 		return this.thisPointer;
 	}
 	constructor(id: string, path: string[], event:  string) {
@@ -160,132 +160,6 @@ export abstract class ToolbarImpl<T> extends ViewGroupImpl<T>{
 		this.thisPointer = this.getThisPointer();
 	}
 	
-
-	public setTitle(value : string) : T {
-		this.resetIfRequired();
-		if (this.title == null || this.title == undefined) {
-			this.title = new CommandAttr<string>();
-		}
-		
-		this.title.setSetter(true);
-		this.title.setValue(value);
-		this.orderSet++;
-		this.title.setOrderSet(this.orderSet);
-		return this.thisPointer;
-	}
-		
-
-	public setTitleTextColor(value : string) : T {
-		this.resetIfRequired();
-		if (this.titleTextColor == null || this.titleTextColor == undefined) {
-			this.titleTextColor = new CommandAttr<string>();
-		}
-		
-		this.titleTextColor.setSetter(true);
-		this.titleTextColor.setValue(value);
-		this.orderSet++;
-		this.titleTextColor.setOrderSet(this.orderSet);
-		return this.thisPointer;
-	}
-		
-
-	public setSubtitle(value : string) : T {
-		this.resetIfRequired();
-		if (this.subtitle == null || this.subtitle == undefined) {
-			this.subtitle = new CommandAttr<string>();
-		}
-		
-		this.subtitle.setSetter(true);
-		this.subtitle.setValue(value);
-		this.orderSet++;
-		this.subtitle.setOrderSet(this.orderSet);
-		return this.thisPointer;
-	}
-		
-
-	public setSubtitleTextColor(value : string) : T {
-		this.resetIfRequired();
-		if (this.subtitleTextColor == null || this.subtitleTextColor == undefined) {
-			this.subtitleTextColor = new CommandAttr<string>();
-		}
-		
-		this.subtitleTextColor.setSetter(true);
-		this.subtitleTextColor.setValue(value);
-		this.orderSet++;
-		this.subtitleTextColor.setOrderSet(this.orderSet);
-		return this.thisPointer;
-	}
-		
-
-	public setLogo(value : string) : T {
-		this.resetIfRequired();
-		if (this.logo == null || this.logo == undefined) {
-			this.logo = new CommandAttr<string>();
-		}
-		
-		this.logo.setSetter(true);
-		this.logo.setValue(value);
-		this.orderSet++;
-		this.logo.setOrderSet(this.orderSet);
-		return this.thisPointer;
-	}
-		
-
-	public setNavigationIcon(value : string) : T {
-		this.resetIfRequired();
-		if (this.navigationIcon == null || this.navigationIcon == undefined) {
-			this.navigationIcon = new CommandAttr<string>();
-		}
-		
-		this.navigationIcon.setSetter(true);
-		this.navigationIcon.setValue(value);
-		this.orderSet++;
-		this.navigationIcon.setOrderSet(this.orderSet);
-		return this.thisPointer;
-	}
-		
-
-	public setOverflowIcon(value : string) : T {
-		this.resetIfRequired();
-		if (this.overflowIcon == null || this.overflowIcon == undefined) {
-			this.overflowIcon = new CommandAttr<string>();
-		}
-		
-		this.overflowIcon.setSetter(true);
-		this.overflowIcon.setValue(value);
-		this.orderSet++;
-		this.overflowIcon.setOrderSet(this.orderSet);
-		return this.thisPointer;
-	}
-		
-
-	public setOnNavigationIconClick(value : string) : T {
-		this.resetIfRequired();
-		if (this.onNavigationIconClick == null || this.onNavigationIconClick == undefined) {
-			this.onNavigationIconClick = new CommandAttr<string>();
-		}
-		
-		this.onNavigationIconClick.setSetter(true);
-		this.onNavigationIconClick.setValue(value);
-		this.orderSet++;
-		this.onNavigationIconClick.setOrderSet(this.orderSet);
-		return this.thisPointer;
-	}
-		
-
-	public setOnMenuItemClick(value : string) : T {
-		this.resetIfRequired();
-		if (this.onMenuItemClick == null || this.onMenuItemClick == undefined) {
-			this.onMenuItemClick = new CommandAttr<string>();
-		}
-		
-		this.onMenuItemClick.setSetter(true);
-		this.onMenuItemClick.setValue(value);
-		this.orderSet++;
-		this.onMenuItemClick.setOrderSet(this.orderSet);
-		return this.thisPointer;
-	}
-		
 
 	public setGravity(...value : Gravity[]) : T {
 		this.resetIfRequired();
@@ -507,6 +381,132 @@ this.buttonGravity.setTransformer('gravity');		return this.thisPointer;
 		this.menu.setValue(value);
 		this.orderSet++;
 		this.menu.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setTitle(value : string) : T {
+		this.resetIfRequired();
+		if (this.title == null || this.title == undefined) {
+			this.title = new CommandAttr<string>();
+		}
+		
+		this.title.setSetter(true);
+		this.title.setValue(value);
+		this.orderSet++;
+		this.title.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setTitleTextColor(value : string) : T {
+		this.resetIfRequired();
+		if (this.titleTextColor == null || this.titleTextColor == undefined) {
+			this.titleTextColor = new CommandAttr<string>();
+		}
+		
+		this.titleTextColor.setSetter(true);
+		this.titleTextColor.setValue(value);
+		this.orderSet++;
+		this.titleTextColor.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setSubtitle(value : string) : T {
+		this.resetIfRequired();
+		if (this.subtitle == null || this.subtitle == undefined) {
+			this.subtitle = new CommandAttr<string>();
+		}
+		
+		this.subtitle.setSetter(true);
+		this.subtitle.setValue(value);
+		this.orderSet++;
+		this.subtitle.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setSubtitleTextColor(value : string) : T {
+		this.resetIfRequired();
+		if (this.subtitleTextColor == null || this.subtitleTextColor == undefined) {
+			this.subtitleTextColor = new CommandAttr<string>();
+		}
+		
+		this.subtitleTextColor.setSetter(true);
+		this.subtitleTextColor.setValue(value);
+		this.orderSet++;
+		this.subtitleTextColor.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setLogo(value : string) : T {
+		this.resetIfRequired();
+		if (this.logo == null || this.logo == undefined) {
+			this.logo = new CommandAttr<string>();
+		}
+		
+		this.logo.setSetter(true);
+		this.logo.setValue(value);
+		this.orderSet++;
+		this.logo.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setNavigationIcon(value : string) : T {
+		this.resetIfRequired();
+		if (this.navigationIcon == null || this.navigationIcon == undefined) {
+			this.navigationIcon = new CommandAttr<string>();
+		}
+		
+		this.navigationIcon.setSetter(true);
+		this.navigationIcon.setValue(value);
+		this.orderSet++;
+		this.navigationIcon.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setOverflowIcon(value : string) : T {
+		this.resetIfRequired();
+		if (this.overflowIcon == null || this.overflowIcon == undefined) {
+			this.overflowIcon = new CommandAttr<string>();
+		}
+		
+		this.overflowIcon.setSetter(true);
+		this.overflowIcon.setValue(value);
+		this.orderSet++;
+		this.overflowIcon.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setOnNavigationIconClick(value : string) : T {
+		this.resetIfRequired();
+		if (this.onNavigationIconClick == null || this.onNavigationIconClick == undefined) {
+			this.onNavigationIconClick = new CommandAttr<string>();
+		}
+		
+		this.onNavigationIconClick.setSetter(true);
+		this.onNavigationIconClick.setValue(value);
+		this.orderSet++;
+		this.onNavigationIconClick.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setOnMenuItemClick(value : string) : T {
+		this.resetIfRequired();
+		if (this.onMenuItemClick == null || this.onMenuItemClick == undefined) {
+			this.onMenuItemClick = new CommandAttr<string>();
+		}
+		
+		this.onMenuItemClick.setSetter(true);
+		this.onMenuItemClick.setValue(value);
+		this.orderSet++;
+		this.onMenuItemClick.setOrderSet(this.orderSet);
 		return this.thisPointer;
 	}
 		
