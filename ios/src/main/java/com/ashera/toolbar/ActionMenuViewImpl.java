@@ -434,6 +434,31 @@ return layoutParams.weight;			}
         public r.android.view.View getOverFlowButton() {
         	return ActionMenuViewImpl.this.getOverFlowButton();
         }
+        
+        	public void state0() {
+        		ViewImpl.state(ActionMenuViewImpl.this, 0);
+        	}
+        	public void state1() {
+        		ViewImpl.state(ActionMenuViewImpl.this, 1);
+        	}
+        	public void state2() {
+        		ViewImpl.state(ActionMenuViewImpl.this, 2);
+        	}
+        	public void state3() {
+        		ViewImpl.state(ActionMenuViewImpl.this, 3);
+        	}
+        	public void state4() {
+        		ViewImpl.state(ActionMenuViewImpl.this, 4);
+        	}
+                        
+        public void stateYes() {
+        	ViewImpl.stateYes(ActionMenuViewImpl.this);
+        	
+        }
+        
+        public void stateNo() {
+        	ViewImpl.stateNo(ActionMenuViewImpl.this);
+        }
 	}
 	@Override
 	public Class getViewClass() {
@@ -790,7 +815,7 @@ return getDividerPadding();			}
 	public void setId(String id){
 		if (id != null && !id.equals("")){
 			super.setId(id);
-			actionMenuView.setId(IdGenerator.getId(id));
+			actionMenuView.setId((int) quickConvert(id, "id"));
 		}
 	}
 	

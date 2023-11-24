@@ -303,6 +303,20 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Orientation)
 
 - (void)setVisibilityWithInt:(jint)visibility;
 
+- (void)state0;
+
+- (void)state1;
+
+- (void)state2;
+
+- (void)state3;
+
+- (void)state4;
+
+- (void)stateNo;
+
+- (void)stateYes;
+
 - (void)updateMeasuredDimensionWithInt:(jint)width
                                withInt:(jint)height;
 

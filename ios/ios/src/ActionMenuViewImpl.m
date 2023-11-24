@@ -21,7 +21,6 @@
 #include "IOSPrimitiveArray.h"
 #include "IWidget.h"
 #include "IWidgetLifeCycleListener.h"
-#include "IdGenerator.h"
 #include "J2ObjC_source.h"
 #include "MeasureEvent.h"
 #include "MenuBuilder.h"
@@ -726,7 +725,7 @@ J2OBJC_IGNORE_DESIGNATED_END
 - (void)setIdWithNSString:(NSString *)id_ {
   if (id_ != nil && ![id_ isEqual:@""]) {
     [super setIdWithNSString:id_];
-    [((ADXActionMenuView *) nil_chk(actionMenuView_)) setIdWithInt:ASIdGenerator_getIdWithNSString_(id_)];
+    [((ADXActionMenuView *) nil_chk(actionMenuView_)) setIdWithInt:[((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk([self quickConvertWithId:id_ withNSString:@"id"], [JavaLangInteger class]))) intValue]];
   }
 }
 
@@ -1469,6 +1468,34 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Orientation)
   return ASActionMenuViewImpl_getOverFlowButton(this$0_);
 }
 
+- (void)state0 {
+  ASViewImpl_stateWithASIWidget_withInt_(this$0_, 0);
+}
+
+- (void)state1 {
+  ASViewImpl_stateWithASIWidget_withInt_(this$0_, 1);
+}
+
+- (void)state2 {
+  ASViewImpl_stateWithASIWidget_withInt_(this$0_, 2);
+}
+
+- (void)state3 {
+  ASViewImpl_stateWithASIWidget_withInt_(this$0_, 3);
+}
+
+- (void)state4 {
+  ASViewImpl_stateWithASIWidget_withInt_(this$0_, 4);
+}
+
+- (void)stateYes {
+  ASViewImpl_stateYesWithASIWidget_(this$0_);
+}
+
+- (void)stateNo {
+  ASViewImpl_stateNoWithASIWidget_(this$0_);
+}
+
 - (void)__javaClone:(ASActionMenuViewImpl_ActionMenuViewExt *)original {
   [super __javaClone:original];
   JreRelease(this$0_);
@@ -1502,6 +1529,13 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Orientation)
     { NULL, "V", 0x1, 28, 1, -1, -1, -1, -1 },
     { NULL, "LADView;", 0x1, 29, 30, -1, -1, -1, -1 },
     { NULL, "LADView;", 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
@@ -1532,6 +1566,13 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Orientation)
   methods[23].selector = @selector(setVisibilityWithInt:);
   methods[24].selector = @selector(getItemViewWithADMenuItem:);
   methods[25].selector = @selector(getOverFlowButton);
+  methods[26].selector = @selector(state0);
+  methods[27].selector = @selector(state1);
+  methods[28].selector = @selector(state2);
+  methods[29].selector = @selector(state3);
+  methods[30].selector = @selector(state4);
+  methods[31].selector = @selector(stateYes);
+  methods[32].selector = @selector(stateNo);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "this$0_", "LASActionMenuViewImpl;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
@@ -1542,7 +1583,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Orientation)
     { "templates_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 31, -1 },
   };
   static const void *ptrTable[] = { "setMaxWidth", "I", "setMaxHeight", "LASActionMenuViewImpl;", "onMeasure", "II", "onLayout", "ZIIII", "execute", "LNSString;[LNSObject;", "updateMeasuredDimension", "newInstance", "LASIWidget;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;", "()Ljava/util/List<Ljava/lang/String;>;", "getAttribute", "LASWidgetAttribute;", "inflateView", "LNSString;", "getLocationOnScreen", "[I", "getWindowVisibleDisplayFrame", "LADRect;", "offsetTopAndBottom", "offsetLeftAndRight", "setMyAttribute", "LNSString;LNSObject;", "setVisibility", "getItemView", "LADMenuItem;", "Ljava/util/Map<Ljava/lang/String;Lcom/ashera/widget/IWidget;>;" };
-  static const J2ObjcClassInfo _ASActionMenuViewImpl_ActionMenuViewExt = { "ActionMenuViewExt", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 26, 6, 3, -1, -1, -1, -1 };
+  static const J2ObjcClassInfo _ASActionMenuViewImpl_ActionMenuViewExt = { "ActionMenuViewExt", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 33, 6, 3, -1, -1, -1, -1 };
   return &_ASActionMenuViewImpl_ActionMenuViewExt;
 }
 
