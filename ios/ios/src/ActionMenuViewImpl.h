@@ -271,6 +271,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Orientation)
 
 - (ADView *)getOverFlowButton;
 
+- (id<ASIWidget>)getWidget;
+
 - (void)getWindowVisibleDisplayFrameWithADRect:(ADRect *)displayFrame;
 
 - (ADView *)inflateViewWithNSString:(NSString *)layout;
