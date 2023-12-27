@@ -303,6 +303,16 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Orientation)
 - (void)setMyAttributeWithNSString:(NSString *)name
                             withId:(id)value;
 
+- (void)setState0WithId:(id)value;
+
+- (void)setState1WithId:(id)value;
+
+- (void)setState2WithId:(id)value;
+
+- (void)setState3WithId:(id)value;
+
+- (void)setState4WithId:(id)value;
+
 - (void)setVisibilityWithInt:(jint)visibility;
 
 - (void)state0;
@@ -406,6 +416,10 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_ShowAsAction)
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)addModelWithId:(id)arg0;
 
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)animatorXmlWithNSString:(NSString *)arg0;
+
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)endAnimator;
+
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)executeWithBoolean:(jboolean)setter;
 
 - (id)getBaselineAlignedChildIndex;
@@ -477,6 +491,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_ShowAsAction)
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setDividerPaddingWithNSString:(NSString *)value;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setDuplicateParentStateWithBoolean:(jboolean)arg0;
+
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setElevationWithNSString:(NSString *)arg0;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setEnabledWithBoolean:(jboolean)arg0;
 
@@ -600,6 +616,14 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_ShowAsAction)
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setModelUiToPojoWithNSString:(NSString *)arg0;
 
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setOnAnimationCancelWithNSString:(NSString *)arg0;
+
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setOnAnimationEndWithNSString:(NSString *)arg0;
+
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setOnAnimationRepeatWithNSString:(NSString *)arg0;
+
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setOnAnimationStartWithNSString:(NSString *)arg0;
+
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setOnChildViewAddedWithNSString:(NSString *)arg0;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setOnChildViewRemovedWithNSString:(NSString *)arg0;
@@ -691,6 +715,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_ShowAsAction)
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setWeightSumWithFloat:(jfloat)value;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setZIndexWithInt:(jint)arg0;
+
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)startAnimator;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)tryGetAddStatesFromChildren;
 

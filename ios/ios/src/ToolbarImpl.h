@@ -257,6 +257,16 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_PreMeasureHandler)
 - (void)setMyAttributeWithNSString:(NSString *)name
                             withId:(id)value;
 
+- (void)setState0WithId:(id)value;
+
+- (void)setState1WithId:(id)value;
+
+- (void)setState2WithId:(id)value;
+
+- (void)setState3WithId:(id)value;
+
+- (void)setState4WithId:(id)value;
+
 - (void)setVisibilityWithInt:(jint)visibility;
 
 - (void)state0;
@@ -324,6 +334,10 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)addModelWithId:(id)arg0;
 
+- (ASToolbarImpl_ToolbarCommandBuilder *)animatorXmlWithNSString:(NSString *)arg0;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)endAnimator;
+
 - (ASToolbarImpl_ToolbarCommandBuilder *)executeWithBoolean:(jboolean)setter;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)invalidate;
@@ -385,6 +399,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 - (ASToolbarImpl_ToolbarCommandBuilder *)setCustomErrorMessageValuesWithNSString:(NSString *)arg0;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setDuplicateParentStateWithBoolean:(jboolean)arg0;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setElevationWithNSString:(NSString *)arg0;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setEnabledWithBoolean:(jboolean)arg0;
 
@@ -514,6 +530,14 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setNavigationIconWithNSString:(NSString *)value;
 
+- (ASToolbarImpl_ToolbarCommandBuilder *)setOnAnimationCancelWithNSString:(NSString *)arg0;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setOnAnimationEndWithNSString:(NSString *)arg0;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setOnAnimationRepeatWithNSString:(NSString *)arg0;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setOnAnimationStartWithNSString:(NSString *)arg0;
+
 - (ASToolbarImpl_ToolbarCommandBuilder *)setOnChildViewAddedWithNSString:(NSString *)arg0;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setOnChildViewRemovedWithNSString:(NSString *)arg0;
@@ -625,6 +649,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 - (ASToolbarImpl_ToolbarCommandBuilder *)setVisibilityWithNSString:(NSString *)arg0;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setZIndexWithInt:(jint)arg0;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)startAnimator;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)tryGetAddStatesFromChildren;
 
