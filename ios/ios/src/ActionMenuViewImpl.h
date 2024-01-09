@@ -254,6 +254,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Orientation)
 
 - (void)drawableStateChanged;
 
+- (void)endViewTransitionWithADView:(ADView *)view;
+
 - (void)executeWithNSString:(NSString *)method
           withNSObjectArray:(IOSObjectArray *)canvas;
 

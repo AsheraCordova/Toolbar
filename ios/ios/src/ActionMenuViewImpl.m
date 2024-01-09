@@ -22,6 +22,7 @@
 #include "IWidget.h"
 #include "IWidgetLifeCycleListener.h"
 #include "J2ObjC_source.h"
+#include "LayoutTransition.h"
 #include "MeasureEvent.h"
 #include "MenuBuilder.h"
 #include "MenuItem.h"
@@ -40,6 +41,7 @@
 #include "java/lang/Boolean.h"
 #include "java/lang/Float.h"
 #include "java/lang/Integer.h"
+#include "java/lang/Runnable.h"
 #include "java/lang/UnsupportedOperationException.h"
 #include "java/util/ArrayList.h"
 #include "java/util/HashMap.h"
@@ -57,6 +59,7 @@
 @protocol JavaUtilMap;
 
 
+#pragma clang diagnostic ignored "-Wprotocol"
 #pragma clang diagnostic ignored "-Wincomplete-implementation"
 
 @interface ASActionMenuViewImpl () {
@@ -77,6 +80,8 @@
 }
 
 - (void)setWidgetOnNativeClass;
+
+- (void)nativeRemoveViewWithASIWidget:(id<ASIWidget>)widget;
 
 - (void)createLayoutParamsWithADView:(ADView *)view;
 
@@ -155,6 +160,8 @@ static NSString *ASActionMenuViewImpl_MAX_ICON_SIZE = @"32dp";
 J2OBJC_STATIC_FIELD_OBJ_FINAL(ASActionMenuViewImpl, MAX_ICON_SIZE, NSString *)
 
 __attribute__((unused)) static void ASActionMenuViewImpl_setWidgetOnNativeClass(ASActionMenuViewImpl *self);
+
+__attribute__((unused)) static void ASActionMenuViewImpl_nativeRemoveViewWithASIWidget_(ASActionMenuViewImpl *self, id<ASIWidget> widget);
 
 __attribute__((unused)) static void ASActionMenuViewImpl_createLayoutParamsWithADView_(ASActionMenuViewImpl *self, ADView *view);
 
@@ -343,6 +350,23 @@ __attribute__((unused)) static ASActionMenuViewImpl_MenuClickListener *create_AS
 
 J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_MenuClickListener)
 
+@interface ASActionMenuViewImpl_$Lambda$1 : NSObject < JavaLangRunnable > {
+ @public
+  id<ASIWidget> val$widget_;
+}
+
+- (void)run;
+
+@end
+
+J2OBJC_EMPTY_STATIC_INIT(ASActionMenuViewImpl_$Lambda$1)
+
+__attribute__((unused)) static void ASActionMenuViewImpl_$Lambda$1_initWithASIWidget_(ASActionMenuViewImpl_$Lambda$1 *self, id<ASIWidget> capture$0);
+
+__attribute__((unused)) static ASActionMenuViewImpl_$Lambda$1 *new_ASActionMenuViewImpl_$Lambda$1_initWithASIWidget_(id<ASIWidget> capture$0) NS_RETURNS_RETAINED;
+
+__attribute__((unused)) static ASActionMenuViewImpl_$Lambda$1 *create_ASActionMenuViewImpl_$Lambda$1_initWithASIWidget_(id<ASIWidget> capture$0);
+
 NSString *ASActionMenuViewImpl_LOCAL_NAME = @"androidx.appcompat.widget.ActionMenuView";
 NSString *ASActionMenuViewImpl_GROUP_NAME = @"androidx.appcompat.widget.ActionMenuView";
 
@@ -411,7 +435,7 @@ J2OBJC_IGNORE_DESIGNATED_END
 - (jboolean)removeWithASIWidget:(id<ASIWidget>)w {
   jboolean remove = [super removeWithASIWidget:w];
   [((ADXActionMenuView *) nil_chk(actionMenuView_)) removeViewWithADView:(ADView *) cast_chk([((id<ASIWidget>) nil_chk(w)) asWidget], [ADView class])];
-  ASViewGroupImpl_nativeRemoveViewWithASIWidget_(w);
+  ASActionMenuViewImpl_nativeRemoveViewWithASIWidget_(self, w);
   return remove;
 }
 
@@ -420,9 +444,13 @@ J2OBJC_IGNORE_DESIGNATED_END
   jboolean remove = [super removeWithInt:index];
   if (index + 1 <= [((ADXActionMenuView *) nil_chk(actionMenuView_)) getChildCount]) {
     [((ADXActionMenuView *) nil_chk(actionMenuView_)) removeViewAtWithInt:index];
-    ASViewGroupImpl_nativeRemoveViewWithASIWidget_(widget);
+    ASActionMenuViewImpl_nativeRemoveViewWithASIWidget_(self, widget);
   }
   return remove;
+}
+
+- (void)nativeRemoveViewWithASIWidget:(id<ASIWidget>)widget {
+  ASActionMenuViewImpl_nativeRemoveViewWithASIWidget_(self, widget);
 }
 
 - (void)addWithASIWidget:(id<ASIWidget>)w
@@ -870,49 +898,50 @@ J2OBJC_IGNORE_DESIGNATED_END
     { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "Z", 0x1, 6, 7, -1, -1, -1, -1 },
     { NULL, "Z", 0x1, 6, 8, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 9, 10, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 11, 12, -1, -1, -1, -1 },
-    { NULL, "LADXActionMenuView_LayoutParams;", 0x2, 13, 12, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 14, 15, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, 16, 17, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 9, 7, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 10, 11, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 12, 13, -1, -1, -1, -1 },
+    { NULL, "LADXActionMenuView_LayoutParams;", 0x2, 14, 13, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 15, 16, -1, -1, -1, -1 },
+    { NULL, "LNSObject;", 0x1, 17, 18, -1, -1, -1, -1 },
     { NULL, "LIOSClass;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 18, 19, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, 20, 21, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 19, 20, -1, -1, -1, -1 },
+    { NULL, "LNSObject;", 0x1, 21, 22, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "Z", 0x101, 22, 1, -1, -1, -1, -1 },
-    { NULL, "V", 0x101, 23, 24, -1, 25, -1, -1 },
+    { NULL, "Z", 0x101, 23, 1, -1, -1, -1, -1 },
+    { NULL, "V", 0x101, 24, 25, -1, 26, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 26, 1, -1, -1, -1, -1 },
-    { NULL, "LADView;", 0x1, 27, 28, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 27, 1, -1, -1, -1, -1 },
+    { NULL, "LADView;", 0x1, 28, 29, -1, -1, -1, -1 },
     { NULL, "Z", 0x2, -1, -1, -1, -1, -1, -1 },
     { NULL, "LASIWidget;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LADView;", 0x2, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 29, 30, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 31, 30, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 30, 31, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 32, 31, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x2, -1, -1, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x2, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x2, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 32, 1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 33, 34, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, 35, 1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 33, 1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 34, 35, -1, -1, -1, -1 },
+    { NULL, "LNSObject;", 0x1, 36, 1, -1, -1, -1, -1 },
     { NULL, "LASActionMenuViewImpl_ActionMenuViewBean;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LASActionMenuViewImpl_ActionMenuViewParamsBean;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LASActionMenuViewImpl_ActionMenuViewCommandParamsBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 36, 37, -1, -1, -1, -1 },
-    { NULL, "[I", 0x2, 38, 39, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 40, 41, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 37, 38, -1, -1, -1, -1 },
+    { NULL, "[I", 0x2, 39, 40, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 41, 42, -1, -1, -1, -1 },
     { NULL, "Z", 0x2, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 42, 43, -1, -1, -1, -1 },
-    { NULL, "V", 0x102, 44, 45, -1, -1, -1, -1 },
-    { NULL, "V", 0x102, 46, 47, -1, 48, -1, -1 },
-    { NULL, "LNSObject;", 0x102, 49, 50, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 51, 30, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 43, 44, -1, -1, -1, -1 },
+    { NULL, "V", 0x102, 45, 46, -1, -1, -1, -1 },
+    { NULL, "V", 0x102, 47, 48, -1, 49, -1, -1 },
+    { NULL, "LNSObject;", 0x102, 50, 51, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 52, 31, -1, -1, -1, -1 },
     { NULL, "Z", 0x2, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x102, 52, 47, -1, 48, -1, -1 },
-    { NULL, "LNSObject;", 0x102, 53, 50, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 54, 50, -1, -1, -1, -1 },
+    { NULL, "V", 0x102, 53, 48, -1, 49, -1, -1 },
+    { NULL, "LNSObject;", 0x102, 54, 51, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 55, 51, -1, -1, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
@@ -928,59 +957,60 @@ J2OBJC_IGNORE_DESIGNATED_END
   methods[7].selector = @selector(asWidget);
   methods[8].selector = @selector(removeWithASIWidget:);
   methods[9].selector = @selector(removeWithInt:);
-  methods[10].selector = @selector(addWithASIWidget:withInt:);
-  methods[11].selector = @selector(createLayoutParamsWithADView:);
-  methods[12].selector = @selector(getLayoutParamsWithADView:);
-  methods[13].selector = @selector(setChildAttributeWithASIWidget:withASWidgetAttribute:withNSString:withId:);
-  methods[14].selector = @selector(getChildAttributeWithASIWidget:withASWidgetAttribute:);
-  methods[15].selector = @selector(getViewClass);
-  methods[16].selector = @selector(setAttributeWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
-  methods[17].selector = @selector(getAttributeWithASWidgetAttribute:withASILifeCycleDecorator:);
-  methods[18].selector = @selector(asNativeWidget);
-  methods[19].selector = @selector(checkIosVersionWithNSString:);
-  methods[20].selector = @selector(nativeCreateWithJavaUtilMap:);
-  methods[21].selector = @selector(requestLayout);
-  methods[22].selector = @selector(invalidate);
-  methods[23].selector = @selector(loadCustomAttributesWithNSString:);
-  methods[24].selector = @selector(getItemViewWithADMenuItem:);
-  methods[25].selector = @selector(shouldAllowTextWithIcon);
-  methods[26].selector = @selector(getOverFlowButtonWidget);
-  methods[27].selector = @selector(getOverFlowButton);
-  methods[28].selector = @selector(setDividerPaddingWithId:);
-  methods[29].selector = @selector(setShowDividersWithId:);
-  methods[30].selector = @selector(getDividerPadding);
-  methods[31].selector = @selector(getShowDividers);
-  methods[32].selector = @selector(createCanvas);
-  methods[33].selector = @selector(setIdWithNSString:);
-  methods[34].selector = @selector(setVisibleWithBoolean:);
-  methods[35].selector = @selector(getPluginWithNSString:);
-  methods[36].selector = @selector(getBean);
-  methods[37].selector = @selector(getBuilder);
-  methods[38].selector = @selector(getParamsBean);
-  methods[39].selector = @selector(getParamsBuilder);
-  methods[40].selector = @selector(addMenuClickListenerWithADMenuItem:withASIWidget:withASToolbarImpl:);
-  methods[41].selector = @selector(getImageDimensionWithADDrawable:);
-  methods[42].selector = @selector(resizeImageIfRequiredWithADDrawable:withInt:withInt:);
-  methods[43].selector = @selector(isLandScape);
-  methods[44].selector = @selector(createPopUpMenuWithASToolbarImpl:);
-  methods[45].selector = @selector(nativeShowKxMenuWithId:withId:);
-  methods[46].selector = @selector(setKxMenuOnButtonWithId:withJavaUtilList:);
-  methods[47].selector = @selector(getKXMenuWithASToolbarImpl:withADXMenuItemImpl:);
-  methods[48].selector = @selector(handleOnKxMenuItemClickWithId:);
-  methods[49].selector = @selector(isKxMenuToBeShown);
-  methods[50].selector = @selector(setMenuOnButtonWithId:withJavaUtilList:);
-  methods[51].selector = @selector(getActionWithASToolbarImpl:withADXMenuItemImpl:);
-  methods[52].selector = @selector(handleOnMenuItemClickWithASToolbarImpl:withADXMenuItemImpl:);
-  methods[53].selector = @selector(initialized);
+  methods[10].selector = @selector(nativeRemoveViewWithASIWidget:);
+  methods[11].selector = @selector(addWithASIWidget:withInt:);
+  methods[12].selector = @selector(createLayoutParamsWithADView:);
+  methods[13].selector = @selector(getLayoutParamsWithADView:);
+  methods[14].selector = @selector(setChildAttributeWithASIWidget:withASWidgetAttribute:withNSString:withId:);
+  methods[15].selector = @selector(getChildAttributeWithASIWidget:withASWidgetAttribute:);
+  methods[16].selector = @selector(getViewClass);
+  methods[17].selector = @selector(setAttributeWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
+  methods[18].selector = @selector(getAttributeWithASWidgetAttribute:withASILifeCycleDecorator:);
+  methods[19].selector = @selector(asNativeWidget);
+  methods[20].selector = @selector(checkIosVersionWithNSString:);
+  methods[21].selector = @selector(nativeCreateWithJavaUtilMap:);
+  methods[22].selector = @selector(requestLayout);
+  methods[23].selector = @selector(invalidate);
+  methods[24].selector = @selector(loadCustomAttributesWithNSString:);
+  methods[25].selector = @selector(getItemViewWithADMenuItem:);
+  methods[26].selector = @selector(shouldAllowTextWithIcon);
+  methods[27].selector = @selector(getOverFlowButtonWidget);
+  methods[28].selector = @selector(getOverFlowButton);
+  methods[29].selector = @selector(setDividerPaddingWithId:);
+  methods[30].selector = @selector(setShowDividersWithId:);
+  methods[31].selector = @selector(getDividerPadding);
+  methods[32].selector = @selector(getShowDividers);
+  methods[33].selector = @selector(createCanvas);
+  methods[34].selector = @selector(setIdWithNSString:);
+  methods[35].selector = @selector(setVisibleWithBoolean:);
+  methods[36].selector = @selector(getPluginWithNSString:);
+  methods[37].selector = @selector(getBean);
+  methods[38].selector = @selector(getBuilder);
+  methods[39].selector = @selector(getParamsBean);
+  methods[40].selector = @selector(getParamsBuilder);
+  methods[41].selector = @selector(addMenuClickListenerWithADMenuItem:withASIWidget:withASToolbarImpl:);
+  methods[42].selector = @selector(getImageDimensionWithADDrawable:);
+  methods[43].selector = @selector(resizeImageIfRequiredWithADDrawable:withInt:withInt:);
+  methods[44].selector = @selector(isLandScape);
+  methods[45].selector = @selector(createPopUpMenuWithASToolbarImpl:);
+  methods[46].selector = @selector(nativeShowKxMenuWithId:withId:);
+  methods[47].selector = @selector(setKxMenuOnButtonWithId:withJavaUtilList:);
+  methods[48].selector = @selector(getKXMenuWithASToolbarImpl:withADXMenuItemImpl:);
+  methods[49].selector = @selector(handleOnKxMenuItemClickWithId:);
+  methods[50].selector = @selector(isKxMenuToBeShown);
+  methods[51].selector = @selector(setMenuOnButtonWithId:withJavaUtilList:);
+  methods[52].selector = @selector(getActionWithASToolbarImpl:withADXMenuItemImpl:);
+  methods[53].selector = @selector(handleOnMenuItemClickWithASToolbarImpl:withADXMenuItemImpl:);
+  methods[54].selector = @selector(initialized);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "uiView_", "LNSObject;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "canvas_", "LADCanvas;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "LOCAL_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 55, -1, -1 },
-    { "GROUP_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 56, -1, -1 },
+    { "LOCAL_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 56, -1, -1 },
+    { "GROUP_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 57, -1, -1 },
     { "actionMenuView_", "LADXActionMenuView;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "MAX_ICON_SIZE", "LNSString;", .constantValue.asLong = 0, 0x1a, -1, 57, -1, -1 },
-    { "menuItemMap_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 58, -1 },
+    { "MAX_ICON_SIZE", "LNSString;", .constantValue.asLong = 0, 0x1a, -1, 58, -1, -1 },
+    { "menuItemMap_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 59, -1 },
     { "overFlowButton_", "LASIWidget;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "builder_", "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "bean_", "LASActionMenuViewImpl_ActionMenuViewBean;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
@@ -989,10 +1019,10 @@ J2OBJC_IGNORE_DESIGNATED_END
     { "toolbar_", "LASToolbarImpl;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "itemArray_", "LNSObject;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "OVERFLOW_BUTTON_TYPE_", "LNSString;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "menuItemToNativeMenuItemMap_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 59, -1 },
+    { "menuItemToNativeMenuItemMap_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 60, -1 },
   };
-  static const void *ptrTable[] = { "loadAttributes", "LNSString;", "LNSString;LNSString;", "create", "LASIFragment;LJavaUtilMap;", "(Lcom/ashera/core/IFragment;Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "remove", "LASIWidget;", "I", "add", "LASIWidget;I", "createLayoutParams", "LADView;", "getLayoutParams", "setChildAttribute", "LASIWidget;LASWidgetAttribute;LNSString;LNSObject;", "getChildAttribute", "LASIWidget;LASWidgetAttribute;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;LASILifeCycleDecorator;", "getAttribute", "LASWidgetAttribute;LASILifeCycleDecorator;", "checkIosVersion", "nativeCreate", "LJavaUtilMap;", "(Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "loadCustomAttributes", "getItemView", "LADMenuItem;", "setDividerPadding", "LNSObject;", "setShowDividers", "setId", "setVisible", "Z", "getPlugin", "addMenuClickListener", "LADMenuItem;LASIWidget;LASToolbarImpl;", "getImageDimension", "LADDrawable;", "resizeImageIfRequired", "LADDrawable;II", "createPopUpMenu", "LASToolbarImpl;", "nativeShowKxMenu", "LNSObject;LNSObject;", "setKxMenuOnButton", "LNSObject;LJavaUtilList;", "(Ljava/lang/Object;Ljava/util/List<Ljava/lang/Object;>;)V", "getKXMenu", "LASToolbarImpl;LADXMenuItemImpl;", "handleOnKxMenuItemClick", "setMenuOnButton", "getAction", "handleOnMenuItemClick", &ASActionMenuViewImpl_LOCAL_NAME, &ASActionMenuViewImpl_GROUP_NAME, &ASActionMenuViewImpl_MAX_ICON_SIZE, "Ljava/util/Map<Lr/android/view/MenuItem;Lcom/ashera/widget/IWidget;>;", "Ljava/util/Map<Ljava/lang/Object;Landroidx/appcompat/view/menu/MenuItemImpl;>;", "LASActionMenuViewImpl_Divider;LASActionMenuViewImpl_Orientation;LASActionMenuViewImpl_ActionMenuViewExt;LASActionMenuViewImpl_ShowAsAction;LASActionMenuViewImpl_CanvasImpl;LASActionMenuViewImpl_ActionMenuViewCommandBuilder;LASActionMenuViewImpl_ActionMenuViewBean;LASActionMenuViewImpl_ActionMenuViewParamsBean;LASActionMenuViewImpl_ActionMenuViewCommandParamsBuilder;LASActionMenuViewImpl_MenuOnClickListener;LASActionMenuViewImpl_MenuClickListener;" };
-  static const J2ObjcClassInfo _ASActionMenuViewImpl = { "ActionMenuViewImpl", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 54, 16, -1, 60, -1, -1, -1 };
+  static const void *ptrTable[] = { "loadAttributes", "LNSString;", "LNSString;LNSString;", "create", "LASIFragment;LJavaUtilMap;", "(Lcom/ashera/core/IFragment;Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "remove", "LASIWidget;", "I", "nativeRemoveView", "add", "LASIWidget;I", "createLayoutParams", "LADView;", "getLayoutParams", "setChildAttribute", "LASIWidget;LASWidgetAttribute;LNSString;LNSObject;", "getChildAttribute", "LASIWidget;LASWidgetAttribute;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;LASILifeCycleDecorator;", "getAttribute", "LASWidgetAttribute;LASILifeCycleDecorator;", "checkIosVersion", "nativeCreate", "LJavaUtilMap;", "(Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "loadCustomAttributes", "getItemView", "LADMenuItem;", "setDividerPadding", "LNSObject;", "setShowDividers", "setId", "setVisible", "Z", "getPlugin", "addMenuClickListener", "LADMenuItem;LASIWidget;LASToolbarImpl;", "getImageDimension", "LADDrawable;", "resizeImageIfRequired", "LADDrawable;II", "createPopUpMenu", "LASToolbarImpl;", "nativeShowKxMenu", "LNSObject;LNSObject;", "setKxMenuOnButton", "LNSObject;LJavaUtilList;", "(Ljava/lang/Object;Ljava/util/List<Ljava/lang/Object;>;)V", "getKXMenu", "LASToolbarImpl;LADXMenuItemImpl;", "handleOnKxMenuItemClick", "setMenuOnButton", "getAction", "handleOnMenuItemClick", &ASActionMenuViewImpl_LOCAL_NAME, &ASActionMenuViewImpl_GROUP_NAME, &ASActionMenuViewImpl_MAX_ICON_SIZE, "Ljava/util/Map<Lr/android/view/MenuItem;Lcom/ashera/widget/IWidget;>;", "Ljava/util/Map<Ljava/lang/Object;Landroidx/appcompat/view/menu/MenuItemImpl;>;", "LASActionMenuViewImpl_Divider;LASActionMenuViewImpl_Orientation;LASActionMenuViewImpl_ActionMenuViewExt;LASActionMenuViewImpl_ShowAsAction;LASActionMenuViewImpl_CanvasImpl;LASActionMenuViewImpl_ActionMenuViewCommandBuilder;LASActionMenuViewImpl_ActionMenuViewBean;LASActionMenuViewImpl_ActionMenuViewParamsBean;LASActionMenuViewImpl_ActionMenuViewCommandParamsBuilder;LASActionMenuViewImpl_MenuOnClickListener;LASActionMenuViewImpl_MenuClickListener;" };
+  static const J2ObjcClassInfo _ASActionMenuViewImpl = { "ActionMenuViewImpl", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 55, 16, -1, 61, -1, -1, -1 };
   return &_ASActionMenuViewImpl;
 }
 
@@ -1042,6 +1072,16 @@ ASActionMenuViewImpl *create_ASActionMenuViewImpl_initWithNSString_withNSString_
 
 void ASActionMenuViewImpl_setWidgetOnNativeClass(ASActionMenuViewImpl *self) {
   ((ASUIView*) [self asNativeWidget]).widget = self;
+}
+
+void ASActionMenuViewImpl_nativeRemoveViewWithASIWidget_(ASActionMenuViewImpl *self, id<ASIWidget> widget) {
+  ADLayoutTransition *layoutTransition = [((ADXActionMenuView *) nil_chk(self->actionMenuView_)) getLayoutTransition];
+  if (layoutTransition != nil && ([layoutTransition isTransitionTypeEnabledWithInt:ADLayoutTransition_CHANGE_DISAPPEARING] || [layoutTransition isTransitionTypeEnabledWithInt:ADLayoutTransition_DISAPPEARING])) {
+    [self addToBufferedRunnablesWithJavaLangRunnable:new_ASActionMenuViewImpl_$Lambda$1_initWithASIWidget_(widget)];
+  }
+  else {
+    ASViewGroupImpl_nativeRemoveViewWithASIWidget_(widget);
+  }
 }
 
 void ASActionMenuViewImpl_createLayoutParamsWithADView_(ASActionMenuViewImpl *self, ADView *view) {
@@ -1540,6 +1580,11 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Orientation)
   ASViewImpl_stateNoWithASIWidget_(this$0_);
 }
 
+- (void)endViewTransitionWithADView:(ADView *)view {
+  [super endViewTransitionWithADView:view];
+  [this$0_ runBufferedRunnables];
+}
+
 - (void)__javaClone:(ASActionMenuViewImpl_ActionMenuViewExt *)original {
   [super __javaClone:original];
   JreRelease(this$0_);
@@ -1586,6 +1631,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Orientation)
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 37, 38, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
@@ -1629,6 +1675,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Orientation)
   methods[36].selector = @selector(state4);
   methods[37].selector = @selector(stateYes);
   methods[38].selector = @selector(stateNo);
+  methods[39].selector = @selector(endViewTransitionWithADView:);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "this$0_", "LASActionMenuViewImpl;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
@@ -1636,10 +1683,10 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Orientation)
     { "onLayoutEvent_", "LASOnLayoutEvent;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mMaxWidth_", "I", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mMaxHeight_", "I", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "templates_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 37, -1 },
+    { "templates_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 39, -1 },
   };
-  static const void *ptrTable[] = { "setMaxWidth", "I", "setMaxHeight", "LASActionMenuViewImpl;", "onMeasure", "II", "onLayout", "ZIIII", "execute", "LNSString;[LNSObject;", "updateMeasuredDimension", "newInstance", "LASIWidget;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;", "()Ljava/util/List<Ljava/lang/String;>;", "getAttribute", "LASWidgetAttribute;", "inflateView", "LNSString;", "getLocationOnScreen", "[I", "getWindowVisibleDisplayFrame", "LADRect;", "offsetTopAndBottom", "offsetLeftAndRight", "setMyAttribute", "LNSString;LNSObject;", "setVisibility", "getItemView", "LADMenuItem;", "setState0", "LNSObject;", "setState1", "setState2", "setState3", "setState4", "Ljava/util/Map<Ljava/lang/String;Lcom/ashera/widget/IWidget;>;" };
-  static const J2ObjcClassInfo _ASActionMenuViewImpl_ActionMenuViewExt = { "ActionMenuViewExt", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 39, 6, 3, -1, -1, -1, -1 };
+  static const void *ptrTable[] = { "setMaxWidth", "I", "setMaxHeight", "LASActionMenuViewImpl;", "onMeasure", "II", "onLayout", "ZIIII", "execute", "LNSString;[LNSObject;", "updateMeasuredDimension", "newInstance", "LASIWidget;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;", "()Ljava/util/List<Ljava/lang/String;>;", "getAttribute", "LASWidgetAttribute;", "inflateView", "LNSString;", "getLocationOnScreen", "[I", "getWindowVisibleDisplayFrame", "LADRect;", "offsetTopAndBottom", "offsetLeftAndRight", "setMyAttribute", "LNSString;LNSObject;", "setVisibility", "getItemView", "LADMenuItem;", "setState0", "LNSObject;", "setState1", "setState2", "setState3", "setState4", "endViewTransition", "LADView;", "Ljava/util/Map<Ljava/lang/String;Lcom/ashera/widget/IWidget;>;" };
+  static const J2ObjcClassInfo _ASActionMenuViewImpl_ActionMenuViewExt = { "ActionMenuViewExt", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 40, 6, 3, -1, -1, -1, -1 };
   return &_ASActionMenuViewImpl_ActionMenuViewExt;
 }
 
@@ -2528,3 +2575,24 @@ ASActionMenuViewImpl_MenuClickListener *create_ASActionMenuViewImpl_MenuClickLis
 }
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_MenuClickListener)
+
+@implementation ASActionMenuViewImpl_$Lambda$1
+
+- (void)run {
+  ASViewGroupImpl_nativeRemoveViewWithASIWidget_(val$widget_);
+}
+
+@end
+
+void ASActionMenuViewImpl_$Lambda$1_initWithASIWidget_(ASActionMenuViewImpl_$Lambda$1 *self, id<ASIWidget> capture$0) {
+  self->val$widget_ = capture$0;
+  NSObject_init(self);
+}
+
+ASActionMenuViewImpl_$Lambda$1 *new_ASActionMenuViewImpl_$Lambda$1_initWithASIWidget_(id<ASIWidget> capture$0) {
+  J2OBJC_NEW_IMPL(ASActionMenuViewImpl_$Lambda$1, initWithASIWidget_, capture$0)
+}
+
+ASActionMenuViewImpl_$Lambda$1 *create_ASActionMenuViewImpl_$Lambda$1_initWithASIWidget_(id<ASIWidget> capture$0) {
+  J2OBJC_CREATE_IMPL(ASActionMenuViewImpl_$Lambda$1, initWithASIWidget_, capture$0)
+}

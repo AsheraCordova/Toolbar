@@ -123,7 +123,7 @@ public class ToolbarImpl extends BaseHasWidgets {
 	public boolean remove(IWidget w) {		
 		boolean remove = super.remove(w);
 		toolbar.removeView((View) w.asWidget());
-         ViewGroupImpl.nativeRemoveView(w);            
+		 nativeRemoveView(w);            
 		return remove;
 	}
 	
@@ -134,10 +134,22 @@ public class ToolbarImpl extends BaseHasWidgets {
 
         if (index + 1 <= toolbar.getChildCount()) {
             toolbar.removeViewAt(index);
-            ViewGroupImpl.nativeRemoveView(widget);            
+            nativeRemoveView(widget);
         }    
         return remove;
     }
+	
+	private void nativeRemoveView(IWidget widget) {
+		r.android.animation.LayoutTransition layoutTransition = toolbar.getLayoutTransition();
+		if (layoutTransition != null && (
+				layoutTransition.isTransitionTypeEnabled(r.android.animation.LayoutTransition.CHANGE_DISAPPEARING) ||
+				layoutTransition.isTransitionTypeEnabled(r.android.animation.LayoutTransition.DISAPPEARING)
+				)) {
+			addToBufferedRunnables(() -> ViewGroupImpl.nativeRemoveView(widget));          
+		} else {
+			ViewGroupImpl.nativeRemoveView(widget);
+		}
+	}
 	
 	@Override
 	public void add(IWidget w, int index) {
@@ -449,6 +461,12 @@ public class ToolbarImpl extends BaseHasWidgets {
         public void stateNo() {
         	ViewImpl.stateNo(ToolbarImpl.this);
         }
+     
+		@Override
+		public void endViewTransition(r.android.view.View view) {
+			super.endViewTransition(view);
+			runBufferedRunnables();
+		}
 	}
 	@Override
 	public Class getViewClass() {
@@ -714,6 +732,9 @@ public class ToolbarImpl extends BaseHasWidgets {
         pane = new org.eclipse.swt.widgets.Composite((org.eclipse.swt.widgets.Composite)ViewImpl.getParent(this), getStyle(params, fragment));
         ((org.eclipse.swt.widgets.Composite)pane).setLayout(new org.eclipse.nebula.widgets.layout.AbsoluteLayout());
     }
+    public boolean isWidgetDisposed() {
+		return ((org.eclipse.swt.widgets.Control) pane).isDisposed();
+	}
     
     @Override
     public void requestLayout() {

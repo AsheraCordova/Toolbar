@@ -95,6 +95,9 @@ __attribute__((unused)) static void ADXActionMenuPresenter_subtractOverFlow(ADXA
       hasOverflow = (count > 0);
     }
   }
+  if (!hasOverflow && mOverflowButton_ != nil) {
+    [mOverflowButton_ setVisibilityWithInt:ADView_INVISIBLE];
+  }
   if (hasOverflow) {
     if (mOverflowButton_ == nil) {
       JreStrongAssign(&mOverflowButton_, [((ADXActionMenuView *) nil_chk(mMenuView_)) getOverFlowButton]);

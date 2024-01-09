@@ -27,6 +27,7 @@
 #include "IWidget.h"
 #include "IWidgetLifeCycleListener.h"
 #include "J2ObjC_source.h"
+#include "LayoutTransition.h"
 #include "MeasureEvent.h"
 #include "MenuBuilder.h"
 #include "MenuItem.h"
@@ -45,6 +46,7 @@
 #include "WidgetFactory.h"
 #include "java/lang/Boolean.h"
 #include "java/lang/Integer.h"
+#include "java/lang/Runnable.h"
 #include "java/lang/UnsupportedOperationException.h"
 #include "java/util/HashMap.h"
 #include "java/util/List.h"
@@ -58,6 +60,7 @@
 @protocol JavaUtilMap;
 
 
+#pragma clang diagnostic ignored "-Wprotocol"
 #pragma clang diagnostic ignored "-Wincomplete-implementation"
 
 @interface ASToolbarImpl () {
@@ -84,6 +87,8 @@
 - (void)addPremeasureHandler;
 
 - (void)setWidgetOnNativeClass;
+
+- (void)nativeRemoveViewWithASIWidget:(id<ASIWidget>)widget;
 
 - (void)createLayoutParamsWithADView:(ADView *)view;
 
@@ -172,6 +177,8 @@ J2OBJC_FIELD_SETTER(ASToolbarImpl, paramsBean_, ASToolbarImpl_ToolbarParamsBean 
 __attribute__((unused)) static void ASToolbarImpl_addPremeasureHandler(ASToolbarImpl *self);
 
 __attribute__((unused)) static void ASToolbarImpl_setWidgetOnNativeClass(ASToolbarImpl *self);
+
+__attribute__((unused)) static void ASToolbarImpl_nativeRemoveViewWithASIWidget_(ASToolbarImpl *self, id<ASIWidget> widget);
 
 __attribute__((unused)) static void ASToolbarImpl_createLayoutParamsWithADView_(ASToolbarImpl *self, ADView *view);
 
@@ -342,6 +349,23 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_OnMenuItemClickListener)
 
 @end
 
+@interface ASToolbarImpl_$Lambda$1 : NSObject < JavaLangRunnable > {
+ @public
+  id<ASIWidget> val$widget_;
+}
+
+- (void)run;
+
+@end
+
+J2OBJC_EMPTY_STATIC_INIT(ASToolbarImpl_$Lambda$1)
+
+__attribute__((unused)) static void ASToolbarImpl_$Lambda$1_initWithASIWidget_(ASToolbarImpl_$Lambda$1 *self, id<ASIWidget> capture$0);
+
+__attribute__((unused)) static ASToolbarImpl_$Lambda$1 *new_ASToolbarImpl_$Lambda$1_initWithASIWidget_(id<ASIWidget> capture$0) NS_RETURNS_RETAINED;
+
+__attribute__((unused)) static ASToolbarImpl_$Lambda$1 *create_ASToolbarImpl_$Lambda$1_initWithASIWidget_(id<ASIWidget> capture$0);
+
 NSString *ASToolbarImpl_LOCAL_NAME = @"androidx.appcompat.widget.Toolbar";
 NSString *ASToolbarImpl_GROUP_NAME = @"androidx.appcompat.widget.Toolbar";
 
@@ -425,7 +449,7 @@ J2OBJC_IGNORE_DESIGNATED_END
 - (jboolean)removeWithASIWidget:(id<ASIWidget>)w {
   jboolean remove = [super removeWithASIWidget:w];
   [((ADXToolbar *) nil_chk(toolbar_)) removeViewWithADView:(ADView *) cast_chk([((id<ASIWidget>) nil_chk(w)) asWidget], [ADView class])];
-  ASViewGroupImpl_nativeRemoveViewWithASIWidget_(w);
+  ASToolbarImpl_nativeRemoveViewWithASIWidget_(self, w);
   return remove;
 }
 
@@ -434,9 +458,13 @@ J2OBJC_IGNORE_DESIGNATED_END
   jboolean remove = [super removeWithInt:index];
   if (index + 1 <= [((ADXToolbar *) nil_chk(toolbar_)) getChildCount]) {
     [((ADXToolbar *) nil_chk(toolbar_)) removeViewAtWithInt:index];
-    ASViewGroupImpl_nativeRemoveViewWithASIWidget_(widget);
+    ASToolbarImpl_nativeRemoveViewWithASIWidget_(self, widget);
   }
   return remove;
+}
+
+- (void)nativeRemoveViewWithASIWidget:(id<ASIWidget>)widget {
+  ASToolbarImpl_nativeRemoveViewWithASIWidget_(self, widget);
 }
 
 - (void)addWithASIWidget:(id<ASIWidget>)w
@@ -841,47 +869,48 @@ J2OBJC_IGNORE_DESIGNATED_END
     { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "Z", 0x1, 6, 7, -1, -1, -1, -1 },
     { NULL, "Z", 0x1, 6, 8, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 9, 10, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 11, 12, -1, -1, -1, -1 },
-    { NULL, "LADXToolbar_LayoutParams;", 0x2, 13, 12, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 14, 15, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, 16, 17, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 9, 7, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 10, 11, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 12, 13, -1, -1, -1, -1 },
+    { NULL, "LADXToolbar_LayoutParams;", 0x2, 14, 13, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 15, 16, -1, -1, -1, -1 },
+    { NULL, "LNSObject;", 0x1, 17, 18, -1, -1, -1, -1 },
     { NULL, "LIOSClass;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 18, 19, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, 20, 21, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 19, 20, -1, -1, -1, -1 },
+    { NULL, "LNSObject;", 0x1, 21, 22, -1, -1, -1, -1 },
     { NULL, "LNSObject;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "Z", 0x101, 22, 1, -1, -1, -1, -1 },
-    { NULL, "V", 0x101, 23, 24, -1, 25, -1, -1 },
+    { NULL, "Z", 0x101, 23, 1, -1, -1, -1, -1 },
+    { NULL, "V", 0x101, 24, 25, -1, 26, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 26, 19, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 27, 20, -1, -1, -1, -1 },
     { NULL, "V", 0x2, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 27, 19, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 28, 19, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 29, 19, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 28, 20, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 29, 20, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 30, 20, -1, -1, -1, -1 },
     { NULL, "V", 0x2, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 30, 19, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 31, 19, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 32, 33, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 31, 20, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 32, 20, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 33, 34, -1, -1, -1, -1 },
     { NULL, "V", 0x2, -1, -1, -1, -1, -1, -1 },
     { NULL, "LADXToolbar_OnMenuItemClickListener;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 34, 35, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 36, 19, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 37, 33, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 38, 33, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 39, 33, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 40, 33, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 41, 33, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 42, 33, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 43, 33, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 44, 1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 45, 46, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, 47, 1, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 35, 36, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 37, 20, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 38, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 39, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 40, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 41, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 42, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 43, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 44, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 45, 1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 46, 47, -1, -1, -1, -1 },
+    { NULL, "LNSObject;", 0x1, 48, 1, -1, -1, -1, -1 },
     { NULL, "LASToolbarImpl_ToolbarBean;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LASToolbarImpl_ToolbarCommandBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LASToolbarImpl_ToolbarParamsBean;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LASToolbarImpl_ToolbarCommandParamsBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 48, 49, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 49, 50, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
@@ -897,52 +926,53 @@ J2OBJC_IGNORE_DESIGNATED_END
   methods[8].selector = @selector(asWidget);
   methods[9].selector = @selector(removeWithASIWidget:);
   methods[10].selector = @selector(removeWithInt:);
-  methods[11].selector = @selector(addWithASIWidget:withInt:);
-  methods[12].selector = @selector(createLayoutParamsWithADView:);
-  methods[13].selector = @selector(getLayoutParamsWithADView:);
-  methods[14].selector = @selector(setChildAttributeWithASIWidget:withASWidgetAttribute:withNSString:withId:);
-  methods[15].selector = @selector(getChildAttributeWithASIWidget:withASWidgetAttribute:);
-  methods[16].selector = @selector(getViewClass);
-  methods[17].selector = @selector(setAttributeWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
-  methods[18].selector = @selector(getAttributeWithASWidgetAttribute:withASILifeCycleDecorator:);
-  methods[19].selector = @selector(asNativeWidget);
-  methods[20].selector = @selector(checkIosVersionWithNSString:);
-  methods[21].selector = @selector(nativeCreateWithJavaUtilMap:);
-  methods[22].selector = @selector(requestLayout);
-  methods[23].selector = @selector(invalidate);
-  methods[24].selector = @selector(setTitleWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
-  methods[25].selector = @selector(initTitle);
-  methods[26].selector = @selector(setSubtitleColorWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
-  methods[27].selector = @selector(setTitleTextColorWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
-  methods[28].selector = @selector(setSubtitleWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
-  methods[29].selector = @selector(initSubTitle);
-  methods[30].selector = @selector(setLogoWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
-  methods[31].selector = @selector(setNavigationIconWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
-  methods[32].selector = @selector(setMenuWithId:);
-  methods[33].selector = @selector(createMenu);
-  methods[34].selector = @selector(getOnMenuItemClickListener);
-  methods[35].selector = @selector(setOnMenuItemClickListenerWithNSString:withId:);
-  methods[36].selector = @selector(setOverflowIconWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
-  methods[37].selector = @selector(setGravityWithId:);
-  methods[38].selector = @selector(setMaxButtonHeightWithId:);
-  methods[39].selector = @selector(setButtonGravityWithId:);
-  methods[40].selector = @selector(handlePreMeasureWithId:);
-  methods[41].selector = @selector(setContentInsetEndWithId:);
-  methods[42].selector = @selector(setContentInsetStartWithId:);
-  methods[43].selector = @selector(setTitleMarginWithId:);
-  methods[44].selector = @selector(setIdWithNSString:);
-  methods[45].selector = @selector(setVisibleWithBoolean:);
-  methods[46].selector = @selector(getPluginWithNSString:);
-  methods[47].selector = @selector(getBean);
-  methods[48].selector = @selector(getBuilder);
-  methods[49].selector = @selector(getParamsBean);
-  methods[50].selector = @selector(getParamsBuilder);
-  methods[51].selector = @selector(setNavigationOnClickListenerWithASToolbarImpl_OnClickListener:);
+  methods[11].selector = @selector(nativeRemoveViewWithASIWidget:);
+  methods[12].selector = @selector(addWithASIWidget:withInt:);
+  methods[13].selector = @selector(createLayoutParamsWithADView:);
+  methods[14].selector = @selector(getLayoutParamsWithADView:);
+  methods[15].selector = @selector(setChildAttributeWithASIWidget:withASWidgetAttribute:withNSString:withId:);
+  methods[16].selector = @selector(getChildAttributeWithASIWidget:withASWidgetAttribute:);
+  methods[17].selector = @selector(getViewClass);
+  methods[18].selector = @selector(setAttributeWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
+  methods[19].selector = @selector(getAttributeWithASWidgetAttribute:withASILifeCycleDecorator:);
+  methods[20].selector = @selector(asNativeWidget);
+  methods[21].selector = @selector(checkIosVersionWithNSString:);
+  methods[22].selector = @selector(nativeCreateWithJavaUtilMap:);
+  methods[23].selector = @selector(requestLayout);
+  methods[24].selector = @selector(invalidate);
+  methods[25].selector = @selector(setTitleWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
+  methods[26].selector = @selector(initTitle);
+  methods[27].selector = @selector(setSubtitleColorWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
+  methods[28].selector = @selector(setTitleTextColorWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
+  methods[29].selector = @selector(setSubtitleWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
+  methods[30].selector = @selector(initSubTitle);
+  methods[31].selector = @selector(setLogoWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
+  methods[32].selector = @selector(setNavigationIconWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
+  methods[33].selector = @selector(setMenuWithId:);
+  methods[34].selector = @selector(createMenu);
+  methods[35].selector = @selector(getOnMenuItemClickListener);
+  methods[36].selector = @selector(setOnMenuItemClickListenerWithNSString:withId:);
+  methods[37].selector = @selector(setOverflowIconWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
+  methods[38].selector = @selector(setGravityWithId:);
+  methods[39].selector = @selector(setMaxButtonHeightWithId:);
+  methods[40].selector = @selector(setButtonGravityWithId:);
+  methods[41].selector = @selector(handlePreMeasureWithId:);
+  methods[42].selector = @selector(setContentInsetEndWithId:);
+  methods[43].selector = @selector(setContentInsetStartWithId:);
+  methods[44].selector = @selector(setTitleMarginWithId:);
+  methods[45].selector = @selector(setIdWithNSString:);
+  methods[46].selector = @selector(setVisibleWithBoolean:);
+  methods[47].selector = @selector(getPluginWithNSString:);
+  methods[48].selector = @selector(getBean);
+  methods[49].selector = @selector(getBuilder);
+  methods[50].selector = @selector(getParamsBean);
+  methods[51].selector = @selector(getParamsBuilder);
+  methods[52].selector = @selector(setNavigationOnClickListenerWithASToolbarImpl_OnClickListener:);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "uiView_", "LNSObject;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "LOCAL_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 50, -1, -1 },
-    { "GROUP_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 51, -1, -1 },
+    { "LOCAL_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 51, -1, -1 },
+    { "GROUP_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 52, -1, -1 },
     { "toolbar_", "LADXToolbar;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "PREMEASURE_EVENT_", "LNSString;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "titleView_", "LASIWidget;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
@@ -960,8 +990,8 @@ J2OBJC_IGNORE_DESIGNATED_END
     { "paramsBuilder_", "LASToolbarImpl_ToolbarCommandParamsBuilder;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "paramsBean_", "LASToolbarImpl_ToolbarParamsBean;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
   };
-  static const void *ptrTable[] = { "loadAttributes", "LNSString;", "LNSString;LNSString;", "create", "LASIFragment;LJavaUtilMap;", "(Lcom/ashera/core/IFragment;Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "remove", "LASIWidget;", "I", "add", "LASIWidget;I", "createLayoutParams", "LADView;", "getLayoutParams", "setChildAttribute", "LASIWidget;LASWidgetAttribute;LNSString;LNSObject;", "getChildAttribute", "LASIWidget;LASWidgetAttribute;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;LASILifeCycleDecorator;", "getAttribute", "LASWidgetAttribute;LASILifeCycleDecorator;", "checkIosVersion", "nativeCreate", "LJavaUtilMap;", "(Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "setTitle", "setSubtitleColor", "setTitleTextColor", "setSubtitle", "setLogo", "setNavigationIcon", "setMenu", "LNSObject;", "setOnMenuItemClickListener", "LNSString;LNSObject;", "setOverflowIcon", "setGravity", "setMaxButtonHeight", "setButtonGravity", "handlePreMeasure", "setContentInsetEnd", "setContentInsetStart", "setTitleMargin", "setId", "setVisible", "Z", "getPlugin", "setNavigationOnClickListener", "LASToolbarImpl_OnClickListener;", &ASToolbarImpl_LOCAL_NAME, &ASToolbarImpl_GROUP_NAME, "LASToolbarImpl_PreMeasureHandler;LASToolbarImpl_ToolbarExt;LASToolbarImpl_OnClickListener;LASToolbarImpl_OnMenuItemClickListener;LASToolbarImpl_ToolbarCommandBuilder;LASToolbarImpl_ToolbarBean;LASToolbarImpl_ToolbarParamsBean;LASToolbarImpl_ToolbarCommandParamsBuilder;" };
-  static const J2ObjcClassInfo _ASToolbarImpl = { "ToolbarImpl", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 52, 19, -1, 52, -1, -1, -1 };
+  static const void *ptrTable[] = { "loadAttributes", "LNSString;", "LNSString;LNSString;", "create", "LASIFragment;LJavaUtilMap;", "(Lcom/ashera/core/IFragment;Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "remove", "LASIWidget;", "I", "nativeRemoveView", "add", "LASIWidget;I", "createLayoutParams", "LADView;", "getLayoutParams", "setChildAttribute", "LASIWidget;LASWidgetAttribute;LNSString;LNSObject;", "getChildAttribute", "LASIWidget;LASWidgetAttribute;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;LASILifeCycleDecorator;", "getAttribute", "LASWidgetAttribute;LASILifeCycleDecorator;", "checkIosVersion", "nativeCreate", "LJavaUtilMap;", "(Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "setTitle", "setSubtitleColor", "setTitleTextColor", "setSubtitle", "setLogo", "setNavigationIcon", "setMenu", "LNSObject;", "setOnMenuItemClickListener", "LNSString;LNSObject;", "setOverflowIcon", "setGravity", "setMaxButtonHeight", "setButtonGravity", "handlePreMeasure", "setContentInsetEnd", "setContentInsetStart", "setTitleMargin", "setId", "setVisible", "Z", "getPlugin", "setNavigationOnClickListener", "LASToolbarImpl_OnClickListener;", &ASToolbarImpl_LOCAL_NAME, &ASToolbarImpl_GROUP_NAME, "LASToolbarImpl_PreMeasureHandler;LASToolbarImpl_ToolbarExt;LASToolbarImpl_OnClickListener;LASToolbarImpl_OnMenuItemClickListener;LASToolbarImpl_ToolbarCommandBuilder;LASToolbarImpl_ToolbarBean;LASToolbarImpl_ToolbarParamsBean;LASToolbarImpl_ToolbarCommandParamsBuilder;" };
+  static const J2ObjcClassInfo _ASToolbarImpl = { "ToolbarImpl", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 53, 19, -1, 53, -1, -1, -1 };
   return &_ASToolbarImpl;
 }
 
@@ -1018,6 +1048,16 @@ ASToolbarImpl *create_ASToolbarImpl_initWithNSString_withNSString_(NSString *gro
 
 void ASToolbarImpl_setWidgetOnNativeClass(ASToolbarImpl *self) {
   ((ASUIView*) [self asNativeWidget]).widget = self;
+}
+
+void ASToolbarImpl_nativeRemoveViewWithASIWidget_(ASToolbarImpl *self, id<ASIWidget> widget) {
+  ADLayoutTransition *layoutTransition = [((ADXToolbar *) nil_chk(self->toolbar_)) getLayoutTransition];
+  if (layoutTransition != nil && ([layoutTransition isTransitionTypeEnabledWithInt:ADLayoutTransition_CHANGE_DISAPPEARING] || [layoutTransition isTransitionTypeEnabledWithInt:ADLayoutTransition_DISAPPEARING])) {
+    [self addToBufferedRunnablesWithJavaLangRunnable:new_ASToolbarImpl_$Lambda$1_initWithASIWidget_(widget)];
+  }
+  else {
+    ASViewGroupImpl_nativeRemoveViewWithASIWidget_(widget);
+  }
 }
 
 void ASToolbarImpl_createLayoutParamsWithADView_(ASToolbarImpl *self, ADView *view) {
@@ -1467,6 +1507,11 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_PreMeasureHandler)
   ASViewImpl_stateNoWithASIWidget_(this$0_);
 }
 
+- (void)endViewTransitionWithADView:(ADView *)view {
+  [super endViewTransitionWithADView:view];
+  [this$0_ runBufferedRunnables];
+}
+
 - (void)__javaClone:(ASToolbarImpl_ToolbarExt *)original {
   [super __javaClone:original];
   JreRelease(this$0_);
@@ -1511,6 +1556,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_PreMeasureHandler)
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 35, 36, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
@@ -1552,6 +1598,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_PreMeasureHandler)
   methods[34].selector = @selector(state4);
   methods[35].selector = @selector(stateYes);
   methods[36].selector = @selector(stateNo);
+  methods[37].selector = @selector(endViewTransitionWithADView:);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "this$0_", "LASToolbarImpl;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
@@ -1559,10 +1606,10 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_PreMeasureHandler)
     { "onLayoutEvent_", "LASOnLayoutEvent;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mMaxWidth_", "I", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mMaxHeight_", "I", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "templates_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 35, -1 },
+    { "templates_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 37, -1 },
   };
-  static const void *ptrTable[] = { "setMaxWidth", "I", "setMaxHeight", "LASToolbarImpl;", "onMeasure", "II", "onLayout", "ZIIII", "execute", "LNSString;[LNSObject;", "updateMeasuredDimension", "newInstance", "LASIWidget;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;", "()Ljava/util/List<Ljava/lang/String;>;", "getAttribute", "LASWidgetAttribute;", "inflateView", "LNSString;", "getLocationOnScreen", "[I", "getWindowVisibleDisplayFrame", "LADRect;", "offsetTopAndBottom", "offsetLeftAndRight", "setMyAttribute", "LNSString;LNSObject;", "setVisibility", "setState0", "LNSObject;", "setState1", "setState2", "setState3", "setState4", "Ljava/util/Map<Ljava/lang/String;Lcom/ashera/widget/IWidget;>;" };
-  static const J2ObjcClassInfo _ASToolbarImpl_ToolbarExt = { "ToolbarExt", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 37, 6, 3, -1, -1, -1, -1 };
+  static const void *ptrTable[] = { "setMaxWidth", "I", "setMaxHeight", "LASToolbarImpl;", "onMeasure", "II", "onLayout", "ZIIII", "execute", "LNSString;[LNSObject;", "updateMeasuredDimension", "newInstance", "LASIWidget;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;", "()Ljava/util/List<Ljava/lang/String;>;", "getAttribute", "LASWidgetAttribute;", "inflateView", "LNSString;", "getLocationOnScreen", "[I", "getWindowVisibleDisplayFrame", "LADRect;", "offsetTopAndBottom", "offsetLeftAndRight", "setMyAttribute", "LNSString;LNSObject;", "setVisibility", "setState0", "LNSObject;", "setState1", "setState2", "setState3", "setState4", "endViewTransition", "LADView;", "Ljava/util/Map<Ljava/lang/String;Lcom/ashera/widget/IWidget;>;" };
+  static const J2ObjcClassInfo _ASToolbarImpl_ToolbarExt = { "ToolbarExt", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 38, 6, 3, -1, -1, -1, -1 };
   return &_ASToolbarImpl_ToolbarExt;
 }
 
@@ -2433,3 +2480,24 @@ ASToolbarImpl_ToolbarCommandParamsBuilder *create_ASToolbarImpl_ToolbarCommandPa
 }
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_ToolbarCommandParamsBuilder)
+
+@implementation ASToolbarImpl_$Lambda$1
+
+- (void)run {
+  ASViewGroupImpl_nativeRemoveViewWithASIWidget_(val$widget_);
+}
+
+@end
+
+void ASToolbarImpl_$Lambda$1_initWithASIWidget_(ASToolbarImpl_$Lambda$1 *self, id<ASIWidget> capture$0) {
+  self->val$widget_ = capture$0;
+  NSObject_init(self);
+}
+
+ASToolbarImpl_$Lambda$1 *new_ASToolbarImpl_$Lambda$1_initWithASIWidget_(id<ASIWidget> capture$0) {
+  J2OBJC_NEW_IMPL(ASToolbarImpl_$Lambda$1, initWithASIWidget_, capture$0)
+}
+
+ASToolbarImpl_$Lambda$1 *create_ASToolbarImpl_$Lambda$1_initWithASIWidget_(id<ASIWidget> capture$0) {
+  J2OBJC_CREATE_IMPL(ASToolbarImpl_$Lambda$1, initWithASIWidget_, capture$0)
+}
