@@ -147,7 +147,7 @@ public class ToolbarImpl extends BaseHasWidgets {
         }    
         return remove;
     }
-	
+
 	private void nativeRemoveView(IWidget widget) {
 		r.android.animation.LayoutTransition layoutTransition = toolbar.getLayoutTransition();
 		if (layoutTransition != null && (

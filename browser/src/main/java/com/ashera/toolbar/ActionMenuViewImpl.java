@@ -145,7 +145,7 @@ public class ActionMenuViewImpl extends BaseHasWidgets {
         }    
         return remove;
     }
-	
+
 	private void nativeRemoveView(IWidget widget) {
 		r.android.animation.LayoutTransition layoutTransition = actionMenuView.getLayoutTransition();
 		if (layoutTransition != null && (
