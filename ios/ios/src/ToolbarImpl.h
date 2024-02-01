@@ -360,6 +360,10 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setAlphaWithFloat:(jfloat)arg0;
 
+- (ASToolbarImpl_ToolbarCommandBuilder *)setAnimateLayoutChangesWithBoolean:(jboolean)arg0;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setAnimateParentHierarchyWithBoolean:(jboolean)arg0;
+
 - (ASToolbarImpl_ToolbarCommandBuilder *)setAsDragSourceWithNSString:(NSString *)arg0;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setAttributeUnderTestWithNSString:(NSString *)arg0;
@@ -371,6 +375,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 - (ASToolbarImpl_ToolbarCommandBuilder *)setBackgroundTintWithNSString:(NSString *)arg0;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setBackgroundWithNSString:(NSString *)arg0;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setBottomWithNSString:(NSString *)arg0;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setButtonGravityWithNSString:(NSString *)value;
 
@@ -494,6 +500,12 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setLayoutModeWithNSString:(NSString *)arg0;
 
+- (ASToolbarImpl_ToolbarCommandBuilder *)setLayoutTransitionDurationWithInt:(jint)arg0;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setLayoutTransitionWithNSString:(NSString *)arg0;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setLeftWithNSString:(NSString *)arg0;
+
 - (ASToolbarImpl_ToolbarCommandBuilder *)setListitemWithNSString:(NSString *)arg0;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setLogoWithNSString:(NSString *)value;
@@ -582,6 +594,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setPaddingWithNSString:(NSString *)arg0;
 
+- (ASToolbarImpl_ToolbarCommandBuilder *)setRightWithNSString:(NSString *)arg0;
+
 - (ASToolbarImpl_ToolbarCommandBuilder *)setRotationWithFloat:(jfloat)arg0;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setRotationXWithFloat:(jfloat)arg0;
@@ -619,6 +633,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 - (ASToolbarImpl_ToolbarCommandBuilder *)setTitleMarginTopWithNSString:(NSString *)value;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setTitleTextColorWithNSString:(NSString *)value;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setTopWithNSString:(NSString *)arg0;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setTransformPivotXWithNSString:(NSString *)arg0;
 
@@ -663,6 +679,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 - (ASToolbarImpl_ToolbarCommandBuilder *)tryGetBackgroundTint;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)tryGetBackgroundTintMode;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)tryGetBottom;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)tryGetClickable;
 
@@ -750,6 +768,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)tryGetLayoutMode;
 
+- (ASToolbarImpl_ToolbarCommandBuilder *)tryGetLeft;
+
 - (ASToolbarImpl_ToolbarCommandBuilder *)tryGetLongClickable;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)tryGetMaxHeight;
@@ -784,6 +804,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)tryGetPaddingTop;
 
+- (ASToolbarImpl_ToolbarCommandBuilder *)tryGetRight;
+
 - (ASToolbarImpl_ToolbarCommandBuilder *)tryGetRotation;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)tryGetRotationX;
@@ -799,6 +821,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 - (ASToolbarImpl_ToolbarCommandBuilder *)tryGetTextAlignment;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)tryGetTextDirection;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)tryGetTop;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)tryGetTransformPivotX;
 

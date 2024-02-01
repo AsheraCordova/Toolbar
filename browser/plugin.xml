@@ -17,5 +17,9 @@
    	<js-module src="www/js/add_res.js" name="toolbarAddRes">
     	 <runs/>
   	</js-module>
+  	<!-- start tsc -->
+     <source-file src="tsc/src/web/widget/ActionMenuViewImpl.ts" target-dir="tsc/src/web/widget"/>
+     <source-file src="tsc/src/web/widget/ToolbarImpl.ts" target-dir="tsc/src/web/widget"/>
+     <!-- tsc end -->
   </platform>
 </plugin>

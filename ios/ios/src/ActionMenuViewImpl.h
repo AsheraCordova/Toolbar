@@ -458,6 +458,10 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_ShowAsAction)
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setAlphaWithFloat:(jfloat)arg0;
 
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setAnimateLayoutChangesWithBoolean:(jboolean)arg0;
+
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setAnimateParentHierarchyWithBoolean:(jboolean)arg0;
+
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setAsDragSourceWithNSString:(NSString *)arg0;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setAttributeUnderTestWithNSString:(NSString *)arg0;
@@ -473,6 +477,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_ShowAsAction)
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setBaselineAlignedWithBoolean:(jboolean)value;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setBaselineAlignedChildIndexWithInt:(jint)value;
+
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setBottomWithNSString:(NSString *)arg0;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setChildXmlWithNSString:(NSString *)arg0;
 
@@ -586,6 +592,12 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_ShowAsAction)
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setLayoutModeWithNSString:(NSString *)arg0;
 
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setLayoutTransitionDurationWithInt:(jint)arg0;
+
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setLayoutTransitionWithNSString:(NSString *)arg0;
+
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setLeftWithNSString:(NSString *)arg0;
+
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setListitemWithNSString:(NSString *)arg0;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setLongClickableWithBoolean:(jboolean)arg0;
@@ -664,6 +676,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_ShowAsAction)
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setPaddingWithNSString:(NSString *)arg0;
 
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setRightWithNSString:(NSString *)arg0;
+
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setRotationWithFloat:(jfloat)arg0;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setRotationXWithFloat:(jfloat)arg0;
@@ -683,6 +697,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_ShowAsAction)
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setTextAlignmentWithNSString:(NSString *)arg0;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setTextDirectionWithNSString:(NSString *)arg0;
+
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setTopWithNSString:(NSString *)arg0;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)setTransformPivotXWithNSString:(NSString *)arg0;
 
@@ -733,6 +749,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_ShowAsAction)
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)tryGetBaselineAligned;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)tryGetBaselineAlignedChildIndex;
+
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)tryGetBottom;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)tryGetClickable;
 
@@ -826,6 +844,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_ShowAsAction)
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)tryGetLayoutMode;
 
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)tryGetLeft;
+
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)tryGetLongClickable;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)tryGetMaxHeight;
@@ -862,6 +882,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_ShowAsAction)
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)tryGetPaddingTop;
 
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)tryGetRight;
+
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)tryGetRotation;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)tryGetRotationX;
@@ -879,6 +901,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_ShowAsAction)
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)tryGetTextAlignment;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)tryGetTextDirection;
+
+- (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)tryGetTop;
 
 - (ASActionMenuViewImpl_ActionMenuViewCommandBuilder *)tryGetTransformPivotX;
 

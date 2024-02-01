@@ -13,5 +13,10 @@
       </feature>
     </config-file>  
    	<framework src="core.gradle" custom="true" type="gradleReference" />
+   	
+   	 <!-- start tsc -->
+     <source-file src="tsc/src/swt/widget/ActionMenuViewImpl.ts" target-dir="tsc/src/swt/widget"/>
+     <source-file src="tsc/src/swt/widget/ToolbarImpl.ts" target-dir="tsc/src/swt/widget"/>
+     <!-- tsc end -->
   </platform>
 </plugin>
