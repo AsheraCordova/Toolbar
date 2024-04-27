@@ -25,7 +25,7 @@ import androidx.core.view.*;
 
 import static com.ashera.widget.IWidget.*;
 //end - imports
-
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 @SuppressLint("NewApi")
 public class ToolbarImpl extends BaseHasWidgets {
@@ -74,6 +74,10 @@ public class ToolbarImpl extends BaseHasWidgets {
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("maxButtonHeight").withType("dimension").withUiFlag(UPDATE_UI_REQUEST_LAYOUT));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("buttonGravity").withType("gravity").withUiFlag(UPDATE_UI_REQUEST_LAYOUT));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("menu").withType("string"));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("actionLayoutEventIds").withType("array").withArrayType("string"));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("searchview_attributes").withType("string"));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("onQueryTextSubmit").withType("string"));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("onQueryTextChange").withType("string"));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("title").withType("resourcestring"));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("titleTextColor").withType("color"));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("subtitle").withType("resourcestring"));
@@ -478,7 +482,7 @@ public class ToolbarImpl extends BaseHasWidgets {
 	@SuppressLint("NewApi")
 	@Override
 	public void setAttribute(WidgetAttribute key, String strValue, Object objValue, ILifeCycleDecorator decorator) {
-		ViewGroupImpl.setAttribute(this, key, strValue, objValue, decorator);
+				ViewGroupImpl.setAttribute(this, key, strValue, objValue, decorator);
 		Object nativeWidget = asNativeWidget();
 		switch (key.getAttributeName()) {
 			case "gravity": {
@@ -620,6 +624,42 @@ public class ToolbarImpl extends BaseHasWidgets {
 
 
 		setMenu(objValue);
+
+
+
+			}
+			break;
+			case "actionLayoutEventIds": {
+
+
+		setActionLayoutEventIds(objValue);
+
+
+
+			}
+			break;
+			case "searchview_attributes": {
+
+
+		setSearchviewAttributes(objValue);
+
+
+
+			}
+			break;
+			case "onQueryTextSubmit": {
+
+
+		setOnQueryTextListener("onQueryTextSubmit", strValue, objValue);
+
+
+
+			}
+			break;
+			case "onQueryTextChange": {
+
+
+		setOnQueryTextListener("onQueryTextChange", strValue, objValue);
 
 
 
@@ -768,6 +808,234 @@ public class ToolbarImpl extends BaseHasWidgets {
 		
 	}
 	
+	private SearchView.OnQueryTextListener onQueryTextSubmit;
+	private SearchView.OnQueryTextListener onQueryTextChange;
+	
+	
+	private void setOnQueryTextListener(String action, String strValue, Object objValue) {
+		SearchView.OnQueryTextListener onQueryTextListener;
+		if (objValue instanceof String) {
+			onQueryTextListener = new OnQueryTextListener(this, strValue, action);
+			if (action.equals("onQueryTextSubmit")) {
+				onQueryTextSubmit = onQueryTextListener;
+			}
+			if (action.equals("onQueryTextChange")) {
+				onQueryTextChange = onQueryTextListener;
+			}
+		} else {
+			onQueryTextChange = null;
+			onQueryTextSubmit = null;
+			onQueryTextListener = (SearchView.OnQueryTextListener) objValue; 
+		}
+
+		int menuSize = toolbar.getMenu().size();
+		
+		for (int i = 0; i < menuSize; i++) {
+			MenuItem menu = toolbar.getMenu().getItem(i);
+			
+			if (menu.getActionView() instanceof SearchView) {
+				if (onQueryTextSubmit == null && onQueryTextChange == null) {
+					((SearchView) menu.getActionView()).setOnQueryTextListener(onQueryTextListener);
+				} else {
+					((SearchView) menu.getActionView()).setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+						@Override
+						public boolean onQueryTextChange(String text) {
+							if (onQueryTextChange != null) {
+								onQueryTextChange.onQueryTextChange(text);
+							}
+							return false;
+						}
+
+						@Override
+						public boolean onQueryTextSubmit(String query) {
+							if (onQueryTextSubmit != null) {
+								onQueryTextSubmit.onQueryTextSubmit(query);
+							}
+							return false;
+						}
+						
+					});
+				}
+			}
+			
+		}
+	}
+
+
+
+	private List<String> actionLayoutEventIds;
+	private void setActionLayoutEventIds(Object objValue) {
+		this.actionLayoutEventIds = (List<String>) objValue;
+	}
+	
+	private void applySearchViewAttributes(MenuItem menu) {
+		AutoCompleteTextView autoComplete = findAutoComplete((ViewGroup) menu.getActionView());
+		IWidget widget = getAutoCompleteImpl(autoComplete);
+		Set<String> set = searchviewAttributes.keySet();
+		for (String key : set) {
+			widget.setAttribute(key, searchviewAttributes.get(key), false);
+		}
+		widget.applyModelToWidget();
+		setOnSuggestionListener(menu, autoComplete);
+	}
+	
+	private AutoCompleteTextView findAutoComplete(ViewGroup actionView) {
+		for (int i = 0; i < actionView.getChildCount(); i++) {
+			View view = actionView.getChildAt(i);
+			
+			if (view instanceof AutoCompleteTextView) {
+				return (AutoCompleteTextView)view;
+			}
+			
+			if (view instanceof ViewGroup) {
+				return findAutoComplete((ViewGroup) view);
+			}
+			
+		}
+		return null;
+	}
+
+	
+	private Map<String, Object> searchviewAttributes;
+	private void setSearchviewAttributes(Object objValue) {
+		searchviewAttributes = com.ashera.model.ModelExpressionParser.parseSimpleCssExpression((String) objValue);
+	}
+	
+
+	@SuppressLint("NewApi")
+private static class OnQueryTextListener implements SearchView.OnQueryTextListener, com.ashera.widget.IListener{
+private IWidget w; private View view; private String strValue; private String action;
+public String getAction() {return action;}
+public OnQueryTextListener(IWidget w, String strValue)  {
+this.w = w; this.strValue = strValue;
+}
+public OnQueryTextListener(IWidget w, String strValue, String action)  {
+this.w = w; this.strValue = strValue;this.action=action;
+}
+public boolean onQueryTextSubmit(String query){
+    boolean result = true;
+    
+	if (action == null || action.equals("onQueryTextSubmit")) {
+		// populate the data from ui to pojo
+		w.syncModelFromUiToPojo("onQueryTextSubmit");
+	    java.util.Map<String, Object> obj = getOnQueryTextSubmitEventObj(query);
+	    String commandName =  (String) obj.get(EventExpressionParser.KEY_COMMAND_NAME);
+	    
+	    // execute command based on command type
+	    String commandType = (String)obj.get(EventExpressionParser.KEY_COMMAND_TYPE);
+		switch (commandType) {
+		case "+":
+		    if (EventCommandFactory.hasCommand(commandName)) {
+		    	 Object commandResult = EventCommandFactory.getCommand(commandName).executeCommand(w, obj, query);
+		    	 if (commandResult != null) {
+		    		 result = (boolean) commandResult;
+		    	 }
+		    }
+
+			break;
+		default:
+			break;
+		}
+		
+		if (obj.containsKey("refreshUiFromModel")) {
+			Object widgets = obj.remove("refreshUiFromModel");
+			com.ashera.layout.ViewImpl.refreshUiFromModel(w, widgets, true);
+		}
+		if (w.getModelUiToPojoEventIds() != null) {
+			com.ashera.layout.ViewImpl.refreshUiFromModel(w, w.getModelUiToPojoEventIds(), true);
+		}
+		if (strValue != null && !strValue.isEmpty() && !strValue.trim().startsWith("+")) {
+		    com.ashera.core.IActivity activity = (com.ashera.core.IActivity)w.getFragment().getRootActivity();
+		    activity.sendEventMessage(obj);
+		}
+	}
+    return result;
+}//#####
+
+public java.util.Map<String, Object> getOnQueryTextSubmitEventObj(String query) {
+	java.util.Map<String, Object> obj = com.ashera.widget.PluginInvoker.getJSONCompatMap();
+    obj.put("action", "action");
+    obj.put("eventType", "querytextsubmit");
+    obj.put("fragmentId", w.getFragment().getFragmentId());
+    obj.put("actionUrl", w.getFragment().getActionUrl());
+    
+    if (w.getComponentId() != null) {
+    	obj.put("componentId", w.getComponentId());
+    }
+    
+    PluginInvoker.putJSONSafeObjectIntoMap(obj, "id", w.getId());
+     
+        PluginInvoker.putJSONSafeObjectIntoMap(obj, "query", query);
+    
+    // parse event info into the map
+    EventExpressionParser.parseEventExpression(strValue, obj);
+    
+    // update model data into map
+    w.updateModelToEventMap(obj, "onQueryTextSubmit", (String)obj.get(EventExpressionParser.KEY_EVENT_ARGS));
+    return obj;
+}public boolean onQueryTextChange(String newText){
+    boolean result = true;
+    
+	if (action == null || action.equals("onQueryTextChange")) {
+		// populate the data from ui to pojo
+		w.syncModelFromUiToPojo("onQueryTextChange");
+	    java.util.Map<String, Object> obj = getOnQueryTextChangeEventObj(newText);
+	    String commandName =  (String) obj.get(EventExpressionParser.KEY_COMMAND_NAME);
+	    
+	    // execute command based on command type
+	    String commandType = (String)obj.get(EventExpressionParser.KEY_COMMAND_TYPE);
+		switch (commandType) {
+		case "+":
+		    if (EventCommandFactory.hasCommand(commandName)) {
+		    	 Object commandResult = EventCommandFactory.getCommand(commandName).executeCommand(w, obj, newText);
+		    	 if (commandResult != null) {
+		    		 result = (boolean) commandResult;
+		    	 }
+		    }
+
+			break;
+		default:
+			break;
+		}
+		
+		if (obj.containsKey("refreshUiFromModel")) {
+			Object widgets = obj.remove("refreshUiFromModel");
+			com.ashera.layout.ViewImpl.refreshUiFromModel(w, widgets, true);
+		}
+		if (w.getModelUiToPojoEventIds() != null) {
+			com.ashera.layout.ViewImpl.refreshUiFromModel(w, w.getModelUiToPojoEventIds(), true);
+		}
+		if (strValue != null && !strValue.isEmpty() && !strValue.trim().startsWith("+")) {
+		    com.ashera.core.IActivity activity = (com.ashera.core.IActivity)w.getFragment().getRootActivity();
+		    activity.sendEventMessage(obj);
+		}
+	}
+    return result;
+}//#####
+
+public java.util.Map<String, Object> getOnQueryTextChangeEventObj(String newText) {
+	java.util.Map<String, Object> obj = com.ashera.widget.PluginInvoker.getJSONCompatMap();
+    obj.put("action", "action");
+    obj.put("eventType", "querytextchange");
+    obj.put("fragmentId", w.getFragment().getFragmentId());
+    obj.put("actionUrl", w.getFragment().getActionUrl());
+    
+    if (w.getComponentId() != null) {
+    	obj.put("componentId", w.getComponentId());
+    }
+    
+    PluginInvoker.putJSONSafeObjectIntoMap(obj, "id", w.getId());
+     
+        PluginInvoker.putJSONSafeObjectIntoMap(obj, "newText", newText);
+    
+    // parse event info into the map
+    EventExpressionParser.parseEventExpression(strValue, obj);
+    
+    // update model data into map
+    w.updateModelToEventMap(obj, "onQueryTextChange", (String)obj.get(EventExpressionParser.KEY_EVENT_ARGS));
+    return obj;
+}
+}
 
 	@SuppressLint("NewApi")
 private static class OnClickListener implements View.OnClickListener, com.ashera.widget.IListener{
@@ -1106,6 +1374,38 @@ public ToolbarCommandBuilder setMenu(String value) {
 
 	attrs.put("value", value);
 return this;}
+public ToolbarCommandBuilder setActionLayoutEventIds(String value) {
+	Map<String, Object> attrs = initCommand("actionLayoutEventIds");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
+public ToolbarCommandBuilder setSearchview_attributes(String value) {
+	Map<String, Object> attrs = initCommand("searchview_attributes");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
+public ToolbarCommandBuilder setOnQueryTextSubmit(String value) {
+	Map<String, Object> attrs = initCommand("onQueryTextSubmit");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
+public ToolbarCommandBuilder setOnQueryTextChange(String value) {
+	Map<String, Object> attrs = initCommand("onQueryTextChange");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
 public ToolbarCommandBuilder setTitle(String value) {
 	Map<String, Object> attrs = initCommand("title");
 	attrs.put("type", "attribute");
@@ -1245,6 +1545,22 @@ public void setButtonGravity(String value) {
 
 public void setMenu(String value) {
 	getBuilder().reset().setMenu(value).execute(true);
+}
+
+public void setActionLayoutEventIds(String value) {
+	getBuilder().reset().setActionLayoutEventIds(value).execute(true);
+}
+
+public void setSearchview_attributes(String value) {
+	getBuilder().reset().setSearchview_attributes(value).execute(true);
+}
+
+public void setOnQueryTextSubmit(String value) {
+	getBuilder().reset().setOnQueryTextSubmit(value).execute(true);
+}
+
+public void setOnQueryTextChange(String value) {
+	getBuilder().reset().setOnQueryTextChange(value).execute(true);
 }
 
 public void setTitle(String value) {
@@ -1415,7 +1731,7 @@ public class ToolbarCommandParamsBuilder extends com.ashera.layout.ViewGroupImpl
 	
 			String json = com.ashera.utils.ResourceBundleUtils.getString("menu/menu", key, fragment);
 			androidx.appcompat.widget.ActionMenuView actionMenu = (androidx.appcompat.widget.ActionMenuView) actionMenuView.asWidget();
-			androidx.appcompat.widget.MenuParser.parseMenu(actionMenu.getMenu(), json, fragment);
+			androidx.appcompat.widget.MenuParser.parseMenu((HasWidgets) actionMenuView, actionMenu.getMenu(), json, fragment);
 			actionMenu.updateMenuView();
 			
 			IWidget overFlowButton = ((ActionMenuViewImpl) actionMenuView).getOverFlowButtonWidget();
@@ -1479,7 +1795,51 @@ public class ToolbarCommandParamsBuilder extends com.ashera.layout.ViewGroupImpl
 		}
 		screenWidth = currentScreenWidth;
 	}
+
+	@Override
+	public void initialized() {
+		super.initialized();
+		if (this.actionLayoutEventIds != null || searchviewAttributes != null) {
+			int menuSize = toolbar.getMenu().size();
+			for (int i = 0; i < menuSize; i++) {
+				MenuItem menu = toolbar.getMenu().getItem(i);
+
+				if (this.actionLayoutEventIds != null && menu.getActionView() != null && !(menu.getActionView() instanceof SearchView)) {
+					for (String actionLayoutEventId : this.actionLayoutEventIds) {
+						actionLayoutEventId = actionLayoutEventId.replace("@+id/", "").replace("@id/", "");
+
+						final String myactionLayoutEventId = actionLayoutEventId;
+
+						View view = menu.getActionView().findViewById(IdGenerator.getId("@+id/" + myactionLayoutEventId));
+						if (view != null) {
+							view.setMyAttribute("onClick", new View.OnClickListener() {
+								@Override
+								public void onClick(View v) {
+									if (onMenuItemClickListener != null) {
+										menu.getActionView().setTag(myactionLayoutEventId);
+										onMenuItemClickListener.onMenuItemClick(menu);
+									}
+								}
+							});
+						}
+					}
+				} else if (searchviewAttributes != null && menu.getActionView() != null && (menu.getActionView() instanceof SearchView)) {
+					applySearchViewAttributes(menu);
+				}
+
+			} 
+		}
+	}
 	
+
+	private IWidget getAutoCompleteImpl(AutoCompleteTextView autoComplete) {
+		return ((ILifeCycleDecorator) autoComplete).getWidget();
+	}
+	
+	
+	private void setOnSuggestionListener(MenuItem menu, AutoCompleteTextView autoComplete) {
+		
+	}
 	//end - toolbar
 	private void setNavigationOnClickListener(OnClickListener onClickListener) {
 		if (navigationIcon != null) {

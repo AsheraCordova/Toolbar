@@ -514,7 +514,7 @@ return layoutParams.weight;			}
 	@SuppressLint("NewApi")
 	@Override
 	public void setAttribute(WidgetAttribute key, String strValue, Object objValue, ILifeCycleDecorator decorator) {
-		ViewGroupImpl.setAttribute(this, key, strValue, objValue, decorator);
+				ViewGroupImpl.setAttribute(this, key, strValue, objValue, decorator);
 		Object nativeWidget = asNativeWidget();
 		switch (key.getAttributeName()) {
 			case "baselineAligned": {
@@ -1259,7 +1259,14 @@ return this;}
 				for (org.eclipse.swt.widgets.MenuItem item : popupMenu.getItems()) {
 				    item.dispose();
 				}
+				int menuGroupId = -1;
+				int prevMenuGroupId = -1;
 				for (androidx.appcompat.view.menu.MenuItemImpl menuItemImpl : actionMenuView.getMenu().getNonActionItems()) {
+					menuGroupId = menuItemImpl.getGroupId();
+					
+					if (prevMenuGroupId != -1 && menuGroupId != prevMenuGroupId) {
+						new org.eclipse.swt.widgets.MenuItem(popupMenu, org.eclipse.swt.SWT.SEPARATOR);
+					}
 					org.eclipse.swt.widgets.MenuItem newItem = new org.eclipse.swt.widgets.MenuItem(popupMenu, org.eclipse.swt.SWT.CASCADE);
 					newItem.setText(menuItemImpl.getTitle());
 					
@@ -1271,6 +1278,8 @@ return this;}
 							}
 						});
 					}
+					
+					prevMenuGroupId = menuGroupId;
 				}
 
 				org.eclipse.swt.graphics.Rectangle bounds = control.getBounds();

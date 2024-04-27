@@ -531,6 +531,13 @@ typedef enum {
             itemY += 2;
         }
         
+        if (menuItem.border) {
+            CALayer *topBorder = [CALayer layer];
+			topBorder.frame = CGRectMake(0, 0, itemFrame.size.width, .5);
+			topBorder.backgroundColor = [UIColor whiteColor].CGColor;
+			[itemView.layer addSublayer:topBorder];
+		}
+        
         itemY += maxItemHeight;
         ++itemNum;
     }    

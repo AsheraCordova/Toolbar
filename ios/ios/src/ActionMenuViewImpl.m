@@ -123,8 +123,8 @@
 - (void)setKxMenuOnButtonWithId:(id)button
                withJavaUtilList:(id<JavaUtilList>)actionsObjs;
 
-- (id)getKXMenuWithASToolbarImpl:(ASToolbarImpl *)toolbar
-             withADXMenuItemImpl:(ADXMenuItemImpl *)menuItem;
+- (id)getKXMenuWithNSString:(NSString *)title
+                withBoolean:(jboolean)border;
 
 - (void)handleOnKxMenuItemClickWithId:(id)kxmenuItem;
 
@@ -132,6 +132,9 @@
 
 - (void)setMenuOnButtonWithId:(id)button
              withJavaUtilList:(id<JavaUtilList>)actionsObjs;
+
+- (id)getMenuInlineWithJavaUtilList:(id<JavaUtilList>)actionsObjs
+                       withNSString:(NSString *)groupId;
 
 - (id)getActionWithASToolbarImpl:(ASToolbarImpl *)toolbar
              withADXMenuItemImpl:(ADXMenuItemImpl *)menuItem;
@@ -197,13 +200,15 @@ __attribute__((unused)) static void ASActionMenuViewImpl_nativeShowKxMenuWithId_
 
 __attribute__((unused)) static void ASActionMenuViewImpl_setKxMenuOnButtonWithId_withJavaUtilList_(ASActionMenuViewImpl *self, id button, id<JavaUtilList> actionsObjs);
 
-__attribute__((unused)) static id ASActionMenuViewImpl_getKXMenuWithASToolbarImpl_withADXMenuItemImpl_(ASActionMenuViewImpl *self, ASToolbarImpl *toolbar, ADXMenuItemImpl *menuItem);
+__attribute__((unused)) static id ASActionMenuViewImpl_getKXMenuWithNSString_withBoolean_(ASActionMenuViewImpl *self, NSString *title, jboolean border);
 
 __attribute__((unused)) static void ASActionMenuViewImpl_handleOnKxMenuItemClickWithId_(ASActionMenuViewImpl *self, id kxmenuItem);
 
 __attribute__((unused)) static jboolean ASActionMenuViewImpl_isKxMenuToBeShown(ASActionMenuViewImpl *self);
 
 __attribute__((unused)) static void ASActionMenuViewImpl_setMenuOnButtonWithId_withJavaUtilList_(ASActionMenuViewImpl *self, id button, id<JavaUtilList> actionsObjs);
+
+__attribute__((unused)) static id ASActionMenuViewImpl_getMenuInlineWithJavaUtilList_withNSString_(ASActionMenuViewImpl *self, id<JavaUtilList> actionsObjs, NSString *groupId);
 
 __attribute__((unused)) static id ASActionMenuViewImpl_getActionWithASToolbarImpl_withADXMenuItemImpl_(ASActionMenuViewImpl *self, ASToolbarImpl *toolbar, ADXMenuItemImpl *menuItem);
 
@@ -827,9 +832,9 @@ J2OBJC_IGNORE_DESIGNATED_END
   ASActionMenuViewImpl_setKxMenuOnButtonWithId_withJavaUtilList_(self, button, actionsObjs);
 }
 
-- (id)getKXMenuWithASToolbarImpl:(ASToolbarImpl *)toolbar
-             withADXMenuItemImpl:(ADXMenuItemImpl *)menuItem {
-  return ASActionMenuViewImpl_getKXMenuWithASToolbarImpl_withADXMenuItemImpl_(self, toolbar, menuItem);
+- (id)getKXMenuWithNSString:(NSString *)title
+                withBoolean:(jboolean)border {
+  return ASActionMenuViewImpl_getKXMenuWithNSString_withBoolean_(self, title, border);
 }
 
 - (void) menuItemClicked:(id)sender {
@@ -849,6 +854,11 @@ J2OBJC_IGNORE_DESIGNATED_END
   ASActionMenuViewImpl_setMenuOnButtonWithId_withJavaUtilList_(self, button, actionsObjs);
 }
 
+- (id)getMenuInlineWithJavaUtilList:(id<JavaUtilList>)actionsObjs
+                       withNSString:(NSString *)groupId {
+  return ASActionMenuViewImpl_getMenuInlineWithJavaUtilList_withNSString_(self, actionsObjs, groupId);
+}
+
 - (id)getActionWithASToolbarImpl:(ASToolbarImpl *)toolbar
              withADXMenuItemImpl:(ADXMenuItemImpl *)menuItem {
   return ASActionMenuViewImpl_getActionWithASToolbarImpl_withADXMenuItemImpl_(self, toolbar, menuItem);
@@ -866,16 +876,25 @@ J2OBJC_IGNORE_DESIGNATED_END
     if (menuItemToNativeMenuItemMap_ == nil && ASActionMenuViewImpl_isKxMenuToBeShown(self)) {
       menuItemToNativeMenuItemMap_ = new_JavaUtilHashMap_init();
     }
+    jint menuGroupId = -1;
+    jint prevMenuGroupId = -1;
     for (ADXMenuItemImpl * __strong menuItem in nil_chk([((ADXMenuBuilder *) nil_chk([((ADXActionMenuView *) nil_chk(actionMenuView_)) getMenu])) getNonActionItems])) {
+      menuGroupId = [((ADXMenuItemImpl *) nil_chk(menuItem)) getGroupId];
       if (menuItemToNativeMenuItemMap_ != nil) {
-        id item = ASActionMenuViewImpl_getKXMenuWithASToolbarImpl_withADXMenuItemImpl_(self, toolbar_, menuItem);
+        id item = ASActionMenuViewImpl_getKXMenuWithNSString_withBoolean_(self, [menuItem getTitle], prevMenuGroupId != -1 && menuGroupId != prevMenuGroupId);
         [actions addWithId:item];
         (void) [((id<JavaUtilMap>) nil_chk(menuItemToNativeMenuItemMap_)) putWithId:item withId:menuItem];
       }
       else {
+        if (prevMenuGroupId != -1 && menuGroupId != prevMenuGroupId) {
+          id menu = ASActionMenuViewImpl_getMenuInlineWithJavaUtilList_withNSString_(self, actions, JreStrcat("I", prevMenuGroupId));
+          [actions clear];
+          [actions addWithId:menu];
+        }
         id item = ASActionMenuViewImpl_getActionWithASToolbarImpl_withADXMenuItemImpl_(self, toolbar_, menuItem);
         [actions addWithId:item];
       }
+      prevMenuGroupId = menuGroupId;
     }
     if (ASActionMenuViewImpl_isKxMenuToBeShown(self)) {
       ASActionMenuViewImpl_setKxMenuOnButtonWithId_withJavaUtilList_(self, [((id<ASIWidget>) nil_chk(overFlowButton_)) asNativeWidget], actions);
@@ -940,8 +959,9 @@ J2OBJC_IGNORE_DESIGNATED_END
     { NULL, "V", 0x2, 52, 31, -1, -1, -1, -1 },
     { NULL, "Z", 0x2, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x102, 53, 48, -1, 49, -1, -1 },
-    { NULL, "LNSObject;", 0x102, 54, 51, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 55, 51, -1, -1, -1, -1 },
+    { NULL, "LNSObject;", 0x102, 54, 55, -1, 56, -1, -1 },
+    { NULL, "LNSObject;", 0x102, 57, 58, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 59, 58, -1, -1, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
@@ -995,22 +1015,23 @@ J2OBJC_IGNORE_DESIGNATED_END
   methods[45].selector = @selector(createPopUpMenuWithASToolbarImpl:);
   methods[46].selector = @selector(nativeShowKxMenuWithId:withId:);
   methods[47].selector = @selector(setKxMenuOnButtonWithId:withJavaUtilList:);
-  methods[48].selector = @selector(getKXMenuWithASToolbarImpl:withADXMenuItemImpl:);
+  methods[48].selector = @selector(getKXMenuWithNSString:withBoolean:);
   methods[49].selector = @selector(handleOnKxMenuItemClickWithId:);
   methods[50].selector = @selector(isKxMenuToBeShown);
   methods[51].selector = @selector(setMenuOnButtonWithId:withJavaUtilList:);
-  methods[52].selector = @selector(getActionWithASToolbarImpl:withADXMenuItemImpl:);
-  methods[53].selector = @selector(handleOnMenuItemClickWithASToolbarImpl:withADXMenuItemImpl:);
-  methods[54].selector = @selector(initialized);
+  methods[52].selector = @selector(getMenuInlineWithJavaUtilList:withNSString:);
+  methods[53].selector = @selector(getActionWithASToolbarImpl:withADXMenuItemImpl:);
+  methods[54].selector = @selector(handleOnMenuItemClickWithASToolbarImpl:withADXMenuItemImpl:);
+  methods[55].selector = @selector(initialized);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "uiView_", "LNSObject;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "canvas_", "LADCanvas;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "LOCAL_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 56, -1, -1 },
-    { "GROUP_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 57, -1, -1 },
+    { "LOCAL_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 60, -1, -1 },
+    { "GROUP_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 61, -1, -1 },
     { "actionMenuView_", "LADXActionMenuView;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "MAX_ICON_SIZE", "LNSString;", .constantValue.asLong = 0, 0x1a, -1, 58, -1, -1 },
-    { "menuItemMap_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 59, -1 },
+    { "MAX_ICON_SIZE", "LNSString;", .constantValue.asLong = 0, 0x1a, -1, 62, -1, -1 },
+    { "menuItemMap_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 63, -1 },
     { "overFlowButton_", "LASIWidget;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "builder_", "LASActionMenuViewImpl_ActionMenuViewCommandBuilder;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "bean_", "LASActionMenuViewImpl_ActionMenuViewBean;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
@@ -1019,10 +1040,10 @@ J2OBJC_IGNORE_DESIGNATED_END
     { "toolbar_", "LASToolbarImpl;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "itemArray_", "LNSObject;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "OVERFLOW_BUTTON_TYPE_", "LNSString;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "menuItemToNativeMenuItemMap_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 60, -1 },
+    { "menuItemToNativeMenuItemMap_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 64, -1 },
   };
-  static const void *ptrTable[] = { "loadAttributes", "LNSString;", "LNSString;LNSString;", "create", "LASIFragment;LJavaUtilMap;", "(Lcom/ashera/core/IFragment;Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "remove", "LASIWidget;", "I", "nativeRemoveView", "add", "LASIWidget;I", "createLayoutParams", "LADView;", "getLayoutParams", "setChildAttribute", "LASIWidget;LASWidgetAttribute;LNSString;LNSObject;", "getChildAttribute", "LASIWidget;LASWidgetAttribute;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;LASILifeCycleDecorator;", "getAttribute", "LASWidgetAttribute;LASILifeCycleDecorator;", "checkIosVersion", "nativeCreate", "LJavaUtilMap;", "(Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "loadCustomAttributes", "getItemView", "LADMenuItem;", "setDividerPadding", "LNSObject;", "setShowDividers", "setId", "setVisible", "Z", "getPlugin", "addMenuClickListener", "LADMenuItem;LASIWidget;LASToolbarImpl;", "getImageDimension", "LADDrawable;", "resizeImageIfRequired", "LADDrawable;II", "createPopUpMenu", "LASToolbarImpl;", "nativeShowKxMenu", "LNSObject;LNSObject;", "setKxMenuOnButton", "LNSObject;LJavaUtilList;", "(Ljava/lang/Object;Ljava/util/List<Ljava/lang/Object;>;)V", "getKXMenu", "LASToolbarImpl;LADXMenuItemImpl;", "handleOnKxMenuItemClick", "setMenuOnButton", "getAction", "handleOnMenuItemClick", &ASActionMenuViewImpl_LOCAL_NAME, &ASActionMenuViewImpl_GROUP_NAME, &ASActionMenuViewImpl_MAX_ICON_SIZE, "Ljava/util/Map<Lr/android/view/MenuItem;Lcom/ashera/widget/IWidget;>;", "Ljava/util/Map<Ljava/lang/Object;Landroidx/appcompat/view/menu/MenuItemImpl;>;", "LASActionMenuViewImpl_Divider;LASActionMenuViewImpl_Orientation;LASActionMenuViewImpl_ActionMenuViewExt;LASActionMenuViewImpl_ShowAsAction;LASActionMenuViewImpl_CanvasImpl;LASActionMenuViewImpl_ActionMenuViewCommandBuilder;LASActionMenuViewImpl_ActionMenuViewBean;LASActionMenuViewImpl_ActionMenuViewParamsBean;LASActionMenuViewImpl_ActionMenuViewCommandParamsBuilder;LASActionMenuViewImpl_MenuOnClickListener;LASActionMenuViewImpl_MenuClickListener;" };
-  static const J2ObjcClassInfo _ASActionMenuViewImpl = { "ActionMenuViewImpl", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 55, 16, -1, 61, -1, -1, -1 };
+  static const void *ptrTable[] = { "loadAttributes", "LNSString;", "LNSString;LNSString;", "create", "LASIFragment;LJavaUtilMap;", "(Lcom/ashera/core/IFragment;Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "remove", "LASIWidget;", "I", "nativeRemoveView", "add", "LASIWidget;I", "createLayoutParams", "LADView;", "getLayoutParams", "setChildAttribute", "LASIWidget;LASWidgetAttribute;LNSString;LNSObject;", "getChildAttribute", "LASIWidget;LASWidgetAttribute;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;LASILifeCycleDecorator;", "getAttribute", "LASWidgetAttribute;LASILifeCycleDecorator;", "checkIosVersion", "nativeCreate", "LJavaUtilMap;", "(Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "loadCustomAttributes", "getItemView", "LADMenuItem;", "setDividerPadding", "LNSObject;", "setShowDividers", "setId", "setVisible", "Z", "getPlugin", "addMenuClickListener", "LADMenuItem;LASIWidget;LASToolbarImpl;", "getImageDimension", "LADDrawable;", "resizeImageIfRequired", "LADDrawable;II", "createPopUpMenu", "LASToolbarImpl;", "nativeShowKxMenu", "LNSObject;LNSObject;", "setKxMenuOnButton", "LNSObject;LJavaUtilList;", "(Ljava/lang/Object;Ljava/util/List<Ljava/lang/Object;>;)V", "getKXMenu", "LNSString;Z", "handleOnKxMenuItemClick", "setMenuOnButton", "getMenuInline", "LJavaUtilList;LNSString;", "(Ljava/util/List<Ljava/lang/Object;>;Ljava/lang/String;)Ljava/lang/Object;", "getAction", "LASToolbarImpl;LADXMenuItemImpl;", "handleOnMenuItemClick", &ASActionMenuViewImpl_LOCAL_NAME, &ASActionMenuViewImpl_GROUP_NAME, &ASActionMenuViewImpl_MAX_ICON_SIZE, "Ljava/util/Map<Lr/android/view/MenuItem;Lcom/ashera/widget/IWidget;>;", "Ljava/util/Map<Ljava/lang/Object;Landroidx/appcompat/view/menu/MenuItemImpl;>;", "LASActionMenuViewImpl_Divider;LASActionMenuViewImpl_Orientation;LASActionMenuViewImpl_ActionMenuViewExt;LASActionMenuViewImpl_ShowAsAction;LASActionMenuViewImpl_CanvasImpl;LASActionMenuViewImpl_ActionMenuViewCommandBuilder;LASActionMenuViewImpl_ActionMenuViewBean;LASActionMenuViewImpl_ActionMenuViewParamsBean;LASActionMenuViewImpl_ActionMenuViewCommandParamsBuilder;LASActionMenuViewImpl_MenuOnClickListener;LASActionMenuViewImpl_MenuClickListener;" };
+  static const J2ObjcClassInfo _ASActionMenuViewImpl = { "ActionMenuViewImpl", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 56, 16, -1, 65, -1, -1, -1 };
   return &_ASActionMenuViewImpl;
 }
 
@@ -1184,13 +1205,18 @@ void ASActionMenuViewImpl_setKxMenuOnButtonWithId_withJavaUtilList_(ASActionMenu
   self->itemArray_ = actions;
 }
 
-id ASActionMenuViewImpl_getKXMenuWithASToolbarImpl_withADXMenuItemImpl_(ASActionMenuViewImpl *self, ASToolbarImpl *toolbar, ADXMenuItemImpl *menuItem) {
-  return [KxMenuItem menuItem:[menuItem getTitle] image:nil target:self action:@selector(menuItemClicked:)];
+id ASActionMenuViewImpl_getKXMenuWithNSString_withBoolean_(ASActionMenuViewImpl *self, NSString *title, jboolean border) {
+  KxMenuItem* item = [KxMenuItem menuItem:title image:nil target:self action:@selector(menuItemClicked:)];
+  item.border = border;
+  return item;
 }
 
 void ASActionMenuViewImpl_handleOnKxMenuItemClickWithId_(ASActionMenuViewImpl *self, id kxmenuItem) {
   if ([((ASToolbarImpl *) nil_chk(self->toolbar_)) getOnMenuItemClickListener] != nil) {
-    [((id<ADXToolbar_OnMenuItemClickListener>) nil_chk([((ASToolbarImpl *) nil_chk(self->toolbar_)) getOnMenuItemClickListener])) onMenuItemClickWithADMenuItem:[((id<JavaUtilMap>) nil_chk(self->menuItemToNativeMenuItemMap_)) getWithId:kxmenuItem]];
+    ADXMenuItemImpl *item = [((id<JavaUtilMap>) nil_chk(self->menuItemToNativeMenuItemMap_)) getWithId:kxmenuItem];
+    if (item != nil) {
+      [((id<ADXToolbar_OnMenuItemClickListener>) nil_chk([((ASToolbarImpl *) nil_chk(self->toolbar_)) getOnMenuItemClickListener])) onMenuItemClickWithADMenuItem:item];
+    }
   }
 }
 
@@ -1206,6 +1232,15 @@ void ASActionMenuViewImpl_setMenuOnButtonWithId_withJavaUtilList_(ASActionMenuVi
   UIMenu* menu = [UIMenu menuWithTitle:@"" children:actions];
   ((UIButton*)button).showsMenuAsPrimaryAction = YES;
   ((UIButton*)button).menu = menu;
+}
+
+id ASActionMenuViewImpl_getMenuInlineWithJavaUtilList_withNSString_(ASActionMenuViewImpl *self, id<JavaUtilList> actionsObjs, NSString *groupId) {
+  NSMutableArray* actions = [[NSMutableArray alloc] init];
+  for (id action in actionsObjs) {
+    [actions addObject: action];
+  }
+  UIMenu* menu = [UIMenu menuWithTitle:@"" image: nil identifier: groupId options:UIMenuOptionsDisplayInline children:actions];
+  return menu;
 }
 
 id ASActionMenuViewImpl_getActionWithASToolbarImpl_withADXMenuItemImpl_(ASActionMenuViewImpl *self, ASToolbarImpl *toolbar, ADXMenuItemImpl *menuItem) {

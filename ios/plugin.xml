@@ -24,6 +24,8 @@
      <source-file src="ios/src/CordovaToolbarPlugin.m" target-dir="ToolbarPlugin/ios/src" compiler-flags="-fobjc-arc-exceptions"/>
      <header-file src="ios/src/KxMenu.h" target-dir="ToolbarPlugin/ios/src"/>
      <source-file src="ios/src/KxMenu.m" target-dir="ToolbarPlugin/ios/src" compiler-flags="-fobjc-arc-exceptions"/>
+     <header-file src="ios/src/SearchViewImpl.h" target-dir="ToolbarPlugin/ios/src"/>
+     <source-file src="ios/src/SearchViewImpl.m" target-dir="ToolbarPlugin/ios/src" compiler-flags="-fobjc-arc-exceptions"/>
      <header-file src="ios/src/ToolbarImpl.h" target-dir="ToolbarPlugin/ios/src"/>
      <source-file src="ios/src/ToolbarImpl.m" target-dir="ToolbarPlugin/ios/src" compiler-flags="-fobjc-arc-exceptions"/>
      <header-file src="ios/src/ToolbarPlugin.h" target-dir="ToolbarPlugin/ios/src"/>
@@ -31,6 +33,7 @@
      <!-- ios end -->
      <!-- start tsc -->
      <source-file src="tsc/src/ios/widget/ActionMenuViewImpl.ts" target-dir="tsc/src/ios/widget"/>
+     <source-file src="tsc/src/ios/widget/SearchViewImpl.ts" target-dir="tsc/src/ios/widget"/>
      <source-file src="tsc/src/ios/widget/ToolbarImpl.ts" target-dir="tsc/src/ios/widget"/>
      <!-- tsc end -->
      <!-- start AndroidToolbarPlugin -->
@@ -40,6 +43,8 @@
      <source-file src="library/AndroidToolbarPlugin/src/ActionMenuView.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
      <header-file src="library/AndroidToolbarPlugin/src/BaseMenuPresenter.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>
      <source-file src="library/AndroidToolbarPlugin/src/BaseMenuPresenter.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
+     <header-file src="library/AndroidToolbarPlugin/src/CollapsibleActionView.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>
+     <source-file src="library/AndroidToolbarPlugin/src/CollapsibleActionView.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
      <header-file src="library/AndroidToolbarPlugin/src/LinearLayoutCompat.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>
      <source-file src="library/AndroidToolbarPlugin/src/LinearLayoutCompat.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
      <header-file src="library/AndroidToolbarPlugin/src/MenuBuilder.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>
@@ -52,6 +57,10 @@
      <source-file src="library/AndroidToolbarPlugin/src/MenuPresenter.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
      <header-file src="library/AndroidToolbarPlugin/src/RtlSpacingHelper.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>
      <source-file src="library/AndroidToolbarPlugin/src/RtlSpacingHelper.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
+     <header-file src="library/AndroidToolbarPlugin/src/SearchView.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>
+     <source-file src="library/AndroidToolbarPlugin/src/SearchView.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
+     <header-file src="library/AndroidToolbarPlugin/src/SupportMenuItem.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>
+     <source-file src="library/AndroidToolbarPlugin/src/SupportMenuItem.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
      <header-file src="library/AndroidToolbarPlugin/src/Toolbar.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>
      <source-file src="library/AndroidToolbarPlugin/src/Toolbar.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
      <header-file src="library/AndroidToolbarPlugin/src/ViewUtils.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>

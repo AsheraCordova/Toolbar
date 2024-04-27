@@ -7,6 +7,7 @@ public class ToolbarPlugin  {
     	//start - widgets
         WidgetFactory.register(new com.ashera.toolbar.ToolbarImpl());
         WidgetFactory.register(new com.ashera.toolbar.ActionMenuViewImpl());
+        WidgetFactory.register(new com.ashera.toolbar.SearchViewImpl());
         //end - widgets
     }
 }

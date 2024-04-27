@@ -526,7 +526,7 @@ return layoutParams.weight;			}
 	@SuppressLint("NewApi")
 	@Override
 	public void setAttribute(WidgetAttribute key, String strValue, Object objValue, ILifeCycleDecorator decorator) {
-		ViewGroupImpl.setAttribute(this, key, strValue, objValue, decorator);
+				ViewGroupImpl.setAttribute(this, key, strValue, objValue, decorator);
 		Object nativeWidget = asNativeWidget();
 		switch (key.getAttributeName()) {
 			case "baselineAligned": {
@@ -1305,8 +1305,10 @@ return this;}
 	]-*/;
 	
 	
-	private native Object getKXMenu(ToolbarImpl toolbar, androidx.appcompat.view.menu.MenuItemImpl menuItem)/*-[
-		return [KxMenuItem menuItem:[menuItem getTitle] image:nil target:self action:@selector(menuItemClicked:)];
+	private native Object getKXMenu(String title, boolean border)/*-[
+		KxMenuItem* item = [KxMenuItem menuItem:title image:nil target:self action:@selector(menuItemClicked:)];
+		item.border = border;
+		return item;
 	]-*/;
 	
 	/*-[
@@ -1317,7 +1319,10 @@ return this;}
 	
 	private void handleOnKxMenuItemClick(Object kxmenuItem) {
 		if (toolbar.getOnMenuItemClickListener() != null) {
-				toolbar.getOnMenuItemClickListener().onMenuItemClick(menuItemToNativeMenuItemMap.get(kxmenuItem));
+				androidx.appcompat.view.menu.MenuItemImpl item = menuItemToNativeMenuItemMap.get(kxmenuItem);
+				if (item != null) {
+					toolbar.getOnMenuItemClickListener().onMenuItemClick(item);
+				}
 		}
 	}
 	
@@ -1335,6 +1340,15 @@ return this;}
 		((UIButton*)button).showsMenuAsPrimaryAction = YES;
 		((UIButton*)button).menu = menu;
 	]-*/;
+	private native Object getMenuInline(List<Object> actionsObjs, String groupId) /*-[
+		NSMutableArray* actions = [[NSMutableArray alloc] init];
+		for (id action in actionsObjs) {
+				[actions addObject: action];
+		}
+		UIMenu* menu = [UIMenu menuWithTitle:@"" image: nil identifier: groupId options:UIMenuOptionsDisplayInline children:actions];
+		return menu;
+	]-*/;
+	
 	private native Object getAction(ToolbarImpl toolbar, androidx.appcompat.view.menu.MenuItemImpl menuItem)/*-[
 		return [UIAction actionWithTitle:[menuItem getTitle]
 		                                       image:nil
@@ -1362,17 +1376,27 @@ return this;}
 			if (menuItemToNativeMenuItemMap == null && isKxMenuToBeShown()) {
 				menuItemToNativeMenuItemMap = new java.util.HashMap<>();
 			}
+			int menuGroupId = -1;
+			int prevMenuGroupId = -1;
 			for (androidx.appcompat.view.menu.MenuItemImpl menuItem : actionMenuView.getMenu().getNonActionItems()) {
+				menuGroupId = menuItem.getGroupId();
 				
 				if (menuItemToNativeMenuItemMap != null) {
-					Object item = getKXMenu(toolbar, menuItem);
+					Object item = getKXMenu(menuItem.getTitle(), prevMenuGroupId != -1 && menuGroupId != prevMenuGroupId);
 					actions.add(item);
 					menuItemToNativeMenuItemMap.put(item, menuItem);
 				} else {
+					if (prevMenuGroupId != -1 && menuGroupId != prevMenuGroupId) {
+						Object menu = getMenuInline(actions, prevMenuGroupId + "");
+						actions.clear();
+						actions.add(menu);
+					}
+
 					Object item = getAction(toolbar, menuItem);
 					actions.add(item);
 				}
-				
+
+				prevMenuGroupId = menuGroupId;
 			}
 			if (isKxMenuToBeShown()) {
 				setKxMenuOnButton(overFlowButton.asNativeWidget(), actions);

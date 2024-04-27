@@ -76,6 +76,8 @@
 
 - (IOSClass *)getViewClass;
 
+- (void)initialized OBJC_METHOD_FAMILY_NONE;
+
 - (void)invalidate;
 
 - (void)loadAttributesWithNSString:(NSString *)localName;
@@ -356,6 +358,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)reset;
 
+- (ASToolbarImpl_ToolbarCommandBuilder *)setActionLayoutEventIdsWithNSString:(NSString *)value;
+
 - (ASToolbarImpl_ToolbarCommandBuilder *)setAddStatesFromChildrenWithBoolean:(jboolean)arg0;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setAlphaWithFloat:(jfloat)arg0;
@@ -568,6 +572,10 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setOnNavigationIconClickWithNSString:(NSString *)value;
 
+- (ASToolbarImpl_ToolbarCommandBuilder *)setOnQueryTextChangeWithNSString:(NSString *)value;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setOnQueryTextSubmitWithNSString:(NSString *)value;
+
 - (ASToolbarImpl_ToolbarCommandBuilder *)setOnSwipedWithNSString:(NSString *)arg0;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setOnTouchWithNSString:(NSString *)arg0;
@@ -605,6 +613,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 - (ASToolbarImpl_ToolbarCommandBuilder *)setScaleXWithFloat:(jfloat)arg0;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setScaleYWithFloat:(jfloat)arg0;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setSearchview_attributesWithNSString:(NSString *)value;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setSelectedWithBoolean:(jboolean)arg0;
 
@@ -877,6 +887,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarCommandBuilder)
 
 - (instancetype)initWithASToolbarImpl:(ASToolbarImpl *)outer$;
 
+- (void)setActionLayoutEventIdsWithNSString:(NSString *)value;
+
 - (void)setButtonGravityWithNSString:(NSString *)value;
 
 - (void)setContentInsetEndWithNSString:(NSString *)value;
@@ -905,7 +917,13 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarCommandBuilder)
 
 - (void)setOnNavigationIconClickWithNSString:(NSString *)value;
 
+- (void)setOnQueryTextChangeWithNSString:(NSString *)value;
+
+- (void)setOnQueryTextSubmitWithNSString:(NSString *)value;
+
 - (void)setOverflowIconWithNSString:(NSString *)value;
+
+- (void)setSearchview_attributesWithNSString:(NSString *)value;
 
 - (void)setSubtitleWithNSString:(NSString *)value;
 

@@ -5,6 +5,7 @@
 
 #include "ActionMenuView.h"
 #include "ActionMenuViewImpl.h"
+#include "AutoCompleteTextView.h"
 #include "BaseHasWidgets.h"
 #include "BaseMeasurableImageView.h"
 #include "Event.h"
@@ -26,16 +27,19 @@
 #include "IOSPrimitiveArray.h"
 #include "IWidget.h"
 #include "IWidgetLifeCycleListener.h"
+#include "IdGenerator.h"
 #include "J2ObjC_source.h"
 #include "LayoutTransition.h"
 #include "MeasureEvent.h"
 #include "MenuBuilder.h"
 #include "MenuItem.h"
 #include "MenuParser.h"
+#include "ModelExpressionParser.h"
 #include "OnLayoutEvent.h"
 #include "PluginInvoker.h"
 #include "Rect.h"
 #include "ResourceBundleUtils.h"
+#include "SearchView.h"
 #include "Toolbar.h"
 #include "ToolbarImpl.h"
 #include "View.h"
@@ -51,12 +55,14 @@
 #include "java/util/HashMap.h"
 #include "java/util/List.h"
 #include "java/util/Map.h"
+#include "java/util/Set.h"
 
 #include <UIKit/UIKit.h>
 #include "ASUIView.h"
 #include "HasLifeCycleDecorators.h"
 
 @class ASToolbarImpl_OnClickListener;
+@protocol JavaUtilList;
 @protocol JavaUtilMap;
 
 
@@ -78,6 +84,10 @@
   id overflowIcon_;
   jint mButtonGravity_;
   jint screenWidth_;
+  id<ADXSearchView_OnQueryTextListener> onQueryTextSubmit_;
+  id<ADXSearchView_OnQueryTextListener> onQueryTextChange_;
+  id<JavaUtilList> actionLayoutEventIds_;
+  id<JavaUtilMap> searchviewAttributes_;
   ASToolbarImpl_ToolbarCommandBuilder *builder_;
   ASToolbarImpl_ToolbarBean *bean_;
   ASToolbarImpl_ToolbarCommandParamsBuilder *paramsBuilder_;
@@ -148,11 +158,28 @@
 
 - (void)handlePreMeasureWithId:(id)payload;
 
+- (id<ASIWidget>)getAutoCompleteImplWithADAutoCompleteTextView:(ADAutoCompleteTextView *)autoComplete;
+
+- (void)setOnSuggestionListenerWithADMenuItem:(id<ADMenuItem>)menu
+                   withADAutoCompleteTextView:(ADAutoCompleteTextView *)autoComplete;
+
 - (void)setContentInsetEndWithId:(id)objValue;
 
 - (void)setContentInsetStartWithId:(id)objValue;
 
 - (void)setTitleMarginWithId:(id)objValue;
+
+- (void)setOnQueryTextListenerWithNSString:(NSString *)action
+                              withNSString:(NSString *)strValue
+                                    withId:(id)objValue;
+
+- (void)setActionLayoutEventIdsWithId:(id)objValue;
+
+- (void)applySearchViewAttributesWithADMenuItem:(id<ADMenuItem>)menu;
+
+- (ADAutoCompleteTextView *)findAutoCompleteWithADViewGroup:(ADViewGroup *)actionView;
+
+- (void)setSearchviewAttributesWithId:(id)objValue;
 
 - (void)setNavigationOnClickListenerWithASToolbarImpl_OnClickListener:(ASToolbarImpl_OnClickListener *)onClickListener;
 
@@ -169,6 +196,10 @@ J2OBJC_FIELD_SETTER(ASToolbarImpl, actionMenuView_, id<ASIWidget>)
 J2OBJC_FIELD_SETTER(ASToolbarImpl, menu_, NSString *)
 J2OBJC_FIELD_SETTER(ASToolbarImpl, onMenuItemClickListener_, id<ADXToolbar_OnMenuItemClickListener>)
 J2OBJC_FIELD_SETTER(ASToolbarImpl, overflowIcon_, id)
+J2OBJC_FIELD_SETTER(ASToolbarImpl, onQueryTextSubmit_, id<ADXSearchView_OnQueryTextListener>)
+J2OBJC_FIELD_SETTER(ASToolbarImpl, onQueryTextChange_, id<ADXSearchView_OnQueryTextListener>)
+J2OBJC_FIELD_SETTER(ASToolbarImpl, actionLayoutEventIds_, id<JavaUtilList>)
+J2OBJC_FIELD_SETTER(ASToolbarImpl, searchviewAttributes_, id<JavaUtilMap>)
 J2OBJC_FIELD_SETTER(ASToolbarImpl, builder_, ASToolbarImpl_ToolbarCommandBuilder *)
 J2OBJC_FIELD_SETTER(ASToolbarImpl, bean_, ASToolbarImpl_ToolbarBean *)
 J2OBJC_FIELD_SETTER(ASToolbarImpl, paramsBuilder_, ASToolbarImpl_ToolbarCommandParamsBuilder *)
@@ -216,11 +247,25 @@ __attribute__((unused)) static void ASToolbarImpl_setButtonGravityWithId_(ASTool
 
 __attribute__((unused)) static void ASToolbarImpl_handlePreMeasureWithId_(ASToolbarImpl *self, id payload);
 
+__attribute__((unused)) static id<ASIWidget> ASToolbarImpl_getAutoCompleteImplWithADAutoCompleteTextView_(ASToolbarImpl *self, ADAutoCompleteTextView *autoComplete);
+
+__attribute__((unused)) static void ASToolbarImpl_setOnSuggestionListenerWithADMenuItem_withADAutoCompleteTextView_(ASToolbarImpl *self, id<ADMenuItem> menu, ADAutoCompleteTextView *autoComplete);
+
 __attribute__((unused)) static void ASToolbarImpl_setContentInsetEndWithId_(ASToolbarImpl *self, id objValue);
 
 __attribute__((unused)) static void ASToolbarImpl_setContentInsetStartWithId_(ASToolbarImpl *self, id objValue);
 
 __attribute__((unused)) static void ASToolbarImpl_setTitleMarginWithId_(ASToolbarImpl *self, id objValue);
+
+__attribute__((unused)) static void ASToolbarImpl_setOnQueryTextListenerWithNSString_withNSString_withId_(ASToolbarImpl *self, NSString *action, NSString *strValue, id objValue);
+
+__attribute__((unused)) static void ASToolbarImpl_setActionLayoutEventIdsWithId_(ASToolbarImpl *self, id objValue);
+
+__attribute__((unused)) static void ASToolbarImpl_applySearchViewAttributesWithADMenuItem_(ASToolbarImpl *self, id<ADMenuItem> menu);
+
+__attribute__((unused)) static ADAutoCompleteTextView *ASToolbarImpl_findAutoCompleteWithADViewGroup_(ASToolbarImpl *self, ADViewGroup *actionView);
+
+__attribute__((unused)) static void ASToolbarImpl_setSearchviewAttributesWithId_(ASToolbarImpl *self, id objValue);
 
 __attribute__((unused)) static void ASToolbarImpl_setNavigationOnClickListenerWithASToolbarImpl_OnClickListener_(ASToolbarImpl *self, ASToolbarImpl_OnClickListener *onClickListener);
 
@@ -246,6 +291,98 @@ __attribute__((unused)) static void ASToolbarImpl_setNavigationOnClickListenerWi
 J2OBJC_FIELD_SETTER(ASToolbarImpl_ToolbarExt, measureFinished_, ASMeasureEvent *)
 J2OBJC_FIELD_SETTER(ASToolbarImpl_ToolbarExt, onLayoutEvent_, ASOnLayoutEvent *)
 J2OBJC_FIELD_SETTER(ASToolbarImpl_ToolbarExt, templates_, id<JavaUtilMap>)
+
+@interface ASToolbarImpl_1 : NSObject < ADView_OnClickListener > {
+ @public
+  ASToolbarImpl *this$0_;
+  id<ADMenuItem> val$menu_;
+  NSString *val$myactionLayoutEventId_;
+}
+
+- (instancetype)initWithASToolbarImpl:(ASToolbarImpl *)outer$
+                       withADMenuItem:(id<ADMenuItem>)capture$0
+                         withNSString:(NSString *)capture$1;
+
+- (void)onClickWithADView:(ADView *)v;
+
+@end
+
+J2OBJC_EMPTY_STATIC_INIT(ASToolbarImpl_1)
+
+__attribute__((unused)) static void ASToolbarImpl_1_initWithASToolbarImpl_withADMenuItem_withNSString_(ASToolbarImpl_1 *self, ASToolbarImpl *outer$, id<ADMenuItem> capture$0, NSString *capture$1);
+
+__attribute__((unused)) static ASToolbarImpl_1 *new_ASToolbarImpl_1_initWithASToolbarImpl_withADMenuItem_withNSString_(ASToolbarImpl *outer$, id<ADMenuItem> capture$0, NSString *capture$1) NS_RETURNS_RETAINED;
+
+__attribute__((unused)) static ASToolbarImpl_1 *create_ASToolbarImpl_1_initWithASToolbarImpl_withADMenuItem_withNSString_(ASToolbarImpl *outer$, id<ADMenuItem> capture$0, NSString *capture$1);
+
+@interface ASToolbarImpl_2 : NSObject < ADXSearchView_OnQueryTextListener > {
+ @public
+  ASToolbarImpl *this$0_;
+}
+
+- (instancetype)initWithASToolbarImpl:(ASToolbarImpl *)outer$;
+
+- (jboolean)onQueryTextChangeWithNSString:(NSString *)text;
+
+- (jboolean)onQueryTextSubmitWithNSString:(NSString *)query;
+
+@end
+
+J2OBJC_EMPTY_STATIC_INIT(ASToolbarImpl_2)
+
+__attribute__((unused)) static void ASToolbarImpl_2_initWithASToolbarImpl_(ASToolbarImpl_2 *self, ASToolbarImpl *outer$);
+
+__attribute__((unused)) static ASToolbarImpl_2 *new_ASToolbarImpl_2_initWithASToolbarImpl_(ASToolbarImpl *outer$) NS_RETURNS_RETAINED;
+
+__attribute__((unused)) static ASToolbarImpl_2 *create_ASToolbarImpl_2_initWithASToolbarImpl_(ASToolbarImpl *outer$);
+
+@interface ASToolbarImpl_OnQueryTextListener : NSObject < ADXSearchView_OnQueryTextListener, ASIListener > {
+ @public
+  id<ASIWidget> w_;
+  ADView *view_;
+  NSString *strValue_;
+  NSString *action_;
+}
+
+- (NSString *)getAction;
+
+- (instancetype)initWithASIWidget:(id<ASIWidget>)w
+                     withNSString:(NSString *)strValue;
+
+- (instancetype)initWithASIWidget:(id<ASIWidget>)w
+                     withNSString:(NSString *)strValue
+                     withNSString:(NSString *)action;
+
+- (jboolean)onQueryTextSubmitWithNSString:(NSString *)query;
+
+- (id<JavaUtilMap>)getOnQueryTextSubmitEventObjWithNSString:(NSString *)query;
+
+- (jboolean)onQueryTextChangeWithNSString:(NSString *)newText;
+
+- (id<JavaUtilMap>)getOnQueryTextChangeEventObjWithNSString:(NSString *)newText;
+
+@end
+
+J2OBJC_EMPTY_STATIC_INIT(ASToolbarImpl_OnQueryTextListener)
+
+J2OBJC_FIELD_SETTER(ASToolbarImpl_OnQueryTextListener, w_, id<ASIWidget>)
+J2OBJC_FIELD_SETTER(ASToolbarImpl_OnQueryTextListener, view_, ADView *)
+J2OBJC_FIELD_SETTER(ASToolbarImpl_OnQueryTextListener, strValue_, NSString *)
+J2OBJC_FIELD_SETTER(ASToolbarImpl_OnQueryTextListener, action_, NSString *)
+
+__attribute__((unused)) static void ASToolbarImpl_OnQueryTextListener_initWithASIWidget_withNSString_(ASToolbarImpl_OnQueryTextListener *self, id<ASIWidget> w, NSString *strValue);
+
+__attribute__((unused)) static ASToolbarImpl_OnQueryTextListener *new_ASToolbarImpl_OnQueryTextListener_initWithASIWidget_withNSString_(id<ASIWidget> w, NSString *strValue) NS_RETURNS_RETAINED;
+
+__attribute__((unused)) static ASToolbarImpl_OnQueryTextListener *create_ASToolbarImpl_OnQueryTextListener_initWithASIWidget_withNSString_(id<ASIWidget> w, NSString *strValue);
+
+__attribute__((unused)) static void ASToolbarImpl_OnQueryTextListener_initWithASIWidget_withNSString_withNSString_(ASToolbarImpl_OnQueryTextListener *self, id<ASIWidget> w, NSString *strValue, NSString *action);
+
+__attribute__((unused)) static ASToolbarImpl_OnQueryTextListener *new_ASToolbarImpl_OnQueryTextListener_initWithASIWidget_withNSString_withNSString_(id<ASIWidget> w, NSString *strValue, NSString *action) NS_RETURNS_RETAINED;
+
+__attribute__((unused)) static ASToolbarImpl_OnQueryTextListener *create_ASToolbarImpl_OnQueryTextListener_initWithASIWidget_withNSString_withNSString_(id<ASIWidget> w, NSString *strValue, NSString *action);
+
+J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_OnQueryTextListener)
 
 @interface ASToolbarImpl_OnClickListener : NSObject < ADView_OnClickListener, ASIListener > {
  @public
@@ -395,6 +532,10 @@ NSString *ASToolbarImpl_GROUP_NAME = @"androidx.appcompat.widget.Toolbar";
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"maxButtonHeight"])) withTypeWithNSString:@"dimension"])) withUiFlagWithInt:ASIWidget_UPDATE_UI_REQUEST_LAYOUT]);
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"buttonGravity"])) withTypeWithNSString:@"gravity"])) withUiFlagWithInt:ASIWidget_UPDATE_UI_REQUEST_LAYOUT]);
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"menu"])) withTypeWithNSString:@"string"]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"actionLayoutEventIds"])) withTypeWithNSString:@"array"])) withArrayTypeWithNSString:@"string"]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"searchview_attributes"])) withTypeWithNSString:@"string"]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"onQueryTextSubmit"])) withTypeWithNSString:@"string"]);
+  ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"onQueryTextChange"])) withTypeWithNSString:@"string"]);
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"title"])) withTypeWithNSString:@"resourcestring"]);
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"titleTextColor"])) withTypeWithNSString:@"color"]);
   ASWidgetFactory_registerAttributeWithNSString_withASWidgetAttribute_Builder_(localName, [((ASWidgetAttribute_Builder *) nil_chk([new_ASWidgetAttribute_Builder_init() withNameWithNSString:@"subtitle"])) withTypeWithNSString:@"resourcestring"]);
@@ -538,7 +679,7 @@ J2OBJC_IGNORE_DESIGNATED_END
                 withASILifeCycleDecorator:(id<ASILifeCycleDecorator>)decorator {
   ASViewGroupImpl_setAttributeWithASIWidget_withASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
   id nativeWidget = [self asNativeWidget];
-  switch (JreIndexOfStr([((ASWidgetAttribute *) nil_chk(key)) getAttributeName], (id[]){ @"gravity", @"titleMargin", @"titleMarginStart", @"titleMarginEnd", @"titleMarginTop", @"titleMarginBottom", @"titleMargins", @"contentInsetStart", @"contentInsetEnd", @"contentInsetLeft", @"contentInsetRight", @"contentInsetStartWithNavigation", @"contentInsetEndWithActions", @"maxButtonHeight", @"buttonGravity", @"menu", @"title", @"titleTextColor", @"subtitle", @"subtitleTextColor", @"logo", @"navigationIcon", @"overflowIcon", @"onNavigationIconClick", @"onMenuItemClick" }, 25)) {
+  switch (JreIndexOfStr([((ASWidgetAttribute *) nil_chk(key)) getAttributeName], (id[]){ @"gravity", @"titleMargin", @"titleMarginStart", @"titleMarginEnd", @"titleMarginTop", @"titleMarginBottom", @"titleMargins", @"contentInsetStart", @"contentInsetEnd", @"contentInsetLeft", @"contentInsetRight", @"contentInsetStartWithNavigation", @"contentInsetEndWithActions", @"maxButtonHeight", @"buttonGravity", @"menu", @"actionLayoutEventIds", @"searchview_attributes", @"onQueryTextSubmit", @"onQueryTextChange", @"title", @"titleTextColor", @"subtitle", @"subtitleTextColor", @"logo", @"navigationIcon", @"overflowIcon", @"onNavigationIconClick", @"onMenuItemClick" }, 29)) {
     case 0:
     {
       ASToolbarImpl_setGravityWithId_(self, objValue);
@@ -621,45 +762,65 @@ J2OBJC_IGNORE_DESIGNATED_END
     break;
     case 16:
     {
-      ASToolbarImpl_setTitleWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
+      ASToolbarImpl_setActionLayoutEventIdsWithId_(self, objValue);
     }
     break;
     case 17:
     {
-      ASToolbarImpl_setTitleTextColorWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
+      ASToolbarImpl_setSearchviewAttributesWithId_(self, objValue);
     }
     break;
     case 18:
     {
-      ASToolbarImpl_setSubtitleWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
+      ASToolbarImpl_setOnQueryTextListenerWithNSString_withNSString_withId_(self, @"onQueryTextSubmit", strValue, objValue);
     }
     break;
     case 19:
     {
-      ASToolbarImpl_setSubtitleColorWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
+      ASToolbarImpl_setOnQueryTextListenerWithNSString_withNSString_withId_(self, @"onQueryTextChange", strValue, objValue);
     }
     break;
     case 20:
     {
-      ASToolbarImpl_setLogoWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
+      ASToolbarImpl_setTitleWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
     }
     break;
     case 21:
     {
-      ASToolbarImpl_setNavigationIconWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
+      ASToolbarImpl_setTitleTextColorWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
     }
     break;
     case 22:
     {
-      ASToolbarImpl_setOverflowIconWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
+      ASToolbarImpl_setSubtitleWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
     }
     break;
     case 23:
     {
-      ASToolbarImpl_setNavigationOnClickListenerWithASToolbarImpl_OnClickListener_(self, new_ASToolbarImpl_OnClickListener_initWithASIWidget_withNSString_(self, strValue));
+      ASToolbarImpl_setSubtitleColorWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
     }
     break;
     case 24:
+    {
+      ASToolbarImpl_setLogoWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
+    }
+    break;
+    case 25:
+    {
+      ASToolbarImpl_setNavigationIconWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
+    }
+    break;
+    case 26:
+    {
+      ASToolbarImpl_setOverflowIconWithASWidgetAttribute_withNSString_withId_withASILifeCycleDecorator_(self, key, strValue, objValue, decorator);
+    }
+    break;
+    case 27:
+    {
+      ASToolbarImpl_setNavigationOnClickListenerWithASToolbarImpl_OnClickListener_(self, new_ASToolbarImpl_OnClickListener_initWithASIWidget_withNSString_(self, strValue));
+    }
+    break;
+    case 28:
     {
       ASToolbarImpl_setOnMenuItemClickListenerWithNSString_withId_(self, strValue, objValue);
     }
@@ -797,6 +958,38 @@ J2OBJC_IGNORE_DESIGNATED_END
   ASToolbarImpl_handlePreMeasureWithId_(self, payload);
 }
 
+- (void)initialized {
+  [super initialized];
+  if (self->actionLayoutEventIds_ != nil || searchviewAttributes_ != nil) {
+    jint menuSize = [((ADXMenuBuilder *) nil_chk([((ADXToolbar *) nil_chk(toolbar_)) getMenu])) size];
+    for (jint i = 0; i < menuSize; i++) {
+      id<ADMenuItem> menu = [((ADXMenuBuilder *) nil_chk([((ADXToolbar *) nil_chk(toolbar_)) getMenu])) getItemWithInt:i];
+      if (self->actionLayoutEventIds_ != nil && [((id<ADMenuItem>) nil_chk(menu)) getActionView] != nil && !([[menu getActionView] isKindOfClass:[ADXSearchView class]])) {
+        for (NSString * __strong actionLayoutEventId in self->actionLayoutEventIds_) {
+          actionLayoutEventId = [((NSString *) nil_chk([((NSString *) nil_chk(actionLayoutEventId)) java_replace:@"@+id/" withSequence:@""])) java_replace:@"@id/" withSequence:@""];
+          NSString *myactionLayoutEventId = actionLayoutEventId;
+          ADView *view = [((ADView *) nil_chk([((id<ADMenuItem>) nil_chk(menu)) getActionView])) findViewByIdWithInt:ASIdGenerator_getIdWithNSString_(JreStrcat("$$", @"@+id/", myactionLayoutEventId))];
+          if (view != nil) {
+            [view setMyAttributeWithNSString:@"onClick" withId:new_ASToolbarImpl_1_initWithASToolbarImpl_withADMenuItem_withNSString_(self, menu, myactionLayoutEventId)];
+          }
+        }
+      }
+      else if (searchviewAttributes_ != nil && [((id<ADMenuItem>) nil_chk(menu)) getActionView] != nil && ([[menu getActionView] isKindOfClass:[ADXSearchView class]])) {
+        ASToolbarImpl_applySearchViewAttributesWithADMenuItem_(self, menu);
+      }
+    }
+  }
+}
+
+- (id<ASIWidget>)getAutoCompleteImplWithADAutoCompleteTextView:(ADAutoCompleteTextView *)autoComplete {
+  return ASToolbarImpl_getAutoCompleteImplWithADAutoCompleteTextView_(self, autoComplete);
+}
+
+- (void)setOnSuggestionListenerWithADMenuItem:(id<ADMenuItem>)menu
+                   withADAutoCompleteTextView:(ADAutoCompleteTextView *)autoComplete {
+  ASToolbarImpl_setOnSuggestionListenerWithADMenuItem_withADAutoCompleteTextView_(self, menu, autoComplete);
+}
+
 - (void)setContentInsetEndWithId:(id)objValue {
   ASToolbarImpl_setContentInsetEndWithId_(self, objValue);
 }
@@ -807,6 +1000,28 @@ J2OBJC_IGNORE_DESIGNATED_END
 
 - (void)setTitleMarginWithId:(id)objValue {
   ASToolbarImpl_setTitleMarginWithId_(self, objValue);
+}
+
+- (void)setOnQueryTextListenerWithNSString:(NSString *)action
+                              withNSString:(NSString *)strValue
+                                    withId:(id)objValue {
+  ASToolbarImpl_setOnQueryTextListenerWithNSString_withNSString_withId_(self, action, strValue, objValue);
+}
+
+- (void)setActionLayoutEventIdsWithId:(id)objValue {
+  ASToolbarImpl_setActionLayoutEventIdsWithId_(self, objValue);
+}
+
+- (void)applySearchViewAttributesWithADMenuItem:(id<ADMenuItem>)menu {
+  ASToolbarImpl_applySearchViewAttributesWithADMenuItem_(self, menu);
+}
+
+- (ADAutoCompleteTextView *)findAutoCompleteWithADViewGroup:(ADViewGroup *)actionView {
+  return ASToolbarImpl_findAutoCompleteWithADViewGroup_(self, actionView);
+}
+
+- (void)setSearchviewAttributesWithId:(id)objValue {
+  ASToolbarImpl_setSearchviewAttributesWithId_(self, objValue);
 }
 
 - (void)setIdWithNSString:(NSString *)id_ {
@@ -900,17 +1115,25 @@ J2OBJC_IGNORE_DESIGNATED_END
     { NULL, "V", 0x2, 39, 34, -1, -1, -1, -1 },
     { NULL, "V", 0x2, 40, 34, -1, -1, -1, -1 },
     { NULL, "V", 0x2, 41, 34, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 42, 34, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 43, 34, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 44, 34, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 45, 1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 46, 47, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, 48, 1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, "LASIWidget;", 0x2, 42, 43, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 44, 45, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 46, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 47, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 48, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 49, 50, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 51, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 52, 53, -1, -1, -1, -1 },
+    { NULL, "LADAutoCompleteTextView;", 0x2, 54, 55, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 56, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 57, 1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 58, 59, -1, -1, -1, -1 },
+    { NULL, "LNSObject;", 0x1, 60, 1, -1, -1, -1, -1 },
     { NULL, "LASToolbarImpl_ToolbarBean;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LASToolbarImpl_ToolbarCommandBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LASToolbarImpl_ToolbarParamsBean;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "LASToolbarImpl_ToolbarCommandParamsBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 49, 50, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 61, 62, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
@@ -957,22 +1180,30 @@ J2OBJC_IGNORE_DESIGNATED_END
   methods[39].selector = @selector(setMaxButtonHeightWithId:);
   methods[40].selector = @selector(setButtonGravityWithId:);
   methods[41].selector = @selector(handlePreMeasureWithId:);
-  methods[42].selector = @selector(setContentInsetEndWithId:);
-  methods[43].selector = @selector(setContentInsetStartWithId:);
-  methods[44].selector = @selector(setTitleMarginWithId:);
-  methods[45].selector = @selector(setIdWithNSString:);
-  methods[46].selector = @selector(setVisibleWithBoolean:);
-  methods[47].selector = @selector(getPluginWithNSString:);
-  methods[48].selector = @selector(getBean);
-  methods[49].selector = @selector(getBuilder);
-  methods[50].selector = @selector(getParamsBean);
-  methods[51].selector = @selector(getParamsBuilder);
-  methods[52].selector = @selector(setNavigationOnClickListenerWithASToolbarImpl_OnClickListener:);
+  methods[42].selector = @selector(initialized);
+  methods[43].selector = @selector(getAutoCompleteImplWithADAutoCompleteTextView:);
+  methods[44].selector = @selector(setOnSuggestionListenerWithADMenuItem:withADAutoCompleteTextView:);
+  methods[45].selector = @selector(setContentInsetEndWithId:);
+  methods[46].selector = @selector(setContentInsetStartWithId:);
+  methods[47].selector = @selector(setTitleMarginWithId:);
+  methods[48].selector = @selector(setOnQueryTextListenerWithNSString:withNSString:withId:);
+  methods[49].selector = @selector(setActionLayoutEventIdsWithId:);
+  methods[50].selector = @selector(applySearchViewAttributesWithADMenuItem:);
+  methods[51].selector = @selector(findAutoCompleteWithADViewGroup:);
+  methods[52].selector = @selector(setSearchviewAttributesWithId:);
+  methods[53].selector = @selector(setIdWithNSString:);
+  methods[54].selector = @selector(setVisibleWithBoolean:);
+  methods[55].selector = @selector(getPluginWithNSString:);
+  methods[56].selector = @selector(getBean);
+  methods[57].selector = @selector(getBuilder);
+  methods[58].selector = @selector(getParamsBean);
+  methods[59].selector = @selector(getParamsBuilder);
+  methods[60].selector = @selector(setNavigationOnClickListenerWithASToolbarImpl_OnClickListener:);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "uiView_", "LNSObject;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "LOCAL_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 51, -1, -1 },
-    { "GROUP_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 52, -1, -1 },
+    { "LOCAL_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 63, -1, -1 },
+    { "GROUP_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 64, -1, -1 },
     { "toolbar_", "LADXToolbar;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "PREMEASURE_EVENT_", "LNSString;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "titleView_", "LASIWidget;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
@@ -985,13 +1216,17 @@ J2OBJC_IGNORE_DESIGNATED_END
     { "overflowIcon_", "LNSObject;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mButtonGravity_", "I", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "screenWidth_", "I", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
+    { "onQueryTextSubmit_", "LADXSearchView_OnQueryTextListener;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
+    { "onQueryTextChange_", "LADXSearchView_OnQueryTextListener;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
+    { "actionLayoutEventIds_", "LJavaUtilList;", .constantValue.asLong = 0, 0x2, -1, -1, 65, -1 },
+    { "searchviewAttributes_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 66, -1 },
     { "builder_", "LASToolbarImpl_ToolbarCommandBuilder;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "bean_", "LASToolbarImpl_ToolbarBean;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "paramsBuilder_", "LASToolbarImpl_ToolbarCommandParamsBuilder;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "paramsBean_", "LASToolbarImpl_ToolbarParamsBean;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
   };
-  static const void *ptrTable[] = { "loadAttributes", "LNSString;", "LNSString;LNSString;", "create", "LASIFragment;LJavaUtilMap;", "(Lcom/ashera/core/IFragment;Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "remove", "LASIWidget;", "I", "nativeRemoveView", "add", "LASIWidget;I", "createLayoutParams", "LADView;", "getLayoutParams", "setChildAttribute", "LASIWidget;LASWidgetAttribute;LNSString;LNSObject;", "getChildAttribute", "LASIWidget;LASWidgetAttribute;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;LASILifeCycleDecorator;", "getAttribute", "LASWidgetAttribute;LASILifeCycleDecorator;", "checkIosVersion", "nativeCreate", "LJavaUtilMap;", "(Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "setTitle", "setSubtitleColor", "setTitleTextColor", "setSubtitle", "setLogo", "setNavigationIcon", "setMenu", "LNSObject;", "setOnMenuItemClickListener", "LNSString;LNSObject;", "setOverflowIcon", "setGravity", "setMaxButtonHeight", "setButtonGravity", "handlePreMeasure", "setContentInsetEnd", "setContentInsetStart", "setTitleMargin", "setId", "setVisible", "Z", "getPlugin", "setNavigationOnClickListener", "LASToolbarImpl_OnClickListener;", &ASToolbarImpl_LOCAL_NAME, &ASToolbarImpl_GROUP_NAME, "LASToolbarImpl_PreMeasureHandler;LASToolbarImpl_ToolbarExt;LASToolbarImpl_OnClickListener;LASToolbarImpl_OnMenuItemClickListener;LASToolbarImpl_ToolbarCommandBuilder;LASToolbarImpl_ToolbarBean;LASToolbarImpl_ToolbarParamsBean;LASToolbarImpl_ToolbarCommandParamsBuilder;" };
-  static const J2ObjcClassInfo _ASToolbarImpl = { "ToolbarImpl", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 53, 19, -1, 53, -1, -1, -1 };
+  static const void *ptrTable[] = { "loadAttributes", "LNSString;", "LNSString;LNSString;", "create", "LASIFragment;LJavaUtilMap;", "(Lcom/ashera/core/IFragment;Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "remove", "LASIWidget;", "I", "nativeRemoveView", "add", "LASIWidget;I", "createLayoutParams", "LADView;", "getLayoutParams", "setChildAttribute", "LASIWidget;LASWidgetAttribute;LNSString;LNSObject;", "getChildAttribute", "LASIWidget;LASWidgetAttribute;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;LASILifeCycleDecorator;", "getAttribute", "LASWidgetAttribute;LASILifeCycleDecorator;", "checkIosVersion", "nativeCreate", "LJavaUtilMap;", "(Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "setTitle", "setSubtitleColor", "setTitleTextColor", "setSubtitle", "setLogo", "setNavigationIcon", "setMenu", "LNSObject;", "setOnMenuItemClickListener", "LNSString;LNSObject;", "setOverflowIcon", "setGravity", "setMaxButtonHeight", "setButtonGravity", "handlePreMeasure", "getAutoCompleteImpl", "LADAutoCompleteTextView;", "setOnSuggestionListener", "LADMenuItem;LADAutoCompleteTextView;", "setContentInsetEnd", "setContentInsetStart", "setTitleMargin", "setOnQueryTextListener", "LNSString;LNSString;LNSObject;", "setActionLayoutEventIds", "applySearchViewAttributes", "LADMenuItem;", "findAutoComplete", "LADViewGroup;", "setSearchviewAttributes", "setId", "setVisible", "Z", "getPlugin", "setNavigationOnClickListener", "LASToolbarImpl_OnClickListener;", &ASToolbarImpl_LOCAL_NAME, &ASToolbarImpl_GROUP_NAME, "Ljava/util/List<Ljava/lang/String;>;", "Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;", "LASToolbarImpl_PreMeasureHandler;LASToolbarImpl_ToolbarExt;LASToolbarImpl_OnQueryTextListener;LASToolbarImpl_OnClickListener;LASToolbarImpl_OnMenuItemClickListener;LASToolbarImpl_ToolbarCommandBuilder;LASToolbarImpl_ToolbarBean;LASToolbarImpl_ToolbarParamsBean;LASToolbarImpl_ToolbarCommandParamsBuilder;" };
+  static const J2ObjcClassInfo _ASToolbarImpl = { "ToolbarImpl", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 61, 23, -1, 67, -1, -1, -1 };
   return &_ASToolbarImpl;
 }
 
@@ -1159,7 +1394,7 @@ void ASToolbarImpl_createMenu(ASToolbarImpl *self) {
     NSString *key = [((NSString *) nil_chk(self->menu_)) java_replace:@"@menu/" withSequence:@""];
     NSString *json = ASResourceBundleUtils_getStringWithNSString_withNSString_withASIFragment_(@"menu/menu", key, self->fragment_);
     ADXActionMenuView *actionMenu = (ADXActionMenuView *) cast_chk([((id<ASIWidget>) nil_chk(self->actionMenuView_)) asWidget], [ADXActionMenuView class]);
-    ADXMenuParser_parseMenuWithADXMenuBuilder_withNSString_withASIFragment_([((ADXActionMenuView *) nil_chk(actionMenu)) getMenu], json, self->fragment_);
+    ADXMenuParser_parseMenuWithASHasWidgets_withADXMenuBuilder_withNSString_withASIFragment_((id<ASHasWidgets>) cast_check(self->actionMenuView_, ASHasWidgets_class_()), [((ADXActionMenuView *) nil_chk(actionMenu)) getMenu], json, self->fragment_);
     [actionMenu updateMenuView];
     id<ASIWidget> overFlowButton = [((ASActionMenuViewImpl *) nil_chk(((ASActionMenuViewImpl *) cast_chk(self->actionMenuView_, [ASActionMenuViewImpl class])))) getOverFlowButtonWidget];
     if (overFlowButton != nil && self->overflowIcon_ != nil) {
@@ -1209,6 +1444,13 @@ void ASToolbarImpl_handlePreMeasureWithId_(ASToolbarImpl *self, id payload) {
   self->screenWidth_ = currentScreenWidth;
 }
 
+id<ASIWidget> ASToolbarImpl_getAutoCompleteImplWithADAutoCompleteTextView_(ASToolbarImpl *self, ADAutoCompleteTextView *autoComplete) {
+  return [((id<ASILifeCycleDecorator>) nil_chk(((id<ASILifeCycleDecorator>) cast_check(autoComplete, ASILifeCycleDecorator_class_())))) getWidget];
+}
+
+void ASToolbarImpl_setOnSuggestionListenerWithADMenuItem_withADAutoCompleteTextView_(ASToolbarImpl *self, id<ADMenuItem> menu, ADAutoCompleteTextView *autoComplete) {
+}
+
 void ASToolbarImpl_setContentInsetEndWithId_(ASToolbarImpl *self, id objValue) {
   [((ADXToolbar *) nil_chk(self->toolbar_)) setContentInsetsRelativeWithInt:[self->toolbar_ getContentInsetStart] withInt:[((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk(objValue, [JavaLangInteger class]))) intValue]];
 }
@@ -1219,6 +1461,68 @@ void ASToolbarImpl_setContentInsetStartWithId_(ASToolbarImpl *self, id objValue)
 
 void ASToolbarImpl_setTitleMarginWithId_(ASToolbarImpl *self, id objValue) {
   [((ADXToolbar *) nil_chk(self->toolbar_)) setTitleMarginWithInt:[((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk(objValue, [JavaLangInteger class]))) intValue] withInt:[((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk(objValue, [JavaLangInteger class]))) intValue] withInt:[((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk(objValue, [JavaLangInteger class]))) intValue] withInt:[((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk(objValue, [JavaLangInteger class]))) intValue]];
+}
+
+void ASToolbarImpl_setOnQueryTextListenerWithNSString_withNSString_withId_(ASToolbarImpl *self, NSString *action, NSString *strValue, id objValue) {
+  id<ADXSearchView_OnQueryTextListener> onQueryTextListener;
+  if ([objValue isKindOfClass:[NSString class]]) {
+    onQueryTextListener = new_ASToolbarImpl_OnQueryTextListener_initWithASIWidget_withNSString_withNSString_(self, strValue, action);
+    if ([((NSString *) nil_chk(action)) isEqual:@"onQueryTextSubmit"]) {
+      self->onQueryTextSubmit_ = onQueryTextListener;
+    }
+    if ([action isEqual:@"onQueryTextChange"]) {
+      self->onQueryTextChange_ = onQueryTextListener;
+    }
+  }
+  else {
+    self->onQueryTextChange_ = nil;
+    self->onQueryTextSubmit_ = nil;
+    onQueryTextListener = (id<ADXSearchView_OnQueryTextListener>) cast_check(objValue, ADXSearchView_OnQueryTextListener_class_());
+  }
+  jint menuSize = [((ADXMenuBuilder *) nil_chk([((ADXToolbar *) nil_chk(self->toolbar_)) getMenu])) size];
+  for (jint i = 0; i < menuSize; i++) {
+    id<ADMenuItem> menu = [((ADXMenuBuilder *) nil_chk([((ADXToolbar *) nil_chk(self->toolbar_)) getMenu])) getItemWithInt:i];
+    if ([[((id<ADMenuItem>) nil_chk(menu)) getActionView] isKindOfClass:[ADXSearchView class]]) {
+      if (self->onQueryTextSubmit_ == nil && self->onQueryTextChange_ == nil) {
+        [((ADXSearchView *) nil_chk(((ADXSearchView *) cast_chk([menu getActionView], [ADXSearchView class])))) setOnQueryTextListenerWithADXSearchView_OnQueryTextListener:onQueryTextListener];
+      }
+      else {
+        [((ADXSearchView *) nil_chk(((ADXSearchView *) cast_chk([menu getActionView], [ADXSearchView class])))) setOnQueryTextListenerWithADXSearchView_OnQueryTextListener:new_ASToolbarImpl_2_initWithASToolbarImpl_(self)];
+      }
+    }
+  }
+}
+
+void ASToolbarImpl_setActionLayoutEventIdsWithId_(ASToolbarImpl *self, id objValue) {
+  self->actionLayoutEventIds_ = (id<JavaUtilList>) cast_check(objValue, JavaUtilList_class_());
+}
+
+void ASToolbarImpl_applySearchViewAttributesWithADMenuItem_(ASToolbarImpl *self, id<ADMenuItem> menu) {
+  ADAutoCompleteTextView *autoComplete = ASToolbarImpl_findAutoCompleteWithADViewGroup_(self, (ADViewGroup *) cast_chk([((id<ADMenuItem>) nil_chk(menu)) getActionView], [ADViewGroup class]));
+  id<ASIWidget> widget = ASToolbarImpl_getAutoCompleteImplWithADAutoCompleteTextView_(self, autoComplete);
+  id<JavaUtilSet> set = [((id<JavaUtilMap>) nil_chk(self->searchviewAttributes_)) keySet];
+  for (NSString * __strong key in nil_chk(set)) {
+    [((id<ASIWidget>) nil_chk(widget)) setAttributeWithNSString:key withId:[((id<JavaUtilMap>) nil_chk(self->searchviewAttributes_)) getWithId:key] withBoolean:false];
+  }
+  [((id<ASIWidget>) nil_chk(widget)) applyModelToWidget];
+  ASToolbarImpl_setOnSuggestionListenerWithADMenuItem_withADAutoCompleteTextView_(self, menu, autoComplete);
+}
+
+ADAutoCompleteTextView *ASToolbarImpl_findAutoCompleteWithADViewGroup_(ASToolbarImpl *self, ADViewGroup *actionView) {
+  for (jint i = 0; i < [((ADViewGroup *) nil_chk(actionView)) getChildCount]; i++) {
+    ADView *view = [actionView getChildAtWithInt:i];
+    if ([view isKindOfClass:[ADAutoCompleteTextView class]]) {
+      return (ADAutoCompleteTextView *) view;
+    }
+    if ([view isKindOfClass:[ADViewGroup class]]) {
+      return ASToolbarImpl_findAutoCompleteWithADViewGroup_(self, (ADViewGroup *) view);
+    }
+  }
+  return nil;
+}
+
+void ASToolbarImpl_setSearchviewAttributesWithId_(ASToolbarImpl *self, id objValue) {
+  self->searchviewAttributes_ = ASModelExpressionParser_parseSimpleCssExpressionWithNSString_((NSString *) cast_chk(objValue, [NSString class]));
 }
 
 void ASToolbarImpl_setNavigationOnClickListenerWithASToolbarImpl_OnClickListener_(ASToolbarImpl *self, ASToolbarImpl_OnClickListener *onClickListener) {
@@ -1636,6 +1940,301 @@ ASToolbarImpl_ToolbarExt *create_ASToolbarImpl_ToolbarExt_initWithASToolbarImpl_
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_ToolbarExt)
 
+@implementation ASToolbarImpl_1
+
+- (instancetype)initWithASToolbarImpl:(ASToolbarImpl *)outer$
+                       withADMenuItem:(id<ADMenuItem>)capture$0
+                         withNSString:(NSString *)capture$1 {
+  ASToolbarImpl_1_initWithASToolbarImpl_withADMenuItem_withNSString_(self, outer$, capture$0, capture$1);
+  return self;
+}
+
+- (void)onClickWithADView:(ADView *)v {
+  if (this$0_->onMenuItemClickListener_ != nil) {
+    [((ADView *) nil_chk([((id<ADMenuItem>) nil_chk(val$menu_)) getActionView])) setTagWithId:val$myactionLayoutEventId_];
+    [((id<ADXToolbar_OnMenuItemClickListener>) nil_chk(this$0_->onMenuItemClickListener_)) onMenuItemClickWithADMenuItem:val$menu_];
+  }
+}
+
++ (const J2ObjcClassInfo *)__metadata {
+  static J2ObjcMethodInfo methods[] = {
+    { NULL, NULL, 0x0, -1, 0, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 1, 2, -1, -1, -1, -1 },
+  };
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
+  #pragma clang diagnostic ignored "-Wundeclared-selector"
+  methods[0].selector = @selector(initWithASToolbarImpl:withADMenuItem:withNSString:);
+  methods[1].selector = @selector(onClickWithADView:);
+  #pragma clang diagnostic pop
+  static const J2ObjcFieldInfo fields[] = {
+    { "this$0_", "LASToolbarImpl;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
+    { "val$menu_", "LADMenuItem;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
+    { "val$myactionLayoutEventId_", "LNSString;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
+  };
+  static const void *ptrTable[] = { "LASToolbarImpl;LADMenuItem;LNSString;", "onClick", "LADView;", "LASToolbarImpl;", "initialized" };
+  static const J2ObjcClassInfo _ASToolbarImpl_1 = { "", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x8010, 2, 3, 3, -1, 4, -1, -1 };
+  return &_ASToolbarImpl_1;
+}
+
+@end
+
+void ASToolbarImpl_1_initWithASToolbarImpl_withADMenuItem_withNSString_(ASToolbarImpl_1 *self, ASToolbarImpl *outer$, id<ADMenuItem> capture$0, NSString *capture$1) {
+  self->this$0_ = outer$;
+  self->val$menu_ = capture$0;
+  self->val$myactionLayoutEventId_ = capture$1;
+  NSObject_init(self);
+}
+
+ASToolbarImpl_1 *new_ASToolbarImpl_1_initWithASToolbarImpl_withADMenuItem_withNSString_(ASToolbarImpl *outer$, id<ADMenuItem> capture$0, NSString *capture$1) {
+  J2OBJC_NEW_IMPL(ASToolbarImpl_1, initWithASToolbarImpl_withADMenuItem_withNSString_, outer$, capture$0, capture$1)
+}
+
+ASToolbarImpl_1 *create_ASToolbarImpl_1_initWithASToolbarImpl_withADMenuItem_withNSString_(ASToolbarImpl *outer$, id<ADMenuItem> capture$0, NSString *capture$1) {
+  J2OBJC_CREATE_IMPL(ASToolbarImpl_1, initWithASToolbarImpl_withADMenuItem_withNSString_, outer$, capture$0, capture$1)
+}
+
+@implementation ASToolbarImpl_2
+
+- (instancetype)initWithASToolbarImpl:(ASToolbarImpl *)outer$ {
+  ASToolbarImpl_2_initWithASToolbarImpl_(self, outer$);
+  return self;
+}
+
+- (jboolean)onQueryTextChangeWithNSString:(NSString *)text {
+  if (this$0_->onQueryTextChange_ != nil) {
+    [this$0_->onQueryTextChange_ onQueryTextChangeWithNSString:text];
+  }
+  return false;
+}
+
+- (jboolean)onQueryTextSubmitWithNSString:(NSString *)query {
+  if (this$0_->onQueryTextSubmit_ != nil) {
+    [this$0_->onQueryTextSubmit_ onQueryTextSubmitWithNSString:query];
+  }
+  return false;
+}
+
++ (const J2ObjcClassInfo *)__metadata {
+  static J2ObjcMethodInfo methods[] = {
+    { NULL, NULL, 0x0, -1, 0, -1, -1, -1, -1 },
+    { NULL, "Z", 0x1, 1, 2, -1, -1, -1, -1 },
+    { NULL, "Z", 0x1, 3, 2, -1, -1, -1, -1 },
+  };
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
+  #pragma clang diagnostic ignored "-Wundeclared-selector"
+  methods[0].selector = @selector(initWithASToolbarImpl:);
+  methods[1].selector = @selector(onQueryTextChangeWithNSString:);
+  methods[2].selector = @selector(onQueryTextSubmitWithNSString:);
+  #pragma clang diagnostic pop
+  static const J2ObjcFieldInfo fields[] = {
+    { "this$0_", "LASToolbarImpl;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
+  };
+  static const void *ptrTable[] = { "LASToolbarImpl;", "onQueryTextChange", "LNSString;", "onQueryTextSubmit", "setOnQueryTextListenerWithNSString:withNSString:withId:" };
+  static const J2ObjcClassInfo _ASToolbarImpl_2 = { "", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x8010, 3, 1, 0, -1, 4, -1, -1 };
+  return &_ASToolbarImpl_2;
+}
+
+@end
+
+void ASToolbarImpl_2_initWithASToolbarImpl_(ASToolbarImpl_2 *self, ASToolbarImpl *outer$) {
+  self->this$0_ = outer$;
+  NSObject_init(self);
+}
+
+ASToolbarImpl_2 *new_ASToolbarImpl_2_initWithASToolbarImpl_(ASToolbarImpl *outer$) {
+  J2OBJC_NEW_IMPL(ASToolbarImpl_2, initWithASToolbarImpl_, outer$)
+}
+
+ASToolbarImpl_2 *create_ASToolbarImpl_2_initWithASToolbarImpl_(ASToolbarImpl *outer$) {
+  J2OBJC_CREATE_IMPL(ASToolbarImpl_2, initWithASToolbarImpl_, outer$)
+}
+
+@implementation ASToolbarImpl_OnQueryTextListener
+
+- (NSString *)getAction {
+  return action_;
+}
+
+- (instancetype)initWithASIWidget:(id<ASIWidget>)w
+                     withNSString:(NSString *)strValue {
+  ASToolbarImpl_OnQueryTextListener_initWithASIWidget_withNSString_(self, w, strValue);
+  return self;
+}
+
+- (instancetype)initWithASIWidget:(id<ASIWidget>)w
+                     withNSString:(NSString *)strValue
+                     withNSString:(NSString *)action {
+  ASToolbarImpl_OnQueryTextListener_initWithASIWidget_withNSString_withNSString_(self, w, strValue, action);
+  return self;
+}
+
+- (jboolean)onQueryTextSubmitWithNSString:(NSString *)query {
+  jboolean result = true;
+  if (action_ == nil || [action_ isEqual:@"onQueryTextSubmit"]) {
+    [((id<ASIWidget>) nil_chk(w_)) syncModelFromUiToPojoWithNSString:@"onQueryTextSubmit"];
+    id<JavaUtilMap> obj = [self getOnQueryTextSubmitEventObjWithNSString:query];
+    NSString *commandName = (NSString *) cast_chk([((id<JavaUtilMap>) nil_chk(obj)) getWithId:ASEventExpressionParser_KEY_COMMAND_NAME], [NSString class]);
+    NSString *commandType = (NSString *) cast_chk([obj getWithId:ASEventExpressionParser_KEY_COMMAND_TYPE], [NSString class]);
+    switch (JreIndexOfStr(commandType, (id[]){ @"+" }, 1)) {
+      case 0:
+      if (ASEventCommandFactory_hasCommandWithNSString_(commandName)) {
+        id commandResult = [((id<ASEventCommand>) nil_chk(ASEventCommandFactory_getCommandWithNSString_(commandName))) executeCommandWithASIWidget:w_ withJavaUtilMap:obj withNSObjectArray:[IOSObjectArray newArrayWithObjects:(id[]){ query } count:1 type:NSObject_class_()]];
+        if (commandResult != nil) {
+          result = [(JavaLangBoolean *) cast_chk(commandResult, [JavaLangBoolean class]) booleanValue];
+        }
+      }
+      break;
+      default:
+      break;
+    }
+    if ([obj containsKeyWithId:@"refreshUiFromModel"]) {
+      id widgets = [obj removeWithId:@"refreshUiFromModel"];
+      ASViewImpl_refreshUiFromModelWithASIWidget_withId_withBoolean_(w_, widgets, true);
+    }
+    if ([((id<ASIWidget>) nil_chk(w_)) getModelUiToPojoEventIds] != nil) {
+      ASViewImpl_refreshUiFromModelWithASIWidget_withId_withBoolean_(w_, [((id<ASIWidget>) nil_chk(w_)) getModelUiToPojoEventIds], true);
+    }
+    if (strValue_ != nil && ![strValue_ java_isEmpty] && ![((NSString *) nil_chk([((NSString *) nil_chk(strValue_)) java_trim])) java_hasPrefix:@"+"]) {
+      id<ASIActivity> activity = [((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getRootActivity];
+      [((id<ASIActivity>) nil_chk(activity)) sendEventMessageWithJavaUtilMap:obj];
+    }
+  }
+  return result;
+}
+
+- (id<JavaUtilMap>)getOnQueryTextSubmitEventObjWithNSString:(NSString *)query {
+  id<JavaUtilMap> obj = ASPluginInvoker_getJSONCompatMap();
+  (void) [((id<JavaUtilMap>) nil_chk(obj)) putWithId:@"action" withId:@"action"];
+  (void) [obj putWithId:@"eventType" withId:@"querytextsubmit"];
+  (void) [obj putWithId:@"fragmentId" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getFragmentId]];
+  (void) [obj putWithId:@"actionUrl" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getActionUrl]];
+  if ([((id<ASIWidget>) nil_chk(w_)) getComponentId] != nil) {
+    (void) [obj putWithId:@"componentId" withId:[((id<ASIWidget>) nil_chk(w_)) getComponentId]];
+  }
+  ASPluginInvoker_putJSONSafeObjectIntoMapWithJavaUtilMap_withNSString_withId_(obj, @"id", [((id<ASIWidget>) nil_chk(w_)) getId]);
+  ASPluginInvoker_putJSONSafeObjectIntoMapWithJavaUtilMap_withNSString_withId_(obj, @"query", query);
+  (void) ASEventExpressionParser_parseEventExpressionWithNSString_withJavaUtilMap_(strValue_, obj);
+  [((id<ASIWidget>) nil_chk(w_)) updateModelToEventMapWithJavaUtilMap:obj withNSString:@"onQueryTextSubmit" withNSString:(NSString *) cast_chk([obj getWithId:ASEventExpressionParser_KEY_EVENT_ARGS], [NSString class])];
+  return obj;
+}
+
+- (jboolean)onQueryTextChangeWithNSString:(NSString *)newText {
+  jboolean result = true;
+  if (action_ == nil || [action_ isEqual:@"onQueryTextChange"]) {
+    [((id<ASIWidget>) nil_chk(w_)) syncModelFromUiToPojoWithNSString:@"onQueryTextChange"];
+    id<JavaUtilMap> obj = [self getOnQueryTextChangeEventObjWithNSString:newText];
+    NSString *commandName = (NSString *) cast_chk([((id<JavaUtilMap>) nil_chk(obj)) getWithId:ASEventExpressionParser_KEY_COMMAND_NAME], [NSString class]);
+    NSString *commandType = (NSString *) cast_chk([obj getWithId:ASEventExpressionParser_KEY_COMMAND_TYPE], [NSString class]);
+    switch (JreIndexOfStr(commandType, (id[]){ @"+" }, 1)) {
+      case 0:
+      if (ASEventCommandFactory_hasCommandWithNSString_(commandName)) {
+        id commandResult = [((id<ASEventCommand>) nil_chk(ASEventCommandFactory_getCommandWithNSString_(commandName))) executeCommandWithASIWidget:w_ withJavaUtilMap:obj withNSObjectArray:[IOSObjectArray newArrayWithObjects:(id[]){ newText } count:1 type:NSObject_class_()]];
+        if (commandResult != nil) {
+          result = [(JavaLangBoolean *) cast_chk(commandResult, [JavaLangBoolean class]) booleanValue];
+        }
+      }
+      break;
+      default:
+      break;
+    }
+    if ([obj containsKeyWithId:@"refreshUiFromModel"]) {
+      id widgets = [obj removeWithId:@"refreshUiFromModel"];
+      ASViewImpl_refreshUiFromModelWithASIWidget_withId_withBoolean_(w_, widgets, true);
+    }
+    if ([((id<ASIWidget>) nil_chk(w_)) getModelUiToPojoEventIds] != nil) {
+      ASViewImpl_refreshUiFromModelWithASIWidget_withId_withBoolean_(w_, [((id<ASIWidget>) nil_chk(w_)) getModelUiToPojoEventIds], true);
+    }
+    if (strValue_ != nil && ![strValue_ java_isEmpty] && ![((NSString *) nil_chk([((NSString *) nil_chk(strValue_)) java_trim])) java_hasPrefix:@"+"]) {
+      id<ASIActivity> activity = [((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getRootActivity];
+      [((id<ASIActivity>) nil_chk(activity)) sendEventMessageWithJavaUtilMap:obj];
+    }
+  }
+  return result;
+}
+
+- (id<JavaUtilMap>)getOnQueryTextChangeEventObjWithNSString:(NSString *)newText {
+  id<JavaUtilMap> obj = ASPluginInvoker_getJSONCompatMap();
+  (void) [((id<JavaUtilMap>) nil_chk(obj)) putWithId:@"action" withId:@"action"];
+  (void) [obj putWithId:@"eventType" withId:@"querytextchange"];
+  (void) [obj putWithId:@"fragmentId" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getFragmentId]];
+  (void) [obj putWithId:@"actionUrl" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getActionUrl]];
+  if ([((id<ASIWidget>) nil_chk(w_)) getComponentId] != nil) {
+    (void) [obj putWithId:@"componentId" withId:[((id<ASIWidget>) nil_chk(w_)) getComponentId]];
+  }
+  ASPluginInvoker_putJSONSafeObjectIntoMapWithJavaUtilMap_withNSString_withId_(obj, @"id", [((id<ASIWidget>) nil_chk(w_)) getId]);
+  ASPluginInvoker_putJSONSafeObjectIntoMapWithJavaUtilMap_withNSString_withId_(obj, @"newText", newText);
+  (void) ASEventExpressionParser_parseEventExpressionWithNSString_withJavaUtilMap_(strValue_, obj);
+  [((id<ASIWidget>) nil_chk(w_)) updateModelToEventMapWithJavaUtilMap:obj withNSString:@"onQueryTextChange" withNSString:(NSString *) cast_chk([obj getWithId:ASEventExpressionParser_KEY_EVENT_ARGS], [NSString class])];
+  return obj;
+}
+
++ (const J2ObjcClassInfo *)__metadata {
+  static J2ObjcMethodInfo methods[] = {
+    { NULL, "LNSString;", 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, NULL, 0x1, -1, 0, -1, -1, -1, -1 },
+    { NULL, NULL, 0x1, -1, 1, -1, -1, -1, -1 },
+    { NULL, "Z", 0x1, 2, 3, -1, -1, -1, -1 },
+    { NULL, "LJavaUtilMap;", 0x1, 4, 3, -1, 5, -1, -1 },
+    { NULL, "Z", 0x1, 6, 3, -1, -1, -1, -1 },
+    { NULL, "LJavaUtilMap;", 0x1, 7, 3, -1, 5, -1, -1 },
+  };
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
+  #pragma clang diagnostic ignored "-Wundeclared-selector"
+  methods[0].selector = @selector(getAction);
+  methods[1].selector = @selector(initWithASIWidget:withNSString:);
+  methods[2].selector = @selector(initWithASIWidget:withNSString:withNSString:);
+  methods[3].selector = @selector(onQueryTextSubmitWithNSString:);
+  methods[4].selector = @selector(getOnQueryTextSubmitEventObjWithNSString:);
+  methods[5].selector = @selector(onQueryTextChangeWithNSString:);
+  methods[6].selector = @selector(getOnQueryTextChangeEventObjWithNSString:);
+  #pragma clang diagnostic pop
+  static const J2ObjcFieldInfo fields[] = {
+    { "w_", "LASIWidget;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
+    { "view_", "LADView;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
+    { "strValue_", "LNSString;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
+    { "action_", "LNSString;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
+  };
+  static const void *ptrTable[] = { "LASIWidget;LNSString;", "LASIWidget;LNSString;LNSString;", "onQueryTextSubmit", "LNSString;", "getOnQueryTextSubmitEventObj", "(Ljava/lang/String;)Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;", "onQueryTextChange", "getOnQueryTextChangeEventObj", "LASToolbarImpl;" };
+  static const J2ObjcClassInfo _ASToolbarImpl_OnQueryTextListener = { "OnQueryTextListener", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0xa, 7, 4, 8, -1, -1, -1, -1 };
+  return &_ASToolbarImpl_OnQueryTextListener;
+}
+
+@end
+
+void ASToolbarImpl_OnQueryTextListener_initWithASIWidget_withNSString_(ASToolbarImpl_OnQueryTextListener *self, id<ASIWidget> w, NSString *strValue) {
+  NSObject_init(self);
+  self->w_ = w;
+  self->strValue_ = strValue;
+}
+
+ASToolbarImpl_OnQueryTextListener *new_ASToolbarImpl_OnQueryTextListener_initWithASIWidget_withNSString_(id<ASIWidget> w, NSString *strValue) {
+  J2OBJC_NEW_IMPL(ASToolbarImpl_OnQueryTextListener, initWithASIWidget_withNSString_, w, strValue)
+}
+
+ASToolbarImpl_OnQueryTextListener *create_ASToolbarImpl_OnQueryTextListener_initWithASIWidget_withNSString_(id<ASIWidget> w, NSString *strValue) {
+  J2OBJC_CREATE_IMPL(ASToolbarImpl_OnQueryTextListener, initWithASIWidget_withNSString_, w, strValue)
+}
+
+void ASToolbarImpl_OnQueryTextListener_initWithASIWidget_withNSString_withNSString_(ASToolbarImpl_OnQueryTextListener *self, id<ASIWidget> w, NSString *strValue, NSString *action) {
+  NSObject_init(self);
+  self->w_ = w;
+  self->strValue_ = strValue;
+  self->action_ = action;
+}
+
+ASToolbarImpl_OnQueryTextListener *new_ASToolbarImpl_OnQueryTextListener_initWithASIWidget_withNSString_withNSString_(id<ASIWidget> w, NSString *strValue, NSString *action) {
+  J2OBJC_NEW_IMPL(ASToolbarImpl_OnQueryTextListener, initWithASIWidget_withNSString_withNSString_, w, strValue, action)
+}
+
+ASToolbarImpl_OnQueryTextListener *create_ASToolbarImpl_OnQueryTextListener_initWithASIWidget_withNSString_withNSString_(id<ASIWidget> w, NSString *strValue, NSString *action) {
+  J2OBJC_CREATE_IMPL(ASToolbarImpl_OnQueryTextListener, initWithASIWidget_withNSString_withNSString_, w, strValue, action)
+}
+
+J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_OnQueryTextListener)
+
 @implementation ASToolbarImpl_OnClickListener
 
 - (NSString *)getAction {
@@ -2051,6 +2650,42 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_OnMenuItemClickListener)
   return self;
 }
 
+- (ASToolbarImpl_ToolbarCommandBuilder *)setActionLayoutEventIdsWithNSString:(NSString *)value {
+  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"actionLayoutEventIds"];
+  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
+  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
+  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
+  (void) [attrs putWithId:@"value" withId:value];
+  return self;
+}
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setSearchview_attributesWithNSString:(NSString *)value {
+  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"searchview_attributes"];
+  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
+  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
+  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
+  (void) [attrs putWithId:@"value" withId:value];
+  return self;
+}
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setOnQueryTextSubmitWithNSString:(NSString *)value {
+  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"onQueryTextSubmit"];
+  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
+  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
+  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
+  (void) [attrs putWithId:@"value" withId:value];
+  return self;
+}
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setOnQueryTextChangeWithNSString:(NSString *)value {
+  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"onQueryTextChange"];
+  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
+  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
+  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
+  (void) [attrs putWithId:@"value" withId:value];
+  return self;
+}
+
 - (ASToolbarImpl_ToolbarCommandBuilder *)setTitleWithNSString:(NSString *)value {
   id<JavaUtilMap> attrs = [self initCommandWithNSString:@"title"];
   (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
@@ -2161,6 +2796,10 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_OnMenuItemClickListener)
     { NULL, "LASToolbarImpl_ToolbarCommandBuilder;", 0x1, 26, 4, -1, -1, -1, -1 },
     { NULL, "LASToolbarImpl_ToolbarCommandBuilder;", 0x1, 27, 4, -1, -1, -1, -1 },
     { NULL, "LASToolbarImpl_ToolbarCommandBuilder;", 0x1, 28, 4, -1, -1, -1, -1 },
+    { NULL, "LASToolbarImpl_ToolbarCommandBuilder;", 0x1, 29, 4, -1, -1, -1, -1 },
+    { NULL, "LASToolbarImpl_ToolbarCommandBuilder;", 0x1, 30, 4, -1, -1, -1, -1 },
+    { NULL, "LASToolbarImpl_ToolbarCommandBuilder;", 0x1, 31, 4, -1, -1, -1, -1 },
+    { NULL, "LASToolbarImpl_ToolbarCommandBuilder;", 0x1, 32, 4, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
@@ -2183,21 +2822,25 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_OnMenuItemClickListener)
   methods[15].selector = @selector(setMaxButtonHeightWithNSString:);
   methods[16].selector = @selector(setButtonGravityWithNSString:);
   methods[17].selector = @selector(setMenuWithNSString:);
-  methods[18].selector = @selector(setTitleWithNSString:);
-  methods[19].selector = @selector(setTitleTextColorWithNSString:);
-  methods[20].selector = @selector(setSubtitleWithNSString:);
-  methods[21].selector = @selector(setSubtitleTextColorWithNSString:);
-  methods[22].selector = @selector(setLogoWithNSString:);
-  methods[23].selector = @selector(setNavigationIconWithNSString:);
-  methods[24].selector = @selector(setOverflowIconWithNSString:);
-  methods[25].selector = @selector(setOnNavigationIconClickWithNSString:);
-  methods[26].selector = @selector(setOnMenuItemClickWithNSString:);
+  methods[18].selector = @selector(setActionLayoutEventIdsWithNSString:);
+  methods[19].selector = @selector(setSearchview_attributesWithNSString:);
+  methods[20].selector = @selector(setOnQueryTextSubmitWithNSString:);
+  methods[21].selector = @selector(setOnQueryTextChangeWithNSString:);
+  methods[22].selector = @selector(setTitleWithNSString:);
+  methods[23].selector = @selector(setTitleTextColorWithNSString:);
+  methods[24].selector = @selector(setSubtitleWithNSString:);
+  methods[25].selector = @selector(setSubtitleTextColorWithNSString:);
+  methods[26].selector = @selector(setLogoWithNSString:);
+  methods[27].selector = @selector(setNavigationIconWithNSString:);
+  methods[28].selector = @selector(setOverflowIconWithNSString:);
+  methods[29].selector = @selector(setOnNavigationIconClickWithNSString:);
+  methods[30].selector = @selector(setOnMenuItemClickWithNSString:);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "this$0_", "LASToolbarImpl;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
   };
-  static const void *ptrTable[] = { "LASToolbarImpl;", "execute", "Z", "setGravity", "LNSString;", "setTitleMargin", "setTitleMarginStart", "setTitleMarginEnd", "setTitleMarginTop", "setTitleMarginBottom", "setTitleMargins", "setContentInsetStart", "setContentInsetEnd", "setContentInsetLeft", "setContentInsetRight", "setContentInsetStartWithNavigation", "setContentInsetEndWithActions", "setMaxButtonHeight", "setButtonGravity", "setMenu", "setTitle", "setTitleTextColor", "setSubtitle", "setSubtitleTextColor", "setLogo", "setNavigationIcon", "setOverflowIcon", "setOnNavigationIconClick", "setOnMenuItemClick", "Lcom/ashera/layout/ViewGroupImpl$ViewGroupCommandBuilder<Lcom/ashera/toolbar/ToolbarImpl$ToolbarCommandBuilder;>;" };
-  static const J2ObjcClassInfo _ASToolbarImpl_ToolbarCommandBuilder = { "ToolbarCommandBuilder", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 27, 1, 0, -1, -1, 29, -1 };
+  static const void *ptrTable[] = { "LASToolbarImpl;", "execute", "Z", "setGravity", "LNSString;", "setTitleMargin", "setTitleMarginStart", "setTitleMarginEnd", "setTitleMarginTop", "setTitleMarginBottom", "setTitleMargins", "setContentInsetStart", "setContentInsetEnd", "setContentInsetLeft", "setContentInsetRight", "setContentInsetStartWithNavigation", "setContentInsetEndWithActions", "setMaxButtonHeight", "setButtonGravity", "setMenu", "setActionLayoutEventIds", "setSearchview_attributes", "setOnQueryTextSubmit", "setOnQueryTextChange", "setTitle", "setTitleTextColor", "setSubtitle", "setSubtitleTextColor", "setLogo", "setNavigationIcon", "setOverflowIcon", "setOnNavigationIconClick", "setOnMenuItemClick", "Lcom/ashera/layout/ViewGroupImpl$ViewGroupCommandBuilder<Lcom/ashera/toolbar/ToolbarImpl$ToolbarCommandBuilder;>;" };
+  static const J2ObjcClassInfo _ASToolbarImpl_ToolbarCommandBuilder = { "ToolbarCommandBuilder", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 31, 1, 0, -1, -1, 33, -1 };
   return &_ASToolbarImpl_ToolbarCommandBuilder;
 }
 
@@ -2289,6 +2932,22 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_ToolbarCommandBuilder)
   (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setMenuWithNSString:value])) executeWithBoolean:true];
 }
 
+- (void)setActionLayoutEventIdsWithNSString:(NSString *)value {
+  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setActionLayoutEventIdsWithNSString:value])) executeWithBoolean:true];
+}
+
+- (void)setSearchview_attributesWithNSString:(NSString *)value {
+  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setSearchview_attributesWithNSString:value])) executeWithBoolean:true];
+}
+
+- (void)setOnQueryTextSubmitWithNSString:(NSString *)value {
+  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setOnQueryTextSubmitWithNSString:value])) executeWithBoolean:true];
+}
+
+- (void)setOnQueryTextChangeWithNSString:(NSString *)value {
+  (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setOnQueryTextChangeWithNSString:value])) executeWithBoolean:true];
+}
+
 - (void)setTitleWithNSString:(NSString *)value {
   (void) [((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([((ASToolbarImpl_ToolbarCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setTitleWithNSString:value])) executeWithBoolean:true];
 }
@@ -2353,6 +3012,10 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_ToolbarCommandBuilder)
     { NULL, "V", 0x1, 24, 2, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 25, 2, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 26, 2, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 27, 2, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 28, 2, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 29, 2, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 30, 2, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
@@ -2374,21 +3037,25 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_ToolbarCommandBuilder)
   methods[14].selector = @selector(setMaxButtonHeightWithNSString:);
   methods[15].selector = @selector(setButtonGravityWithNSString:);
   methods[16].selector = @selector(setMenuWithNSString:);
-  methods[17].selector = @selector(setTitleWithNSString:);
-  methods[18].selector = @selector(setTitleTextColorWithNSString:);
-  methods[19].selector = @selector(setSubtitleWithNSString:);
-  methods[20].selector = @selector(setSubtitleTextColorWithNSString:);
-  methods[21].selector = @selector(setLogoWithNSString:);
-  methods[22].selector = @selector(setNavigationIconWithNSString:);
-  methods[23].selector = @selector(setOverflowIconWithNSString:);
-  methods[24].selector = @selector(setOnNavigationIconClickWithNSString:);
-  methods[25].selector = @selector(setOnMenuItemClickWithNSString:);
+  methods[17].selector = @selector(setActionLayoutEventIdsWithNSString:);
+  methods[18].selector = @selector(setSearchview_attributesWithNSString:);
+  methods[19].selector = @selector(setOnQueryTextSubmitWithNSString:);
+  methods[20].selector = @selector(setOnQueryTextChangeWithNSString:);
+  methods[21].selector = @selector(setTitleWithNSString:);
+  methods[22].selector = @selector(setTitleTextColorWithNSString:);
+  methods[23].selector = @selector(setSubtitleWithNSString:);
+  methods[24].selector = @selector(setSubtitleTextColorWithNSString:);
+  methods[25].selector = @selector(setLogoWithNSString:);
+  methods[26].selector = @selector(setNavigationIconWithNSString:);
+  methods[27].selector = @selector(setOverflowIconWithNSString:);
+  methods[28].selector = @selector(setOnNavigationIconClickWithNSString:);
+  methods[29].selector = @selector(setOnMenuItemClickWithNSString:);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "this$0_", "LASToolbarImpl;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
   };
-  static const void *ptrTable[] = { "LASToolbarImpl;", "setGravity", "LNSString;", "setTitleMargin", "setTitleMarginStart", "setTitleMarginEnd", "setTitleMarginTop", "setTitleMarginBottom", "setTitleMargins", "setContentInsetStart", "setContentInsetEnd", "setContentInsetLeft", "setContentInsetRight", "setContentInsetStartWithNavigation", "setContentInsetEndWithActions", "setMaxButtonHeight", "setButtonGravity", "setMenu", "setTitle", "setTitleTextColor", "setSubtitle", "setSubtitleTextColor", "setLogo", "setNavigationIcon", "setOverflowIcon", "setOnNavigationIconClick", "setOnMenuItemClick" };
-  static const J2ObjcClassInfo _ASToolbarImpl_ToolbarBean = { "ToolbarBean", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 26, 1, 0, -1, -1, -1, -1 };
+  static const void *ptrTable[] = { "LASToolbarImpl;", "setGravity", "LNSString;", "setTitleMargin", "setTitleMarginStart", "setTitleMarginEnd", "setTitleMarginTop", "setTitleMarginBottom", "setTitleMargins", "setContentInsetStart", "setContentInsetEnd", "setContentInsetLeft", "setContentInsetRight", "setContentInsetStartWithNavigation", "setContentInsetEndWithActions", "setMaxButtonHeight", "setButtonGravity", "setMenu", "setActionLayoutEventIds", "setSearchview_attributes", "setOnQueryTextSubmit", "setOnQueryTextChange", "setTitle", "setTitleTextColor", "setSubtitle", "setSubtitleTextColor", "setLogo", "setNavigationIcon", "setOverflowIcon", "setOnNavigationIconClick", "setOnMenuItemClick" };
+  static const J2ObjcClassInfo _ASToolbarImpl_ToolbarBean = { "ToolbarBean", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 30, 1, 0, -1, -1, -1, -1 };
   return &_ASToolbarImpl_ToolbarBean;
 }
 

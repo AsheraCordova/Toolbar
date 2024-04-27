@@ -40,6 +40,7 @@
 @property (readwrite, nonatomic, strong) NSString *title;
 @property (readwrite, nonatomic, weak) id target;
 @property (readwrite, nonatomic) SEL action;
+@property (assign, nonatomic) BOOL border;
 @property (readwrite, nonatomic, strong) UIColor *foreColor;
 @property (readwrite, nonatomic) NSTextAlignment alignment;
 

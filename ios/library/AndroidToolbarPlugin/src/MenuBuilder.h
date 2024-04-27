@@ -58,6 +58,8 @@
 
 - (JavaUtilArrayList *)getActionItems;
 
+- (id<ADMenuItem>)getItemWithInt:(jint)index;
+
 - (JavaUtilArrayList *)getNonActionItems;
 
 - (JavaUtilArrayList *)getVisibleItems;
@@ -67,6 +69,8 @@
 - (void)onItemsChangedWithBoolean:(jboolean)changed;
 
 - (void)setActionMenuPresenterWithADXMenuPresenter:(id<ADXMenuPresenter>)mPresenter;
+
+- (jint)size;
 
 #pragma mark Protected
 

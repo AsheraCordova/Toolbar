@@ -13,6 +13,11 @@ import {MotionEvent} from '../../app/MotionEvent';
 import {DragEvent} from '../../app/DragEvent';
 import {KeyEvent} from '../../app/KeyEvent';
 import { ScopedObject } from '../../app/ScopedObject';
+import { Mixin, decorate } from 'ts-mixer';
+
+
+
+
 
 
 
@@ -47,83 +52,95 @@ export abstract class ToolbarImpl<T> extends ViewGroupImpl<T>{
 	//start - body
 	static initialize() {
     }	
-	@Type(() => CommandAttr)
-	@Expose({ name: "gravity" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "gravity" }))
 	gravity!:CommandAttr<Gravity[]>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "titleMargin" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "titleMargin" }))
 	titleMargin!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "titleMarginStart" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "titleMarginStart" }))
 	titleMarginStart!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "titleMarginEnd" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "titleMarginEnd" }))
 	titleMarginEnd!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "titleMarginTop" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "titleMarginTop" }))
 	titleMarginTop!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "titleMarginBottom" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "titleMarginBottom" }))
 	titleMarginBottom!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "titleMargins" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "titleMargins" }))
 	titleMargins!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "contentInsetStart" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "contentInsetStart" }))
 	contentInsetStart!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "contentInsetEnd" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "contentInsetEnd" }))
 	contentInsetEnd!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "contentInsetLeft" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "contentInsetLeft" }))
 	contentInsetLeft!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "contentInsetRight" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "contentInsetRight" }))
 	contentInsetRight!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "contentInsetStartWithNavigation" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "contentInsetStartWithNavigation" }))
 	contentInsetStartWithNavigation!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "contentInsetEndWithActions" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "contentInsetEndWithActions" }))
 	contentInsetEndWithActions!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "maxButtonHeight" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "maxButtonHeight" }))
 	maxButtonHeight!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "buttonGravity" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "buttonGravity" }))
 	buttonGravity!:CommandAttr<Gravity[]>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "menu" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "menu" }))
 	menu!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "title" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "actionLayoutEventIds" }))
+	actionLayoutEventIds!:CommandAttr<string>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "searchview_attributes" }))
+	searchview_attributes!:CommandAttr<string>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "onQueryTextSubmit" }))
+	onQueryTextSubmit!:CommandAttr<string>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "onQueryTextChange" }))
+	onQueryTextChange!:CommandAttr<string>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "title" }))
 	title!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "titleTextColor" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "titleTextColor" }))
 	titleTextColor!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "subtitle" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "subtitle" }))
 	subtitle!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "subtitleTextColor" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "subtitleTextColor" }))
 	subtitleTextColor!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "logo" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "logo" }))
 	logo!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "navigationIcon" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "navigationIcon" }))
 	navigationIcon!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "overflowIcon" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "overflowIcon" }))
 	overflowIcon!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "onNavigationIconClick" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "onNavigationIconClick" }))
 	onNavigationIconClick!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "onMenuItemClick" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "onMenuItemClick" }))
 	onMenuItemClick!:CommandAttr<string>| undefined;
 
-	@Exclude()
+	@decorate(Exclude())
 	protected thisPointer: T;	
 	protected abstract getThisPointer(): T;
 	reset() : T {	
@@ -144,6 +161,10 @@ export abstract class ToolbarImpl<T> extends ViewGroupImpl<T>{
 		this.maxButtonHeight = undefined;
 		this.buttonGravity = undefined;
 		this.menu = undefined;
+		this.actionLayoutEventIds = undefined;
+		this.searchview_attributes = undefined;
+		this.onQueryTextSubmit = undefined;
+		this.onQueryTextChange = undefined;
 		this.title = undefined;
 		this.titleTextColor = undefined;
 		this.subtitle = undefined;
@@ -385,6 +406,62 @@ this.buttonGravity.setTransformer('gravity');		return this.thisPointer;
 	}
 		
 
+	public setActionLayoutEventIds(value : string) : T {
+		this.resetIfRequired();
+		if (this.actionLayoutEventIds == null || this.actionLayoutEventIds == undefined) {
+			this.actionLayoutEventIds = new CommandAttr<string>();
+		}
+		
+		this.actionLayoutEventIds.setSetter(true);
+		this.actionLayoutEventIds.setValue(value);
+		this.orderSet++;
+		this.actionLayoutEventIds.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setSearchview_attributes(value : string) : T {
+		this.resetIfRequired();
+		if (this.searchview_attributes == null || this.searchview_attributes == undefined) {
+			this.searchview_attributes = new CommandAttr<string>();
+		}
+		
+		this.searchview_attributes.setSetter(true);
+		this.searchview_attributes.setValue(value);
+		this.orderSet++;
+		this.searchview_attributes.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setOnQueryTextSubmit(value : string) : T {
+		this.resetIfRequired();
+		if (this.onQueryTextSubmit == null || this.onQueryTextSubmit == undefined) {
+			this.onQueryTextSubmit = new CommandAttr<string>();
+		}
+		
+		this.onQueryTextSubmit.setSetter(true);
+		this.onQueryTextSubmit.setValue(value);
+		this.orderSet++;
+		this.onQueryTextSubmit.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setOnQueryTextChange(value : string) : T {
+		this.resetIfRequired();
+		if (this.onQueryTextChange == null || this.onQueryTextChange == undefined) {
+			this.onQueryTextChange = new CommandAttr<string>();
+		}
+		
+		this.onQueryTextChange.setSetter(true);
+		this.onQueryTextChange.setValue(value);
+		this.orderSet++;
+		this.onQueryTextChange.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
 	public setTitle(value : string) : T {
 		this.resetIfRequired();
 		if (this.title == null || this.title == undefined) {
@@ -531,6 +608,26 @@ export class Toolbar extends ToolbarImpl<Toolbar> implements IWidget{
 }
 
 ToolbarImpl.initialize();
+export interface OnQueryTextSubmitEvent extends Event{
+        //query:String;
+
+
+}
+export interface OnQueryTextChangeEvent extends Event{
+        //newText:String;
+
+
+}
+export interface OnQueryTextSubmitEvent extends Event{
+        //query:String;
+
+
+}
+export interface OnQueryTextChangeEvent extends Event{
+        //newText:String;
+
+
+}
 export interface OnClickEvent extends Event{
         //v:View;
 

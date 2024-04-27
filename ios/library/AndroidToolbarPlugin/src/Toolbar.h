@@ -26,6 +26,7 @@
 @class ADDrawable;
 @class ADView;
 @class ADViewGroup_LayoutParams;
+@class ADXMenuBuilder;
 @class ADXToolbar_LayoutParams;
 @class ASBaseMeasurableImageView;
 
@@ -53,6 +54,8 @@
 - (jint)getCurrentContentInsetRight;
 
 - (jint)getCurrentContentInsetStart;
+
+- (ADXMenuBuilder *)getMenu;
 
 - (ADDrawable *)getNavigationIcon;
 

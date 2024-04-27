@@ -19,6 +19,7 @@
   	</js-module>
   	<!-- start tsc -->
      <source-file src="tsc/src/web/widget/ActionMenuViewImpl.ts" target-dir="tsc/src/web/widget"/>
+     <source-file src="tsc/src/web/widget/SearchViewImpl.ts" target-dir="tsc/src/web/widget"/>
      <source-file src="tsc/src/web/widget/ToolbarImpl.ts" target-dir="tsc/src/web/widget"/>
      <!-- tsc end -->
   </platform>

@@ -3,6 +3,7 @@
 //  source: D:\Java\git\core-javafx-widget\SWTAndroidToolBar\src\main\java\androidx\appcompat\widget\Toolbar.java
 //
 
+#include "ActionMenuView.h"
 #include "BaseMeasurableImageView.h"
 #include "DisplayMetrics.h"
 #include "Drawable.h"
@@ -11,6 +12,7 @@
 #include "IOSPrimitiveArray.h"
 #include "J2ObjC_source.h"
 #include "MarginLayoutParamsCompat.h"
+#include "MenuBuilder.h"
 #include "Resources.h"
 #include "RtlSpacingHelper.h"
 #include "Toolbar.h"
@@ -685,6 +687,10 @@ J2OBJC_IGNORE_DESIGNATED_END
   mMaxButtonHeight_ = height;
 }
 
+- (ADXMenuBuilder *)getMenu {
+  return [((ADXActionMenuView *) nil_chk(((ADXActionMenuView *) cast_chk(mMenuView_, [ADXActionMenuView class])))) getMenu];
+}
+
 - (void)dealloc {
   RELEASE_(mContentInsets_);
   RELEASE_(mTempViews_);
@@ -748,6 +754,7 @@ J2OBJC_IGNORE_DESIGNATED_END
     { NULL, "V", 0x1, 46, 35, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 47, 3, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 48, 3, -1, -1, -1, -1 },
+    { NULL, "LADXMenuBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
@@ -798,6 +805,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   methods[43].selector = @selector(setMenuViewWithADView:);
   methods[44].selector = @selector(setGravityWithInt:);
   methods[45].selector = @selector(setMaxButtonHeightWithInt:);
+  methods[46].selector = @selector(getMenu);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "mPopupTheme_", "I", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
@@ -828,7 +836,7 @@ J2OBJC_IGNORE_DESIGNATED_END
     { "mSubtitleTextView_", "LADView;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
   };
   static const void *ptrTable[] = { "setTitleMargin", "IIII", "setTitleMarginStart", "I", "setTitleMarginTop", "setTitleMarginEnd", "setTitleMarginBottom", "setContentInsetsRelative", "II", "setContentInsetsAbsolute", "setContentInsetStartWithNavigation", "setContentInsetEndWithActions", "addSystemView", "LADView;Z", "measureChildConstrained", "LADView;IIIII", "measureChildCollapseMargins", "LADView;IIII[I", "onMeasure", "onLayout", "ZIIII", "getViewListMeasuredWidth", "LJavaUtilList;[I", "(Ljava/util/List<Lr/android/view/View;>;[I)I", "layoutChildLeft", "LADView;I[II", "layoutChildRight", "getChildTop", "LADView;I", "getChildVerticalGravity", "addCustomViewsWithGravity", "LJavaUtilList;I", "(Ljava/util/List<Lr/android/view/View;>;I)V", "getChildHorizontalGravity", "shouldLayout", "LADView;", "getHorizontalMargins", "getVerticalMargins", "generateLayoutParams", "LADViewGroup_LayoutParams;", "checkLayoutParams", "setTitleTextView", "setSubtitleTextView", "setLogoView", "setNavigationIcon", "LASBaseMeasurableImageView;", "setMenuView", "setGravity", "setMaxButtonHeight", "Ljava/util/ArrayList<Lr/android/view/View;>;", "LADXToolbar_OnMenuItemClickListener;LADXToolbar_LayoutParams;LADXToolbar_ActionBar;" };
-  static const J2ObjcClassInfo _ADXToolbar = { "Toolbar", "androidx.appcompat.widget", ptrTable, methods, fields, 7, 0x1, 46, 26, -1, 50, -1, -1, -1 };
+  static const J2ObjcClassInfo _ADXToolbar = { "Toolbar", "androidx.appcompat.widget", ptrTable, methods, fields, 7, 0x1, 47, 26, -1, 50, -1, -1, -1 };
   return &_ADXToolbar;
 }
 

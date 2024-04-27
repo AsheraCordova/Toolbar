@@ -9,6 +9,7 @@
 #include "MenuBuilder.h"
 #include "MenuItem.h"
 #include "MenuItemImpl.h"
+#include "SupportMenuItem.h"
 #include "View.h"
 #include "java/lang/CharSequence.h"
 #include "java/lang/IllegalArgumentException.h"
@@ -166,6 +167,16 @@ J2OBJC_STATIC_FIELD_CONSTANT(ADXMenuItemImpl, IS_ACTION, jint)
   [((ADXMenuBuilder *) nil_chk(mMenu_)) onItemActionRequestChangedWithADMenuItem:self];
 }
 
+- (id<ADXSupportMenuItem>)setActionViewWithADView:(ADView *)view {
+  JreStrongAssign(&mActionView_, view);
+  JreStrongAssign(&mActionProvider_, nil);
+  if (view != nil && [view getId] == ADView_NO_ID && mId_ > 0) {
+    [view setIdWithInt:mId_];
+  }
+  [((ADXMenuBuilder *) nil_chk(mMenu_)) onItemActionRequestChangedWithADMenuItem:self];
+  return self;
+}
+
 - (ADView *)getActionView {
   if (mActionView_ != nil) {
     return mActionView_;
@@ -226,6 +237,7 @@ J2OBJC_STATIC_FIELD_CONSTANT(ADXMenuItemImpl, IS_ACTION, jint)
     { NULL, "Z", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 6, 7, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 8, 3, -1, -1, -1, -1 },
+    { NULL, "LADXSupportMenuItem;", 0x1, 9, 10, -1, -1, -1, -1 },
     { NULL, "LADView;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "Z", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "Z", 0x1, -1, -1, -1, -1, -1, -1 },
@@ -248,11 +260,12 @@ J2OBJC_STATIC_FIELD_CONSTANT(ADXMenuItemImpl, IS_ACTION, jint)
   methods[10].selector = @selector(requiresActionButton);
   methods[11].selector = @selector(setIsActionButtonWithBoolean:);
   methods[12].selector = @selector(setShowAsActionWithInt:);
-  methods[13].selector = @selector(getActionView);
-  methods[14].selector = @selector(hasCollapsibleActionView);
-  methods[15].selector = @selector(isActionViewExpanded);
-  methods[16].selector = @selector(getTitle);
-  methods[17].selector = @selector(getIcon);
+  methods[13].selector = @selector(setActionViewWithADView:);
+  methods[14].selector = @selector(getActionView);
+  methods[15].selector = @selector(hasCollapsibleActionView);
+  methods[16].selector = @selector(isActionViewExpanded);
+  methods[17].selector = @selector(getTitle);
+  methods[18].selector = @selector(getIcon);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "SHOW_AS_ACTION_MASK", "I", .constantValue.asInt = ADXMenuItemImpl_SHOW_AS_ACTION_MASK, 0x1a, -1, -1, -1, -1 },
@@ -281,8 +294,8 @@ J2OBJC_STATIC_FIELD_CONSTANT(ADXMenuItemImpl, IS_ACTION, jint)
     { "mActionView_", "LADView;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mActionProvider_", "LADXMenuItemImpl_ActionProvider;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
   };
-  static const void *ptrTable[] = { "LADXMenuBuilder;IIIILJavaLangCharSequence;I", "setIcon", "LADDrawable;", "I", "setIconTintList", "LADColorStateList;", "setIsActionButton", "Z", "setShowAsAction", "LADXMenuItemImpl_ActionProvider;" };
-  static const J2ObjcClassInfo _ADXMenuItemImpl = { "MenuItemImpl", "androidx.appcompat.view.menu", ptrTable, methods, fields, 7, 0x11, 18, 25, -1, 9, -1, -1, -1 };
+  static const void *ptrTable[] = { "LADXMenuBuilder;IIIILJavaLangCharSequence;I", "setIcon", "LADDrawable;", "I", "setIconTintList", "LADColorStateList;", "setIsActionButton", "Z", "setShowAsAction", "setActionView", "LADView;", "LADXMenuItemImpl_ActionProvider;" };
+  static const J2ObjcClassInfo _ADXMenuItemImpl = { "MenuItemImpl", "androidx.appcompat.view.menu", ptrTable, methods, fields, 7, 0x11, 19, 25, -1, 11, -1, -1, -1 };
   return &_ADXMenuItemImpl;
 }
 

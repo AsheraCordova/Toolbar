@@ -16,17 +16,18 @@
 #if !defined (ADXMenuItemImpl_) && (INCLUDE_ALL_MenuItemImpl || defined(INCLUDE_ADXMenuItemImpl))
 #define ADXMenuItemImpl_
 
-#define RESTRICT_MenuItem 1
-#define INCLUDE_ADMenuItem 1
-#include "MenuItem.h"
+#define RESTRICT_SupportMenuItem 1
+#define INCLUDE_ADXSupportMenuItem 1
+#include "SupportMenuItem.h"
 
 @class ADColorStateList;
 @class ADDrawable;
 @class ADView;
 @class ADXMenuBuilder;
+@protocol ADMenuItem;
 @protocol JavaLangCharSequence;
 
-@interface ADXMenuItemImpl : NSObject < ADMenuItem > {
+@interface ADXMenuItemImpl : NSObject < ADXSupportMenuItem > {
  @public
   ADXMenuBuilder *mMenu_;
 }
@@ -56,6 +57,8 @@
 - (jboolean)requestsActionButton;
 
 - (jboolean)requiresActionButton;
+
+- (id<ADXSupportMenuItem>)setActionViewWithADView:(ADView *)view;
 
 - (id<ADMenuItem>)setIconWithADDrawable:(ADDrawable *)icon;
 

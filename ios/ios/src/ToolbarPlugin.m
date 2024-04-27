@@ -5,6 +5,7 @@
 
 #include "ActionMenuViewImpl.h"
 #include "J2ObjC_source.h"
+#include "SearchViewImpl.h"
 #include "ToolbarImpl.h"
 #include "ToolbarPlugin.h"
 #include "WidgetFactory.h"
@@ -56,6 +57,7 @@ void ASToolbarPlugin_initPlugin() {
   ASToolbarPlugin_initialize();
   ASWidgetFactory_register__WithASIWidget_(new_ASToolbarImpl_init());
   ASWidgetFactory_register__WithASIWidget_(new_ASActionMenuViewImpl_init());
+  ASWidgetFactory_register__WithASIWidget_(new_ASSearchViewImpl_init());
 }
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarPlugin)

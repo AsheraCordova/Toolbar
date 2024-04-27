@@ -513,7 +513,7 @@ return layoutParams.weight;			}
 	@SuppressLint("NewApi")
 	@Override
 	public void setAttribute(WidgetAttribute key, String strValue, Object objValue, ILifeCycleDecorator decorator) {
-		ViewGroupImpl.setAttribute(this, key, strValue, objValue, decorator);
+				ViewGroupImpl.setAttribute(this, key, strValue, objValue, decorator);
 		Object nativeWidget = asNativeWidget();
 		switch (key.getAttributeName()) {
 			case "baselineAligned": {
@@ -1279,9 +1279,17 @@ return this;}
 			
 			HTMLElement ul = org.teavm.jso.dom.html.HTMLDocument.current().createElement("ul");
 			myDropdown.appendChild(ul);
+			int menuGroupId = -1;
+			int prevMenuGroupId = -1;
 			for (androidx.appcompat.view.menu.MenuItemImpl menuItemImpl : actionMenuView.getMenu().getNonActionItems()) {
+				menuGroupId = menuItemImpl.getGroupId();
+				
 				HTMLElement li = org.teavm.jso.dom.html.HTMLDocument.current().createElement("li");
 				ul.appendChild(li);
+
+				if (prevMenuGroupId != -1 && menuGroupId != prevMenuGroupId) {
+					li.getStyle().setProperty("border-top", "1px solid black");
+				}
 				
 				HTMLElement href = org.teavm.jso.dom.html.HTMLDocument.current().createElement("a");
 				li.appendChild(href);
@@ -1292,6 +1300,8 @@ return this;}
 						toolbar.getOnMenuItemClickListener().onMenuItemClick(menuItemImpl);
 					});
 				}
+				
+				prevMenuGroupId = menuGroupId;
 			}
 			myDropdown.setAttribute("class", "dropdown-content show");
 			HTMLElement toolbarElement = (HTMLElement) toolbar.asNativeWidget();
@@ -1310,6 +1320,7 @@ return this;}
 		
 		ViewImpl.setOnListener(this, org.teavm.jso.browser.Window.current(), (e) -> {
 			if (!matchesTarget(e, ".dropbtn")) {
+				System.out.println("test" + matchesTarget(e, ".dropbtn"));
 				HTMLElement[] dropdowns = querySelectorAll(root, ".dropdown-content");
 				for (HTMLElement htmlElement : dropdowns) {
 					htmlElement.setAttribute("class", "dropdown-content");
@@ -1324,7 +1335,7 @@ return this;}
 	@org.teavm.jso.JSBody(params = { "element", "className" }, script = "return element.querySelectorAll(className);")
 	private static native HTMLElement[] querySelectorAll(HTMLElement element, String className);
 
-	@org.teavm.jso.JSBody(params = { "event", "className" }, script = "return event.path && event.path[0].matches(className);")
+	@org.teavm.jso.JSBody(params = { "event", "className" }, script = "return (event.composedPath ? event.composedPath() : event.path) && (event.composedPath ? event.composedPath() : event.path)[0].matches(className);")
 	private static native boolean matchesTarget(org.teavm.jso.dom.events.Event event, String className);
 	private String OVERFLOW_BUTTON_TYPE= "ImageView";
 }

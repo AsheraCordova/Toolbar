@@ -36,5 +36,11 @@
 			<groupId>com.ashera</groupId>
 			<artifactId>AndroidLayouts</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>androidx.appcompat</groupId>
+			<artifactId>appcompat-jar</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 </project>

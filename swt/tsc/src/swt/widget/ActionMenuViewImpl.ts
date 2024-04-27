@@ -22,6 +22,7 @@ import {MotionEvent} from '../../app/MotionEvent';
 import {DragEvent} from '../../app/DragEvent';
 import {KeyEvent} from '../../app/KeyEvent';
 import { ScopedObject } from '../../app/ScopedObject';
+import { Mixin, decorate } from 'ts-mixer';
 
 
 
@@ -72,35 +73,35 @@ export abstract class ActionMenuViewImpl<T> extends ViewGroupImpl<T>{
 	static initialize() {
 		TransformerFactory.getInstance().register("divider", new DividerTransformer());
     }	
-	@Type(() => CommandAttr)
-	@Expose({ name: "baselineAligned" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "baselineAligned" }))
 	baselineAligned!:CommandAttr<boolean>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "baselineAlignedChildIndex" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "baselineAlignedChildIndex" }))
 	baselineAlignedChildIndex!:CommandAttr<number>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "divider" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "divider" }))
 	divider!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "gravity" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "gravity" }))
 	gravity!:CommandAttr<Gravity[]>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "measureWithLargestChild" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "measureWithLargestChild" }))
 	measureWithLargestChild!:CommandAttr<boolean>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "weightSum" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "weightSum" }))
 	weightSum!:CommandAttr<number>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "showDividers" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "showDividers" }))
 	showDividers!:CommandAttr<Divider[]>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "dividerPadding" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "dividerPadding" }))
 	dividerPadding!:CommandAttr<string>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "orientation" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "orientation" }))
 	orientation!:CommandAttr<Orientation>| undefined;
 
-	@Exclude()
+	@decorate(Exclude())
 	protected thisPointer: T;	
 	protected abstract getThisPointer(): T;
 	reset() : T {	
@@ -397,13 +398,13 @@ this.showDividers.setTransformer('divider');		return this.thisPointer;
 	
 //start - staticinit
 export abstract class ActionMenuViewImpl_LayoutParams<T> extends ViewGroupImpl_LayoutParams<T> {
-	@Type(() => CommandAttr)
-	@Expose({ name: "layout_gravity" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "layout_gravity" }))
 	layout_gravity!:CommandAttr<Gravity[]>| undefined;
-	@Type(() => CommandAttr)
-	@Expose({ name: "layout_weight" })
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "layout_weight" }))
 	layout_weight!:CommandAttr<number>| undefined;
-	@Exclude()
+	@decorate(Exclude())
 	protected thisPointer: T;	
 	protected abstract getThisPointer(): T;
 	reset() : T {	

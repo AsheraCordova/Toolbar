@@ -151,6 +151,14 @@ J2OBJC_INITIALIZED_DEFN(ADXMenuBuilder)
   [self onItemsChangedWithBoolean:true];
 }
 
+- (jint)size {
+  return [((JavaUtilArrayList *) nil_chk(mItems_)) size];
+}
+
+- (id<ADMenuItem>)getItemWithInt:(jint)index {
+  return [((JavaUtilArrayList *) nil_chk(mItems_)) getWithInt:index];
+}
+
 + (jint)getOrderingWithInt:(jint)categoryOrder {
   return ADXMenuBuilder_getOrderingWithInt_(categoryOrder);
 }
@@ -273,18 +281,20 @@ J2OBJC_IGNORE_DESIGNATED_END
     { NULL, "LADMenuItem;", 0x1, 4, 7, -1, -1, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "I", 0xa, 8, 6, -1, -1, -1, -1 },
-    { NULL, "I", 0xa, 9, 10, -1, 11, -1, -1 },
-    { NULL, "LJavaUtilArrayList;", 0x1, -1, -1, -1, 12, -1, -1 },
+    { NULL, "I", 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, "LADMenuItem;", 0x1, 8, 6, -1, -1, -1, -1 },
+    { NULL, "I", 0xa, 9, 6, -1, -1, -1, -1 },
+    { NULL, "I", 0xa, 10, 11, -1, 12, -1, -1 },
+    { NULL, "LJavaUtilArrayList;", 0x1, -1, -1, -1, 13, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LJavaUtilArrayList;", 0x1, -1, -1, -1, 12, -1, -1 },
-    { NULL, "LJavaUtilArrayList;", 0x1, -1, -1, -1, 12, -1, -1 },
+    { NULL, "LJavaUtilArrayList;", 0x1, -1, -1, -1, 13, -1, -1 },
+    { NULL, "LJavaUtilArrayList;", 0x1, -1, -1, -1, 13, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, NULL, 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 13, 14, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 15, 16, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 17, 14, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 18, 19, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 14, 15, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 16, 17, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 18, 15, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 19, 20, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
@@ -297,29 +307,31 @@ J2OBJC_IGNORE_DESIGNATED_END
   methods[5].selector = @selector(addWithInt:withInt:withInt:withInt:);
   methods[6].selector = @selector(clearAll);
   methods[7].selector = @selector(clear);
-  methods[8].selector = @selector(getOrderingWithInt:);
-  methods[9].selector = @selector(findInsertIndexWithJavaUtilArrayList:withInt:);
-  methods[10].selector = @selector(getVisibleItems);
-  methods[11].selector = @selector(flagActionItems);
-  methods[12].selector = @selector(getActionItems);
-  methods[13].selector = @selector(getNonActionItems);
-  methods[14].selector = @selector(clearHeader);
-  methods[15].selector = @selector(init);
-  methods[16].selector = @selector(collapseItemActionViewWithADMenuItem:);
-  methods[17].selector = @selector(setActionMenuPresenterWithADXMenuPresenter:);
-  methods[18].selector = @selector(onItemActionRequestChangedWithADMenuItem:);
-  methods[19].selector = @selector(onItemsChangedWithBoolean:);
+  methods[8].selector = @selector(size);
+  methods[9].selector = @selector(getItemWithInt:);
+  methods[10].selector = @selector(getOrderingWithInt:);
+  methods[11].selector = @selector(findInsertIndexWithJavaUtilArrayList:withInt:);
+  methods[12].selector = @selector(getVisibleItems);
+  methods[13].selector = @selector(flagActionItems);
+  methods[14].selector = @selector(getActionItems);
+  methods[15].selector = @selector(getNonActionItems);
+  methods[16].selector = @selector(clearHeader);
+  methods[17].selector = @selector(init);
+  methods[18].selector = @selector(collapseItemActionViewWithADMenuItem:);
+  methods[19].selector = @selector(setActionMenuPresenterWithADXMenuPresenter:);
+  methods[20].selector = @selector(onItemActionRequestChangedWithADMenuItem:);
+  methods[21].selector = @selector(onItemsChangedWithBoolean:);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
-    { "sCategoryToOrder", "[I", .constantValue.asLong = 0, 0x1a, -1, 20, -1, -1 },
+    { "sCategoryToOrder", "[I", .constantValue.asLong = 0, 0x1a, -1, 21, -1, -1 },
     { "mResources_", "LADResources;", .constantValue.asLong = 0, 0x12, -1, -1, -1, -1 },
     { "mQwertyMode_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mShortcutsVisible_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "mItems_", "LJavaUtilArrayList;", .constantValue.asLong = 0, 0x2, -1, -1, 21, -1 },
-    { "mVisibleItems_", "LJavaUtilArrayList;", .constantValue.asLong = 0, 0x2, -1, -1, 21, -1 },
+    { "mItems_", "LJavaUtilArrayList;", .constantValue.asLong = 0, 0x2, -1, -1, 22, -1 },
+    { "mVisibleItems_", "LJavaUtilArrayList;", .constantValue.asLong = 0, 0x2, -1, -1, 22, -1 },
     { "mIsVisibleItemsStale_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "mActionItems_", "LJavaUtilArrayList;", .constantValue.asLong = 0, 0x2, -1, -1, 21, -1 },
-    { "mNonActionItems_", "LJavaUtilArrayList;", .constantValue.asLong = 0, 0x2, -1, -1, 21, -1 },
+    { "mActionItems_", "LJavaUtilArrayList;", .constantValue.asLong = 0, 0x2, -1, -1, 22, -1 },
+    { "mNonActionItems_", "LJavaUtilArrayList;", .constantValue.asLong = 0, 0x2, -1, -1, 22, -1 },
     { "mIsActionItemsStale_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mDefaultShowAsAction_", "I", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mHeaderTitle_", "LJavaLangCharSequence;", .constantValue.asLong = 0, 0x0, -1, -1, -1, -1 },
@@ -330,7 +342,7 @@ J2OBJC_IGNORE_DESIGNATED_END
     { "mStructureChangedWhileDispatchPrevented_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mOptionalIconsVisible_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mIsClosing_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "mPresenters_", "LJavaUtilConcurrentCopyOnWriteArrayList;", .constantValue.asLong = 0, 0x2, -1, -1, 22, -1 },
+    { "mPresenters_", "LJavaUtilConcurrentCopyOnWriteArrayList;", .constantValue.asLong = 0, 0x2, -1, -1, 23, -1 },
     { "mExpandedItem_", "LADXMenuItemImpl;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mGroupDividerEnabled_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mOverrideVisibleItems_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
@@ -341,8 +353,8 @@ J2OBJC_IGNORE_DESIGNATED_END
     { "SUPPORTED_MODIFIERS_MASK", "I", .constantValue.asInt = ADXMenuBuilder_SUPPORTED_MODIFIERS_MASK, 0x18, -1, -1, -1, -1 },
     { "FLAG_KEEP_OPEN_ON_SUBMENU_OPENED", "I", .constantValue.asInt = ADXMenuBuilder_FLAG_KEEP_OPEN_ON_SUBMENU_OPENED, 0x18, -1, -1, -1, -1 },
   };
-  static const void *ptrTable[] = { "addInternal", "IIILJavaLangCharSequence;", "createNewMenuItem", "IIIILJavaLangCharSequence;I", "add", "LJavaLangCharSequence;", "I", "IIII", "getOrdering", "findInsertIndex", "LJavaUtilArrayList;I", "(Ljava/util/ArrayList<Landroidx/appcompat/view/menu/MenuItemImpl;>;I)I", "()Ljava/util/ArrayList<Landroidx/appcompat/view/menu/MenuItemImpl;>;", "collapseItemActionView", "LADMenuItem;", "setActionMenuPresenter", "LADXMenuPresenter;", "onItemActionRequestChanged", "onItemsChanged", "Z", &ADXMenuBuilder_sCategoryToOrder, "Ljava/util/ArrayList<Landroidx/appcompat/view/menu/MenuItemImpl;>;", "Ljava/util/concurrent/CopyOnWriteArrayList<Ljava/lang/ref/WeakReference<Landroidx/appcompat/view/menu/MenuPresenter;>;>;", "LADXMenuBuilder_SupportMenuItem;LADXMenuBuilder_ContextMenu;" };
-  static const J2ObjcClassInfo _ADXMenuBuilder = { "MenuBuilder", "androidx.appcompat.view.menu", ptrTable, methods, fields, 7, 0x1, 20, 29, -1, 23, -1, -1, -1 };
+  static const void *ptrTable[] = { "addInternal", "IIILJavaLangCharSequence;", "createNewMenuItem", "IIIILJavaLangCharSequence;I", "add", "LJavaLangCharSequence;", "I", "IIII", "getItem", "getOrdering", "findInsertIndex", "LJavaUtilArrayList;I", "(Ljava/util/ArrayList<Landroidx/appcompat/view/menu/MenuItemImpl;>;I)I", "()Ljava/util/ArrayList<Landroidx/appcompat/view/menu/MenuItemImpl;>;", "collapseItemActionView", "LADMenuItem;", "setActionMenuPresenter", "LADXMenuPresenter;", "onItemActionRequestChanged", "onItemsChanged", "Z", &ADXMenuBuilder_sCategoryToOrder, "Ljava/util/ArrayList<Landroidx/appcompat/view/menu/MenuItemImpl;>;", "Ljava/util/concurrent/CopyOnWriteArrayList<Ljava/lang/ref/WeakReference<Landroidx/appcompat/view/menu/MenuPresenter;>;>;", "LADXMenuBuilder_SupportMenuItem;LADXMenuBuilder_ContextMenu;" };
+  static const J2ObjcClassInfo _ADXMenuBuilder = { "MenuBuilder", "androidx.appcompat.view.menu", ptrTable, methods, fields, 7, 0x1, 22, 29, -1, 24, -1, -1, -1 };
   return &_ADXMenuBuilder;
 }
 
