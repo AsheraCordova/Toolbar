@@ -26,6 +26,7 @@
      <!-- start res -->
      <source-file src="android/res/drawable-xxxhdpi/icon_btn_search_go.png" target-dir="res/drawable-xxxhdpi"/>
      <source-file src="android/res/drawable-xxxhdpi/icon_menu_search.png" target-dir="res/drawable-xxxhdpi"/>
+     <source-file src="android/res/drawable-xxxhdpi/icon_overflow.png" target-dir="res/drawable-xxxhdpi"/>
      <source-file src="android/res/layout/design_toolbar_search_view.xml" target-dir="res/layout"/>
      <!-- res end -->
      <!-- start tsc -->
