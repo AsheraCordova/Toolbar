@@ -1320,7 +1320,6 @@ return this;}
 		
 		ViewImpl.setOnListener(this, org.teavm.jso.browser.Window.current(), (e) -> {
 			if (!matchesTarget(e, ".dropbtn")) {
-				System.out.println("test" + matchesTarget(e, ".dropbtn"));
 				HTMLElement[] dropdowns = querySelectorAll(root, ".dropdown-content");
 				for (HTMLElement htmlElement : dropdowns) {
 					htmlElement.setAttribute("class", "dropdown-content");
