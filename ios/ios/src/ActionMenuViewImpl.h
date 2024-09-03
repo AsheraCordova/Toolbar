@@ -79,6 +79,8 @@
 
 - (IOSClass *)getViewClass;
 
+- (jboolean)hasItemViewWithADMenuItem:(id<ADMenuItem>)item;
+
 - (void)initialized OBJC_METHOD_FAMILY_NONE;
 
 - (void)invalidate;
@@ -276,6 +278,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Orientation)
 - (id<ASIWidget>)getWidget;
 
 - (void)getWindowVisibleDisplayFrameWithADRect:(ADRect *)displayFrame;
+
+- (jboolean)hasItemViewWithADMenuItem:(id<ADMenuItem>)item;
 
 - (ADView *)inflateViewWithNSString:(NSString *)layout;
 

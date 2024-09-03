@@ -28,6 +28,8 @@ import static com.ashera.widget.IWidget.*;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.widget.SearchView;
+import com.google.android.material.badge.BadgeDrawable;
+
 public class ToolbarImpl extends BaseHasWidgets {
 	//start - body
 	private HTMLElement htmlElement;
@@ -78,6 +80,17 @@ public class ToolbarImpl extends BaseHasWidgets {
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("searchview_attributes").withType("string"));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("onQueryTextSubmit").withType("string"));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("onQueryTextChange").withType("string"));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("badgeNumbers").withType("array").withArrayType("int").withOrder(10).withUiFlag(UPDATE_UI_REQUEST_LAYOUT));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("menuItemIds").withType("array").withArrayType("id").withOrder(-1).withUiFlag(UPDATE_UI_REQUEST_LAYOUT));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("badgeAlphas").withType("array").withArrayType("int").withOrder(10).withUiFlag(UPDATE_UI_REQUEST_LAYOUT));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("badgeMaxCharacterCounts").withType("array").withArrayType("int").withOrder(10).withUiFlag(UPDATE_UI_REQUEST_LAYOUT));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("badgeGravities").withType("array").withArrayType("gravity").withOrder(10).withUiFlag(UPDATE_UI_REQUEST_LAYOUT));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("badgeHorizontalOffsets").withType("array").withArrayType("dimension").withOrder(10).withUiFlag(UPDATE_UI_REQUEST_LAYOUT));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("badgeVerticalOffsets").withType("array").withArrayType("dimension").withOrder(10).withUiFlag(UPDATE_UI_REQUEST_LAYOUT));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("badgeIsVisibles").withType("array").withArrayType("boolean").withOrder(10).withUiFlag(UPDATE_UI_REQUEST_LAYOUT));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("badgeBackgroundColors").withType("array").withArrayType("colorint").withOrder(10).withUiFlag(UPDATE_UI_REQUEST_LAYOUT));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("badgeTextColors").withType("array").withArrayType("colorint").withOrder(10).withUiFlag(UPDATE_UI_REQUEST_LAYOUT));
+		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("badgeTextAppearanceResources").withType("array").withArrayType("string").withOrder(10).withUiFlag(UPDATE_UI_REQUEST_LAYOUT));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("title").withType("resourcestring"));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("titleTextColor").withType("color"));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("subtitle").withType("resourcestring"));
@@ -235,6 +248,7 @@ public class ToolbarImpl extends BaseHasWidgets {
 	public class ToolbarExt extends androidx.appcompat.widget.Toolbar implements ILifeCycleDecorator, com.ashera.widget.IMaxDimension{
 		private MeasureEvent measureFinished = new MeasureEvent();
 		private OnLayoutEvent onLayoutEvent = new OnLayoutEvent();
+		private List<IWidget> overlays;
 		public IWidget getWidget() {
 			return ToolbarImpl.this;
 		}
@@ -286,9 +300,12 @@ public class ToolbarImpl extends BaseHasWidgets {
 		protected void onLayout(boolean changed, int l, int t, int r, int b) {
 			super.onLayout(changed, l, t, r, b);
 			ViewImpl.setDrawableBounds(ToolbarImpl.this, l, t, r, b);
+			if (!isOverlay()) {
 			ViewImpl.nativeMakeFrame(asNativeWidget(), l, t, r, b);
+			}
 			replayBufferedEvents();
 	        ViewImpl.redrawDrawables(ToolbarImpl.this);
+	        overlays = ViewImpl.drawOverlay(ToolbarImpl.this, overlays);
 			
 			IWidgetLifeCycleListener listener = (IWidgetLifeCycleListener) getListener();
 			if (listener != null) {
@@ -418,7 +435,7 @@ public class ToolbarImpl extends BaseHasWidgets {
 				setState4(value);
 				return;
 			}
-			ToolbarImpl.this.setAttribute(name, value, true);
+			ToolbarImpl.this.setAttribute(name, value, !(value instanceof String));
 		}
         @Override
         public void setVisibility(int visibility) {
@@ -664,6 +681,105 @@ public class ToolbarImpl extends BaseHasWidgets {
 
 			}
 			break;
+			case "badgeNumbers": {
+
+
+		setBadgeNumbers(objValue);
+
+
+
+			}
+			break;
+			case "menuItemIds": {
+
+
+		setBadgeMenuItemIds(objValue);
+
+
+
+			}
+			break;
+			case "badgeAlphas": {
+
+
+		setBadgeAlphas(objValue);
+
+
+
+			}
+			break;
+			case "badgeMaxCharacterCounts": {
+
+
+		setBadgeMaxCharacterCounts(objValue);
+
+
+
+			}
+			break;
+			case "badgeGravities": {
+
+
+		setBadgeGravities(objValue);
+
+
+
+			}
+			break;
+			case "badgeHorizontalOffsets": {
+
+
+		setBadgeHorizontalOffsets(objValue);
+
+
+
+			}
+			break;
+			case "badgeVerticalOffsets": {
+
+
+		setBadgeVerticalOffsets(objValue);
+
+
+
+			}
+			break;
+			case "badgeIsVisibles": {
+
+
+		setBadgeIsVisibles(objValue);
+
+
+
+			}
+			break;
+			case "badgeBackgroundColors": {
+
+
+		setBadgeBackgroundColors(objValue);
+
+
+
+			}
+			break;
+			case "badgeTextColors": {
+
+
+		setBadgeTextColors(objValue);
+
+
+
+			}
+			break;
+			case "badgeTextAppearanceResources": {
+
+
+		setTextAppearanceResources(objValue);
+
+
+
+			}
+			break;
 			case "title": {
 
 
@@ -888,7 +1004,7 @@ public class ToolbarImpl extends BaseHasWidgets {
 	
 			String json = com.ashera.utils.ResourceBundleUtils.getString("menu/menu", key, fragment);
 			androidx.appcompat.widget.ActionMenuView actionMenu = (androidx.appcompat.widget.ActionMenuView) actionMenuView.asWidget();
-			androidx.appcompat.widget.MenuParser.parseMenu((HasWidgets) actionMenuView, actionMenu.getMenu(), json, fragment);
+			androidx.appcompat.view.menu.MenuParser.parseMenu((HasWidgets) actionMenuView, actionMenu.getMenu(), json, fragment);
 			actionMenu.updateMenuView();
 			
 			IWidget overFlowButton = ((ActionMenuViewImpl) actionMenuView).getOverFlowButtonWidget();
@@ -898,9 +1014,9 @@ public class ToolbarImpl extends BaseHasWidgets {
 			}
 			
 			actionMenuView.initialized();
+			reapplyBadgeDrawables();
 		}
 	}
-	
 
 	private Toolbar.OnMenuItemClickListener onMenuItemClickListener;
 	public Toolbar.OnMenuItemClickListener getOnMenuItemClickListener() {
@@ -996,6 +1112,43 @@ public class ToolbarImpl extends BaseHasWidgets {
 	
 	private void setOnSuggestionListener(MenuItem menu, AutoCompleteTextView autoComplete) {
 		
+	}
+	
+	private Map<Integer, BadgeDrawable> badgeDrawables;
+	private BadgeDrawable getOrCreateBadge(int id) {
+		if (badgeDrawables == null) {
+			badgeDrawables = new java.util.HashMap<>();
+		}
+		
+		if (!badgeDrawables.containsKey(id)) {
+			BadgeDrawable badgeDrawable = BadgeDrawable.create(toolbar.getContext());
+			badgeDrawables.put(id, badgeDrawable);
+			//com.google.android.material.badge.BadgeUtils.attachBadgeDrawable(badgeDrawable, toolbar, id);
+			MenuItem menuItem = toolbar.getMenu().findItem(id);
+			View itemView = ((androidx.appcompat.widget.ActionMenuView) actionMenuView.asWidget()).getItemView(menuItem);
+			if (itemView.getParent() != null) {
+				badgeDrawable.setAdditionalHorizontalOffset((int) PluginInvoker.convertDpToPixel("18dp"));
+				badgeDrawable.setAdditionalVerticalOffset((int) PluginInvoker.convertDpToPixel("12dp"));
+				com.google.android.material.badge.BadgeUtils.attachBadgeDrawable(badgeDrawable, itemView, null);
+			}
+		}
+		return badgeDrawables.get(id);
+	}
+	
+
+	
+
+	private void reapplyBadgeDrawables() {
+		if (badgeDrawables != null) {
+			Set<Integer> ids = badgeDrawables.keySet();
+			for (int id : ids) {
+				MenuItem menuItem = toolbar.getMenu().findItem(id);
+				View itemView = ((androidx.appcompat.widget.ActionMenuView) actionMenuView.asWidget()).getItemView(menuItem);
+				if (itemView.getParent() != null) {
+					com.google.android.material.badge.BadgeUtils.attachBadgeDrawable(badgeDrawables.get(id), itemView, null);
+				}
+			}
+		}
 	}
 	
 
@@ -1107,6 +1260,92 @@ public class ToolbarImpl extends BaseHasWidgets {
 		searchviewAttributes = com.ashera.model.ModelExpressionParser.parseSimpleCssExpression((String) objValue);
 	}
 	
+
+
+private List<Object> badgeMenuItemIds;
+private void setBadgeBackgroundColors(Object objValue) {
+	setValueOnBadgeDrawable(objValue, (badge, value) -> {
+		badge.setBackgroundColor((int) value);
+	});
+}
+
+public static interface ValueSetter {
+	void setValueOnBadgeDrawable(BadgeDrawable badgeDrawable, Object value);
+}
+private void setValueOnBadgeDrawable(Object objValue, ValueSetter valueSetter) {
+	if (badgeMenuItemIds != null) {
+		List<Object> badgeAttrs = PluginInvoker.getList(objValue);
+		
+		for (int i = 0; i < badgeMenuItemIds.size(); i++) {
+			int id = (int) badgeMenuItemIds.get(i);
+			BadgeDrawable badge = this.getOrCreateBadge(id);
+			Object value = badgeAttrs.get(i);
+			valueSetter.setValueOnBadgeDrawable(badge, value);
+		}
+	}
+}
+
+private void setBadgeMenuItemIds(Object objValue) {
+	badgeMenuItemIds = PluginInvoker.getList(objValue);
+}
+
+private void setBadgeNumbers(Object objValue) {
+	setValueOnBadgeDrawable(objValue, (badge, value) -> {
+		badge.setNumber((int) value);
+	});
+}
+
+private void setBadgeVerticalOffsets(Object objValue) {
+	setValueOnBadgeDrawable(objValue, (badge, value) -> {
+		badge.setVerticalOffset((int) value);
+	});	
+}
+
+private void setBadgeHorizontalOffsets(Object objValue) {
+	setValueOnBadgeDrawable(objValue, (badge, value) -> {
+		badge.setHorizontalOffset((int) value);
+	});	
+}
+
+private void setBadgeGravities(Object objValue) {
+	setValueOnBadgeDrawable(objValue, (badge, value) -> {
+		badge.setBadgeGravity((int) value);
+	});	
+}
+
+private void setBadgeMaxCharacterCounts(Object objValue) {
+	setValueOnBadgeDrawable(objValue, (badge, value) -> {
+		badge.setMaxCharacterCount((int) value);
+	});	
+}
+
+private void setBadgeAlphas(Object objValue) {
+	setValueOnBadgeDrawable(objValue, (badge, value) -> {
+		badge.setAlpha((int) value);
+	});	
+}
+
+private void setBadgeTextColors(Object objValue) {
+	setValueOnBadgeDrawable(objValue, (badge, value) -> {
+		badge.setBadgeTextColor((int) value);
+	});
+}
+
+private void setBadgeIsVisibles(Object objValue) {
+	setValueOnBadgeDrawable(objValue, (badge, value) -> {
+		badge.setVisible((boolean) value);
+	});
+}
+
+
+
+private void setTextAppearanceResources(Object objValue) {
+	setValueOnBadgeDrawable(objValue, (badge, value) -> {
+		badge.setTextAppearanceResource((String) value);
+	});
+	
+}
+
 
 	@SuppressLint("NewApi")
 private static class OnQueryTextListener implements SearchView.OnQueryTextListener, com.ashera.widget.IListener{
@@ -1593,6 +1832,94 @@ public ToolbarCommandBuilder setOnQueryTextChange(String value) {
 
 	attrs.put("value", value);
 return this;}
+public ToolbarCommandBuilder setBadgeNumbers(String value) {
+	Map<String, Object> attrs = initCommand("badgeNumbers");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
+public ToolbarCommandBuilder setMenuItemIds(String value) {
+	Map<String, Object> attrs = initCommand("menuItemIds");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
+public ToolbarCommandBuilder setBadgeAlphas(String value) {
+	Map<String, Object> attrs = initCommand("badgeAlphas");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
+public ToolbarCommandBuilder setBadgeMaxCharacterCounts(String value) {
+	Map<String, Object> attrs = initCommand("badgeMaxCharacterCounts");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
+public ToolbarCommandBuilder setBadgeGravities(String value) {
+	Map<String, Object> attrs = initCommand("badgeGravities");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
+public ToolbarCommandBuilder setBadgeHorizontalOffsets(String value) {
+	Map<String, Object> attrs = initCommand("badgeHorizontalOffsets");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
+public ToolbarCommandBuilder setBadgeVerticalOffsets(String value) {
+	Map<String, Object> attrs = initCommand("badgeVerticalOffsets");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
+public ToolbarCommandBuilder setBadgeIsVisibles(String value) {
+	Map<String, Object> attrs = initCommand("badgeIsVisibles");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
+public ToolbarCommandBuilder setBadgeBackgroundColors(String value) {
+	Map<String, Object> attrs = initCommand("badgeBackgroundColors");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
+public ToolbarCommandBuilder setBadgeTextColors(String value) {
+	Map<String, Object> attrs = initCommand("badgeTextColors");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
+public ToolbarCommandBuilder setBadgeTextAppearanceResources(String value) {
+	Map<String, Object> attrs = initCommand("badgeTextAppearanceResources");
+	attrs.put("type", "attribute");
+	attrs.put("setter", true);
+	attrs.put("orderSet", ++orderSet);
+
+	attrs.put("value", value);
+return this;}
 public ToolbarCommandBuilder setTitle(String value) {
 	Map<String, Object> attrs = initCommand("title");
 	attrs.put("type", "attribute");
@@ -1748,6 +2075,50 @@ public void setOnQueryTextSubmit(String value) {
 
 public void setOnQueryTextChange(String value) {
 	getBuilder().reset().setOnQueryTextChange(value).execute(true);
+}
+
+public void setBadgeNumbers(String value) {
+	getBuilder().reset().setBadgeNumbers(value).execute(true);
+}
+
+public void setMenuItemIds(String value) {
+	getBuilder().reset().setMenuItemIds(value).execute(true);
+}
+
+public void setBadgeAlphas(String value) {
+	getBuilder().reset().setBadgeAlphas(value).execute(true);
+}
+
+public void setBadgeMaxCharacterCounts(String value) {
+	getBuilder().reset().setBadgeMaxCharacterCounts(value).execute(true);
+}
+
+public void setBadgeGravities(String value) {
+	getBuilder().reset().setBadgeGravities(value).execute(true);
+}
+
+public void setBadgeHorizontalOffsets(String value) {
+	getBuilder().reset().setBadgeHorizontalOffsets(value).execute(true);
+}
+
+public void setBadgeVerticalOffsets(String value) {
+	getBuilder().reset().setBadgeVerticalOffsets(value).execute(true);
+}
+
+public void setBadgeIsVisibles(String value) {
+	getBuilder().reset().setBadgeIsVisibles(value).execute(true);
+}
+
+public void setBadgeBackgroundColors(String value) {
+	getBuilder().reset().setBadgeBackgroundColors(value).execute(true);
+}
+
+public void setBadgeTextColors(String value) {
+	getBuilder().reset().setBadgeTextColors(value).execute(true);
+}
+
+public void setBadgeTextAppearanceResources(String value) {
+	getBuilder().reset().setBadgeTextAppearanceResources(value).execute(true);
 }
 
 public void setTitle(String value) {

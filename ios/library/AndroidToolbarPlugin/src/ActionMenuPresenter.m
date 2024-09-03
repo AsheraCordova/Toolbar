@@ -6,6 +6,7 @@
 #include "ActionMenuPresenter.h"
 #include "ActionMenuView.h"
 #include "BaseMenuPresenter.h"
+#include "Context.h"
 #include "J2ObjC_source.h"
 #include "MenuBuilder.h"
 #include "MenuItemImpl.h"
@@ -98,23 +99,26 @@ __attribute__((unused)) static void ADXActionMenuPresenter_subtractOverFlow(ADXA
   if (!hasOverflow && mOverflowButton_ != nil) {
     [mOverflowButton_ setVisibilityWithInt:ADView_INVISIBLE];
   }
+  if (hasOverflow && mOverflowButton_ != nil) {
+    [mOverflowButton_ setVisibilityWithInt:ADView_VISIBLE];
+  }
   if (hasOverflow) {
     if (mOverflowButton_ == nil) {
-      JreStrongAssign(&mOverflowButton_, [((ADXActionMenuView *) nil_chk(mMenuView_)) getOverFlowButton]);
+      JreStrongAssign(&mOverflowButton_, [((ADXActionMenuView *) nil_chk(((ADXActionMenuView *) cast_chk(mMenuView_, [ADXActionMenuView class])))) getOverFlowButton]);
     }
     ADViewGroup *parent = (ADViewGroup *) cast_chk([((ADView *) nil_chk(mOverflowButton_)) getParent], [ADViewGroup class]);
     if (parent != mMenuView_) {
       if (parent != nil) {
         [parent removeViewWithADView:mOverflowButton_];
       }
-      ADXActionMenuView *menuView = mMenuView_;
+      ADXActionMenuView *menuView = (ADXActionMenuView *) cast_chk(mMenuView_, [ADXActionMenuView class]);
       [((ADXActionMenuView *) nil_chk(menuView)) addViewWithADView:mOverflowButton_ withADViewGroup_LayoutParams:[menuView generateOverflowButtonLayoutParams]];
     }
   }
-  else if (mOverflowButton_ != nil && [mOverflowButton_ getParent] == mMenuView_) {
-    [((ADViewGroup *) nil_chk((mMenuView_))) removeViewWithADView:mOverflowButton_];
+  else if (mOverflowButton_ != nil && [mOverflowButton_ getParent] == (id) mMenuView_) {
+    [((ADViewGroup *) nil_chk(((ADViewGroup *) cast_chk(mMenuView_, [ADViewGroup class])))) removeViewWithADView:mOverflowButton_];
   }
-  [((ADXActionMenuView *) nil_chk((mMenuView_))) setOverflowReservedWithBoolean:mReserveOverflow_];
+  [((ADXActionMenuView *) nil_chk(((ADXActionMenuView *) cast_chk(mMenuView_, [ADXActionMenuView class])))) setOverflowReservedWithBoolean:mReserveOverflow_];
 }
 
 - (jboolean)flagActionItems {
@@ -131,7 +135,7 @@ __attribute__((unused)) static void ADXActionMenuPresenter_subtractOverFlow(ADXA
   jint maxActions = mMaxItems_;
   jint widthLimit = mActionItemWidthLimit_;
   jint querySpec = ADView_MeasureSpec_makeMeasureSpecWithInt_withInt_(0, ADView_MeasureSpec_UNSPECIFIED);
-  ADViewGroup *parent = mMenuView_;
+  ADViewGroup *parent = (ADViewGroup *) cast_chk(mMenuView_, [ADViewGroup class]);
   jint requiredItems = 0;
   jint requestedItems = 0;
   jint firstActionWidth = 0;
@@ -247,6 +251,16 @@ __attribute__((unused)) static void ADXActionMenuPresenter_subtractOverFlow(ADXA
   return self;
 }
 
+- (ADView *)getItemViewWithADView:(ADView *)parent
+              withADXMenuItemImpl:(ADXMenuItemImpl *)item {
+  ADXActionMenuView *menuParent = (ADXActionMenuView *) cast_chk(parent, [ADXActionMenuView class]);
+  return [((ADXActionMenuView *) nil_chk(menuParent)) getItemViewWithADMenuItem:item];
+}
+
+- (jboolean)isMenuItemViewWithADView:(ADView *)convertView {
+  return ADXActionMenuView_isActionMenuItemViewWithADView_(convertView);
+}
+
 - (jint)getMaxActionButtons {
   jint widthDp = ASPluginInvoker_getScreenWidthDp();
   jint heightDp = ASPluginInvoker_getScreenHeightDp();
@@ -270,6 +284,10 @@ __attribute__((unused)) static void ADXActionMenuPresenter_subtractOverFlow(ADXA
   JreStrongAssign(&mOverflowButton_, overflowButton);
 }
 
+- (void)initForMenuWithADContext:(ADContext *)menuContext
+              withADXMenuBuilder:(ADXMenuBuilder *)menuBuilder {
+}
+
 - (void)dealloc {
   RELEASE_(mActionButtonGroups_);
   RELEASE_(mOverflowButton_);
@@ -285,9 +303,12 @@ __attribute__((unused)) static void ADXActionMenuPresenter_subtractOverFlow(ADXA
     { NULL, "Z", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 7, 8, -1, -1, -1, -1 },
     { NULL, NULL, 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, "LADView;", 0x1, 2, 9, -1, -1, -1, -1 },
+    { NULL, "Z", 0x1, 10, 11, -1, -1, -1, -1 },
     { NULL, "I", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x2, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 9, 10, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 12, 11, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 13, 14, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
@@ -299,9 +320,12 @@ __attribute__((unused)) static void ADXActionMenuPresenter_subtractOverFlow(ADXA
   methods[4].selector = @selector(flagActionItems);
   methods[5].selector = @selector(setMenuViewWithADXActionMenuView:);
   methods[6].selector = @selector(initPackagePrivate);
-  methods[7].selector = @selector(getMaxActionButtons);
-  methods[8].selector = @selector(subtractOverFlow);
-  methods[9].selector = @selector(setOverFlowButtonWithADView:);
+  methods[7].selector = @selector(getItemViewWithADView:withADXMenuItemImpl:);
+  methods[8].selector = @selector(isMenuItemViewWithADView:);
+  methods[9].selector = @selector(getMaxActionButtons);
+  methods[10].selector = @selector(subtractOverFlow);
+  methods[11].selector = @selector(setOverFlowButtonWithADView:);
+  methods[12].selector = @selector(initForMenuWithADContext:withADXMenuBuilder:);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "mPendingOverflowIconSet_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
@@ -319,8 +343,8 @@ __attribute__((unused)) static void ADXActionMenuPresenter_subtractOverFlow(ADXA
     { "mOpenSubMenuId_", "I", .constantValue.asLong = 0, 0x0, -1, -1, -1, -1 },
     { "mOverflowButton_", "LADView;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
   };
-  static const void *ptrTable[] = { "setReserveOverflow", "Z", "getItemView", "LADXMenuItemImpl;LADView;LADViewGroup;", "shouldIncludeItem", "ILADXMenuItemImpl;", "updateMenuView", "setMenuView", "LADXActionMenuView;", "setOverFlowButton", "LADView;", "LADXActionMenuPresenter_ActionProvider;" };
-  static const J2ObjcClassInfo _ADXActionMenuPresenter = { "ActionMenuPresenter", "androidx.appcompat.widget", ptrTable, methods, fields, 7, 0x0, 10, 14, -1, 11, -1, -1, -1 };
+  static const void *ptrTable[] = { "setReserveOverflow", "Z", "getItemView", "LADXMenuItemImpl;LADView;LADViewGroup;", "shouldIncludeItem", "ILADXMenuItemImpl;", "updateMenuView", "setMenuView", "LADXActionMenuView;", "LADView;LADXMenuItemImpl;", "isMenuItemView", "LADView;", "setOverFlowButton", "initForMenu", "LADContext;LADXMenuBuilder;", "LADXActionMenuPresenter_ActionProvider;" };
+  static const J2ObjcClassInfo _ADXActionMenuPresenter = { "ActionMenuPresenter", "androidx.appcompat.widget", ptrTable, methods, fields, 7, 0x0, 13, 14, -1, 15, -1, -1, -1 };
   return &_ADXActionMenuPresenter;
 }
 
@@ -348,7 +372,7 @@ void ADXActionMenuPresenter_subtractOverFlow(ADXActionMenuPresenter *self) {
   jint width = self->mWidthLimit_;
   if (self->mReserveOverflow_) {
     if (self->mOverflowButton_ == nil) {
-      JreStrongAssign(&self->mOverflowButton_, [((ADXActionMenuView *) nil_chk(self->mMenuView_)) getOverFlowButton]);
+      JreStrongAssign(&self->mOverflowButton_, [((ADXActionMenuView *) nil_chk(((ADXActionMenuView *) cast_chk(self->mMenuView_, [ADXActionMenuView class])))) getOverFlowButton]);
       jint spec = ADView_MeasureSpec_makeMeasureSpecWithInt_withInt_(0, ADView_MeasureSpec_UNSPECIFIED);
       [((ADView *) nil_chk(self->mOverflowButton_)) measureWithInt:spec withInt:spec];
     }

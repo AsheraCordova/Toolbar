@@ -65,30 +65,12 @@
      <source-file src="ios/library/AndroidToolbarPlugin/src/ActionMenuPresenter.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
      <header-file src="ios/library/AndroidToolbarPlugin/src/ActionMenuView.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>
      <source-file src="ios/library/AndroidToolbarPlugin/src/ActionMenuView.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
-     <header-file src="ios/library/AndroidToolbarPlugin/src/BaseMenuPresenter.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>
-     <source-file src="ios/library/AndroidToolbarPlugin/src/BaseMenuPresenter.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
      <header-file src="ios/library/AndroidToolbarPlugin/src/CollapsibleActionView.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>
      <source-file src="ios/library/AndroidToolbarPlugin/src/CollapsibleActionView.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
-     <header-file src="ios/library/AndroidToolbarPlugin/src/LinearLayoutCompat.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>
-     <source-file src="ios/library/AndroidToolbarPlugin/src/LinearLayoutCompat.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
-     <header-file src="ios/library/AndroidToolbarPlugin/src/MenuBuilder.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>
-     <source-file src="ios/library/AndroidToolbarPlugin/src/MenuBuilder.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
-     <header-file src="ios/library/AndroidToolbarPlugin/src/MenuItemImpl.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>
-     <source-file src="ios/library/AndroidToolbarPlugin/src/MenuItemImpl.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
-     <header-file src="ios/library/AndroidToolbarPlugin/src/MenuParser.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>
-     <source-file src="ios/library/AndroidToolbarPlugin/src/MenuParser.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
-     <header-file src="ios/library/AndroidToolbarPlugin/src/MenuPresenter.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>
-     <source-file src="ios/library/AndroidToolbarPlugin/src/MenuPresenter.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
-     <header-file src="ios/library/AndroidToolbarPlugin/src/RtlSpacingHelper.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>
-     <source-file src="ios/library/AndroidToolbarPlugin/src/RtlSpacingHelper.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
      <header-file src="ios/library/AndroidToolbarPlugin/src/SearchView.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>
      <source-file src="ios/library/AndroidToolbarPlugin/src/SearchView.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
-     <header-file src="ios/library/AndroidToolbarPlugin/src/SupportMenuItem.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>
-     <source-file src="ios/library/AndroidToolbarPlugin/src/SupportMenuItem.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
      <header-file src="ios/library/AndroidToolbarPlugin/src/Toolbar.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>
      <source-file src="ios/library/AndroidToolbarPlugin/src/Toolbar.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
-     <header-file src="ios/library/AndroidToolbarPlugin/src/ViewUtils.h" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src"/>
-     <source-file src="ios/library/AndroidToolbarPlugin/src/ViewUtils.m" target-dir="AndroidToolbarPlugin/AndroidToolbarPlugin/src" compiler-flags="-fno-objc-arc"/>
      <!-- AndroidToolbarPlugin end -->
   </platform>
   <platform name="browser">

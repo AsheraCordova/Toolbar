@@ -20,9 +20,11 @@
 #define INCLUDE_ADXBaseMenuPresenter 1
 #include "BaseMenuPresenter.h"
 
+@class ADContext;
 @class ADView;
 @class ADViewGroup;
 @class ADXActionMenuView;
+@class ADXMenuBuilder;
 @class ADXMenuItemImpl;
 
 @interface ADXActionMenuPresenter : ADXBaseMenuPresenter {
@@ -40,7 +42,15 @@
                                 withADView:(ADView *)convertView
                            withADViewGroup:(ADViewGroup *)parent;
 
+- (ADView *)getItemViewWithADView:(ADView *)parent
+              withADXMenuItemImpl:(ADXMenuItemImpl *)item;
+
 - (jint)getMaxActionButtons;
+
+- (void)initForMenuWithADContext:(ADContext *)menuContext
+              withADXMenuBuilder:(ADXMenuBuilder *)menuBuilder OBJC_METHOD_FAMILY_NONE;
+
+- (jboolean)isMenuItemViewWithADView:(ADView *)convertView;
 
 - (void)setMenuViewWithADXActionMenuView:(ADXActionMenuView *)menuView;
 

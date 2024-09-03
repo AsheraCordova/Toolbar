@@ -316,6 +316,24 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 
 #endif
 
+#if !defined (ASToolbarImpl_ValueSetter_) && (INCLUDE_ALL_ToolbarImpl || defined(INCLUDE_ASToolbarImpl_ValueSetter))
+#define ASToolbarImpl_ValueSetter_
+
+@class ADXBadgeDrawable;
+
+@protocol ASToolbarImpl_ValueSetter < JavaObject >
+
+- (void)setValueOnBadgeDrawableWithADXBadgeDrawable:(ADXBadgeDrawable *)badgeDrawable
+                                             withId:(id)value;
+
+@end
+
+J2OBJC_EMPTY_STATIC_INIT(ASToolbarImpl_ValueSetter)
+
+J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ValueSetter)
+
+#endif
+
 #if !defined (ASToolbarImpl_ToolbarCommandBuilder_) && (INCLUDE_ALL_ToolbarImpl || defined(INCLUDE_ASToolbarImpl_ToolbarCommandBuilder))
 #define ASToolbarImpl_ToolbarCommandBuilder_
 
@@ -379,6 +397,26 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 - (ASToolbarImpl_ToolbarCommandBuilder *)setBackgroundTintWithNSString:(NSString *)arg0;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setBackgroundWithNSString:(NSString *)arg0;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setBadgeAlphasWithNSString:(NSString *)value;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setBadgeBackgroundColorsWithNSString:(NSString *)value;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setBadgeGravitiesWithNSString:(NSString *)value;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setBadgeHorizontalOffsetsWithNSString:(NSString *)value;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setBadgeIsVisiblesWithNSString:(NSString *)value;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setBadgeMaxCharacterCountsWithNSString:(NSString *)value;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setBadgeNumbersWithNSString:(NSString *)value;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setBadgeTextAppearanceResourcesWithNSString:(NSString *)value;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setBadgeTextColorsWithNSString:(NSString *)value;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setBadgeVerticalOffsetsWithNSString:(NSString *)value;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setBottomWithNSString:(NSString *)arg0;
 
@@ -523,6 +561,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarExt)
 - (ASToolbarImpl_ToolbarCommandBuilder *)setMaxWidthWithNSString:(NSString *)arg0;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setMenuWithNSString:(NSString *)value;
+
+- (ASToolbarImpl_ToolbarCommandBuilder *)setMenuItemIdsWithNSString:(NSString *)value;
 
 - (ASToolbarImpl_ToolbarCommandBuilder *)setMinHeightWithNSString:(NSString *)arg0;
 
@@ -889,6 +929,26 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarCommandBuilder)
 
 - (void)setActionLayoutEventIdsWithNSString:(NSString *)value;
 
+- (void)setBadgeAlphasWithNSString:(NSString *)value;
+
+- (void)setBadgeBackgroundColorsWithNSString:(NSString *)value;
+
+- (void)setBadgeGravitiesWithNSString:(NSString *)value;
+
+- (void)setBadgeHorizontalOffsetsWithNSString:(NSString *)value;
+
+- (void)setBadgeIsVisiblesWithNSString:(NSString *)value;
+
+- (void)setBadgeMaxCharacterCountsWithNSString:(NSString *)value;
+
+- (void)setBadgeNumbersWithNSString:(NSString *)value;
+
+- (void)setBadgeTextAppearanceResourcesWithNSString:(NSString *)value;
+
+- (void)setBadgeTextColorsWithNSString:(NSString *)value;
+
+- (void)setBadgeVerticalOffsetsWithNSString:(NSString *)value;
+
 - (void)setButtonGravityWithNSString:(NSString *)value;
 
 - (void)setContentInsetEndWithNSString:(NSString *)value;
@@ -910,6 +970,8 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_ToolbarCommandBuilder)
 - (void)setMaxButtonHeightWithNSString:(NSString *)value;
 
 - (void)setMenuWithNSString:(NSString *)value;
+
+- (void)setMenuItemIdsWithNSString:(NSString *)value;
 
 - (void)setNavigationIconWithNSString:(NSString *)value;
 

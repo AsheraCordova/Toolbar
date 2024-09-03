@@ -44,6 +44,17 @@ import { Mixin, decorate } from 'ts-mixer';
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 import {ViewGroupImpl_LayoutParams} from './ViewGroupImpl';
 
 // end - imports
@@ -113,6 +124,39 @@ export abstract class ToolbarImpl<T> extends ViewGroupImpl<T>{
 	@decorate(Expose({ name: "onQueryTextChange" }))
 	onQueryTextChange!:CommandAttr<string>| undefined;
 	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "badgeNumbers" }))
+	badgeNumbers!:CommandAttr<string>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "menuItemIds" }))
+	menuItemIds!:CommandAttr<string>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "badgeAlphas" }))
+	badgeAlphas!:CommandAttr<string>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "badgeMaxCharacterCounts" }))
+	badgeMaxCharacterCounts!:CommandAttr<string>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "badgeGravities" }))
+	badgeGravities!:CommandAttr<string>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "badgeHorizontalOffsets" }))
+	badgeHorizontalOffsets!:CommandAttr<string>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "badgeVerticalOffsets" }))
+	badgeVerticalOffsets!:CommandAttr<string>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "badgeIsVisibles" }))
+	badgeIsVisibles!:CommandAttr<string>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "badgeBackgroundColors" }))
+	badgeBackgroundColors!:CommandAttr<string>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "badgeTextColors" }))
+	badgeTextColors!:CommandAttr<string>| undefined;
+	@decorate(Type(() => CommandAttr))
+	@decorate(Expose({ name: "badgeTextAppearanceResources" }))
+	badgeTextAppearanceResources!:CommandAttr<string>| undefined;
+	@decorate(Type(() => CommandAttr))
 	@decorate(Expose({ name: "title" }))
 	title!:CommandAttr<string>| undefined;
 	@decorate(Type(() => CommandAttr))
@@ -165,6 +209,17 @@ export abstract class ToolbarImpl<T> extends ViewGroupImpl<T>{
 		this.searchview_attributes = undefined;
 		this.onQueryTextSubmit = undefined;
 		this.onQueryTextChange = undefined;
+		this.badgeNumbers = undefined;
+		this.menuItemIds = undefined;
+		this.badgeAlphas = undefined;
+		this.badgeMaxCharacterCounts = undefined;
+		this.badgeGravities = undefined;
+		this.badgeHorizontalOffsets = undefined;
+		this.badgeVerticalOffsets = undefined;
+		this.badgeIsVisibles = undefined;
+		this.badgeBackgroundColors = undefined;
+		this.badgeTextColors = undefined;
+		this.badgeTextAppearanceResources = undefined;
 		this.title = undefined;
 		this.titleTextColor = undefined;
 		this.subtitle = undefined;
@@ -458,6 +513,160 @@ this.buttonGravity.setTransformer('gravity');		return this.thisPointer;
 		this.onQueryTextChange.setValue(value);
 		this.orderSet++;
 		this.onQueryTextChange.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setBadgeNumbers(value : string) : T {
+		this.resetIfRequired();
+		if (this.badgeNumbers == null || this.badgeNumbers == undefined) {
+			this.badgeNumbers = new CommandAttr<string>();
+		}
+		
+		this.badgeNumbers.setSetter(true);
+		this.badgeNumbers.setValue(value);
+		this.orderSet++;
+		this.badgeNumbers.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setMenuItemIds(value : string) : T {
+		this.resetIfRequired();
+		if (this.menuItemIds == null || this.menuItemIds == undefined) {
+			this.menuItemIds = new CommandAttr<string>();
+		}
+		
+		this.menuItemIds.setSetter(true);
+		this.menuItemIds.setValue(value);
+		this.orderSet++;
+		this.menuItemIds.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setBadgeAlphas(value : string) : T {
+		this.resetIfRequired();
+		if (this.badgeAlphas == null || this.badgeAlphas == undefined) {
+			this.badgeAlphas = new CommandAttr<string>();
+		}
+		
+		this.badgeAlphas.setSetter(true);
+		this.badgeAlphas.setValue(value);
+		this.orderSet++;
+		this.badgeAlphas.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setBadgeMaxCharacterCounts(value : string) : T {
+		this.resetIfRequired();
+		if (this.badgeMaxCharacterCounts == null || this.badgeMaxCharacterCounts == undefined) {
+			this.badgeMaxCharacterCounts = new CommandAttr<string>();
+		}
+		
+		this.badgeMaxCharacterCounts.setSetter(true);
+		this.badgeMaxCharacterCounts.setValue(value);
+		this.orderSet++;
+		this.badgeMaxCharacterCounts.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setBadgeGravities(value : string) : T {
+		this.resetIfRequired();
+		if (this.badgeGravities == null || this.badgeGravities == undefined) {
+			this.badgeGravities = new CommandAttr<string>();
+		}
+		
+		this.badgeGravities.setSetter(true);
+		this.badgeGravities.setValue(value);
+		this.orderSet++;
+		this.badgeGravities.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setBadgeHorizontalOffsets(value : string) : T {
+		this.resetIfRequired();
+		if (this.badgeHorizontalOffsets == null || this.badgeHorizontalOffsets == undefined) {
+			this.badgeHorizontalOffsets = new CommandAttr<string>();
+		}
+		
+		this.badgeHorizontalOffsets.setSetter(true);
+		this.badgeHorizontalOffsets.setValue(value);
+		this.orderSet++;
+		this.badgeHorizontalOffsets.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setBadgeVerticalOffsets(value : string) : T {
+		this.resetIfRequired();
+		if (this.badgeVerticalOffsets == null || this.badgeVerticalOffsets == undefined) {
+			this.badgeVerticalOffsets = new CommandAttr<string>();
+		}
+		
+		this.badgeVerticalOffsets.setSetter(true);
+		this.badgeVerticalOffsets.setValue(value);
+		this.orderSet++;
+		this.badgeVerticalOffsets.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setBadgeIsVisibles(value : string) : T {
+		this.resetIfRequired();
+		if (this.badgeIsVisibles == null || this.badgeIsVisibles == undefined) {
+			this.badgeIsVisibles = new CommandAttr<string>();
+		}
+		
+		this.badgeIsVisibles.setSetter(true);
+		this.badgeIsVisibles.setValue(value);
+		this.orderSet++;
+		this.badgeIsVisibles.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setBadgeBackgroundColors(value : string) : T {
+		this.resetIfRequired();
+		if (this.badgeBackgroundColors == null || this.badgeBackgroundColors == undefined) {
+			this.badgeBackgroundColors = new CommandAttr<string>();
+		}
+		
+		this.badgeBackgroundColors.setSetter(true);
+		this.badgeBackgroundColors.setValue(value);
+		this.orderSet++;
+		this.badgeBackgroundColors.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setBadgeTextColors(value : string) : T {
+		this.resetIfRequired();
+		if (this.badgeTextColors == null || this.badgeTextColors == undefined) {
+			this.badgeTextColors = new CommandAttr<string>();
+		}
+		
+		this.badgeTextColors.setSetter(true);
+		this.badgeTextColors.setValue(value);
+		this.orderSet++;
+		this.badgeTextColors.setOrderSet(this.orderSet);
+		return this.thisPointer;
+	}
+		
+
+	public setBadgeTextAppearanceResources(value : string) : T {
+		this.resetIfRequired();
+		if (this.badgeTextAppearanceResources == null || this.badgeTextAppearanceResources == undefined) {
+			this.badgeTextAppearanceResources = new CommandAttr<string>();
+		}
+		
+		this.badgeTextAppearanceResources.setSetter(true);
+		this.badgeTextAppearanceResources.setValue(value);
+		this.orderSet++;
+		this.badgeTextAppearanceResources.setOrderSet(this.orderSet);
 		return this.thisPointer;
 	}
 		

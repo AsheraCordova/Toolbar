@@ -256,6 +256,10 @@ J2OBJC_IGNORE_DESIGNATED_END
   [((ADXActionMenuPresenter *) nil_chk(mPresenter_)) updateMenuViewWithBoolean:true];
 }
 
+- (jboolean)hasItemViewWithADMenuItem:(id<ADMenuItem>)item {
+  return false;
+}
+
 - (ADView *)getItemViewWithADMenuItem:(id<ADMenuItem>)item {
   return nil;
 }
@@ -299,11 +303,12 @@ J2OBJC_IGNORE_DESIGNATED_END
     { NULL, "LADXActionMenuView_LayoutParams;", 0x4, 15, 10, -1, -1, -1, -1 },
     { NULL, "LADXMenuBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LADView;", 0x1, 16, 17, -1, -1, -1, -1 },
+    { NULL, "Z", 0x1, 16, 17, -1, -1, -1, -1 },
+    { NULL, "LADView;", 0x1, 18, 17, -1, -1, -1, -1 },
     { NULL, "LADView;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "Z", 0x9, 18, 19, -1, -1, -1, -1 },
-    { NULL, "Z", 0xa, 20, 19, -1, -1, -1, -1 },
-    { NULL, "Z", 0x1, 21, 19, -1, -1, -1, -1 },
+    { NULL, "Z", 0x9, 19, 20, -1, -1, -1, -1 },
+    { NULL, "Z", 0xa, 21, 20, -1, -1, -1, -1 },
+    { NULL, "Z", 0x1, 22, 20, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
@@ -323,11 +328,12 @@ J2OBJC_IGNORE_DESIGNATED_END
   methods[12].selector = @selector(generateLayoutParamsWithADViewGroup_LayoutParams:);
   methods[13].selector = @selector(getMenu);
   methods[14].selector = @selector(updateMenuView);
-  methods[15].selector = @selector(getItemViewWithADMenuItem:);
-  methods[16].selector = @selector(getOverFlowButton);
-  methods[17].selector = @selector(isActionMenuItemViewWithADView:);
-  methods[18].selector = @selector(hasTextStaticWithADView:);
-  methods[19].selector = @selector(hasTextWithADView:);
+  methods[15].selector = @selector(hasItemViewWithADMenuItem:);
+  methods[16].selector = @selector(getItemViewWithADMenuItem:);
+  methods[17].selector = @selector(getOverFlowButton);
+  methods[18].selector = @selector(isActionMenuItemViewWithADView:);
+  methods[19].selector = @selector(hasTextStaticWithADView:);
+  methods[20].selector = @selector(hasTextWithADView:);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "MIN_CELL_SIZE", "I", .constantValue.asInt = ADXActionMenuView_MIN_CELL_SIZE, 0x18, -1, -1, -1, -1 },
@@ -341,8 +347,8 @@ J2OBJC_IGNORE_DESIGNATED_END
     { "mGeneratedItemPadding_", "I", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mPresenter_", "LADXActionMenuPresenter;", .constantValue.asLong = 0, 0x0, -1, -1, -1, -1 },
   };
-  static const void *ptrTable[] = { "onMeasure", "II", "onMeasureExactFormat", "measureChildForCells", "LADView;IIII", "onLayout", "ZIIII", "setOverflowReserved", "Z", "checkLayoutParams", "LADViewGroup_LayoutParams;", "initialize", "LADXMenuBuilder;", "hasSupportDividerBeforeChildAt", "I", "generateLayoutParams", "getItemView", "LADMenuItem;", "isActionMenuItemView", "LADView;", "hasTextStatic", "hasText", "LADXActionMenuView_LayoutParams;LADXActionMenuView_ActionMenuChildView;" };
-  static const J2ObjcClassInfo _ADXActionMenuView = { "ActionMenuView", "androidx.appcompat.widget", ptrTable, methods, fields, 7, 0x1, 20, 10, -1, 22, -1, -1, -1 };
+  static const void *ptrTable[] = { "onMeasure", "II", "onMeasureExactFormat", "measureChildForCells", "LADView;IIII", "onLayout", "ZIIII", "setOverflowReserved", "Z", "checkLayoutParams", "LADViewGroup_LayoutParams;", "initialize", "LADXMenuBuilder;", "hasSupportDividerBeforeChildAt", "I", "generateLayoutParams", "hasItemView", "LADMenuItem;", "getItemView", "isActionMenuItemView", "LADView;", "hasTextStatic", "hasText", "LADXActionMenuView_LayoutParams;LADXActionMenuView_ActionMenuChildView;" };
+  static const J2ObjcClassInfo _ADXActionMenuView = { "ActionMenuView", "androidx.appcompat.widget", ptrTable, methods, fields, 7, 0x1, 21, 10, -1, 23, -1, -1, -1 };
   return &_ADXActionMenuView;
 }
 

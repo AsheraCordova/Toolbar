@@ -59,6 +59,8 @@
 
 - (ADDrawable *)getNavigationIcon;
 
+- (void)requestLayout;
+
 - (void)setContentInsetEndWithActionsWithInt:(jint)insetEndWithActions;
 
 - (void)setContentInsetsAbsoluteWithInt:(jint)contentInsetLeft

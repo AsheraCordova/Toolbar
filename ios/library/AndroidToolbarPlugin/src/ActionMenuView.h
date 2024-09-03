@@ -46,6 +46,8 @@
 
 - (ADView *)getOverFlowButton;
 
+- (jboolean)hasItemViewWithADMenuItem:(id<ADMenuItem>)item;
+
 - (jboolean)hasTextWithADView:(ADView *)child;
 
 - (void)initialize__WithADXMenuBuilder:(ADXMenuBuilder *)menu OBJC_METHOD_FAMILY_NONE;
