@@ -263,6 +263,7 @@ J2OBJC_FIELD_SETTER(ASActionMenuViewImpl_ShowAsAction, mapping_, id<JavaUtilMap>
 @interface ASActionMenuViewImpl_CanvasImpl : NSObject < ADCanvas > {
  @public
   jboolean canvasReset_;
+  jboolean requiresAttrChangeListener_;
   id<JavaUtilList> imageViews_;
   __unsafe_unretained id<ASIWidget> widget_;
 }
@@ -288,6 +289,24 @@ __attribute__((unused)) static ASActionMenuViewImpl_CanvasImpl *new_ASActionMenu
 __attribute__((unused)) static ASActionMenuViewImpl_CanvasImpl *create_ASActionMenuViewImpl_CanvasImpl_initWithASIWidget_(id<ASIWidget> widget);
 
 J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_CanvasImpl)
+
+@interface ASActionMenuViewImpl_CanvasImpl_$Lambda$1 : NSObject < ADDrawable_AttributeChangeListener > {
+ @public
+  id val$imageView_;
+}
+
+- (void)onAttributeChangeWithNSString:(NSString *)name
+                               withId:(id)value;
+
+@end
+
+J2OBJC_EMPTY_STATIC_INIT(ASActionMenuViewImpl_CanvasImpl_$Lambda$1)
+
+__attribute__((unused)) static void ASActionMenuViewImpl_CanvasImpl_$Lambda$1_initWithId_(ASActionMenuViewImpl_CanvasImpl_$Lambda$1 *self, id capture$0);
+
+__attribute__((unused)) static ASActionMenuViewImpl_CanvasImpl_$Lambda$1 *new_ASActionMenuViewImpl_CanvasImpl_$Lambda$1_initWithId_(id capture$0) NS_RETURNS_RETAINED;
+
+__attribute__((unused)) static ASActionMenuViewImpl_CanvasImpl_$Lambda$1 *create_ASActionMenuViewImpl_CanvasImpl_$Lambda$1_initWithId_(id capture$0);
 
 @interface ASActionMenuViewImpl_ActionMenuViewCommandBuilder () {
  @public
@@ -1496,7 +1515,9 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Orientation)
 
 - (void)drawableStateChanged {
   [super drawableStateChanged];
-  ASViewImpl_drawableStateChangedWithASIWidget_(this$0_);
+  if (![this$0_ isWidgetDisposed]) {
+    ASViewImpl_drawableStateChangedWithASIWidget_(this$0_);
+  }
 }
 
 - (ADView *)inflateViewWithNSString:(NSString *)layout {
@@ -1508,7 +1529,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Orientation)
     template_ = (id<ASIWidget>) cast_check([this$0_ quickConvertWithId:layout withNSString:@"template"], ASIWidget_class_());
     (void) [((id<JavaUtilMap>) nil_chk(templates_)) putWithId:layout withId:template_];
   }
-  id<ASIWidget> widget = [((id<ASIWidget>) nil_chk(template_)) loadLazyWidgetsWithASHasWidgets:[this$0_ getParent]];
+  id<ASIWidget> widget = [((id<ASIWidget>) nil_chk(template_)) loadLazyWidgetsWithASHasWidgets:this$0_];
   return (ADView *) cast_chk([((id<ASIWidget>) nil_chk(widget)) asWidget], [ADView class]);
 }
 
@@ -1843,8 +1864,15 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_ShowAsAction)
       return;
     }
   }
-  if ([((ADDrawable *) nil_chk(mDivider)) getDrawable] != nil) {
-    id imageView = [self nativeCreateImageViewWithId:[mDivider getDrawable]];
+  id image = [((ADDrawable *) nil_chk(mDivider)) getDrawable];
+  if (image != nil) {
+    if ([image isKindOfClass:[JavaLangInteger class]]) {
+      image = ASViewImpl_getColorWithId_(image);
+    }
+    id imageView = [self nativeCreateImageViewWithId:image];
+    if (requiresAttrChangeListener_) {
+      [mDivider setAttributeChangeListenerWithADDrawable_AttributeChangeListener:new_ASActionMenuViewImpl_CanvasImpl_$Lambda$1_initWithId_(imageView)];
+    }
     ASViewImpl_nativeMakeFrameWithId_withInt_withInt_withInt_withInt_(imageView, [mDivider getLeft], [mDivider getTop], [mDivider getRight], [mDivider getBottom]);
     [((id<JavaUtilList>) nil_chk(imageViews_)) addWithId:imageView];
     ASViewGroupImpl_nativeAddViewWithId_withId_([((id<ASIWidget>) nil_chk(widget_)) asNativeWidget], imageView);
@@ -1899,11 +1927,12 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_ShowAsAction)
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "canvasReset_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
+    { "requiresAttrChangeListener_", "Z", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "imageViews_", "LJavaUtilList;", .constantValue.asLong = 0, 0x2, -1, -1, 5, -1 },
     { "widget_", "LASIWidget;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
   };
   static const void *ptrTable[] = { "LASIWidget;", "draw", "LADDrawable;", "nativeCreateImageView", "LNSObject;", "Ljava/util/List<Ljava/lang/Object;>;", "LASActionMenuViewImpl;" };
-  static const J2ObjcClassInfo _ASActionMenuViewImpl_CanvasImpl = { "CanvasImpl", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1a, 4, 3, 6, -1, -1, -1, -1 };
+  static const J2ObjcClassInfo _ASActionMenuViewImpl_CanvasImpl = { "CanvasImpl", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1a, 4, 4, 6, -1, -1, -1, -1 };
   return &_ASActionMenuViewImpl_CanvasImpl;
 }
 
@@ -1912,6 +1941,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_ShowAsAction)
 void ASActionMenuViewImpl_CanvasImpl_initWithASIWidget_(ASActionMenuViewImpl_CanvasImpl *self, id<ASIWidget> widget) {
   NSObject_init(self);
   self->canvasReset_ = true;
+  self->requiresAttrChangeListener_ = false;
   self->imageViews_ = new_JavaUtilArrayList_init();
   self->widget_ = widget;
 }
@@ -1925,6 +1955,43 @@ ASActionMenuViewImpl_CanvasImpl *create_ASActionMenuViewImpl_CanvasImpl_initWith
 }
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_CanvasImpl)
+
+@implementation ASActionMenuViewImpl_CanvasImpl_$Lambda$1
+
+- (void)onAttributeChangeWithNSString:(NSString *)name
+                               withId:(id)value {
+  {
+    ADRect *rect;
+    jint alpha;
+    switch (JreIndexOfStr(name, (id[]){ @"bounds", @"alpha" }, 2)) {
+      case 0:
+      rect = (ADRect *) cast_chk(value, [ADRect class]);
+      ASViewImpl_nativeMakeFrameWithId_withInt_withInt_withInt_withInt_(val$imageView_, ((ADRect *) nil_chk(rect))->left_, rect->top_, rect->right_, rect->bottom_);
+      break;
+      case 1:
+      alpha = [((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk(value, [JavaLangInteger class]))) intValue];
+      ASViewImpl_setAlphaWithId_withId_(val$imageView_, JavaLangFloat_valueOfWithFloat_(alpha / 255.0f));
+      break;
+      default:
+      break;
+    }
+  }
+}
+
+@end
+
+void ASActionMenuViewImpl_CanvasImpl_$Lambda$1_initWithId_(ASActionMenuViewImpl_CanvasImpl_$Lambda$1 *self, id capture$0) {
+  self->val$imageView_ = capture$0;
+  NSObject_init(self);
+}
+
+ASActionMenuViewImpl_CanvasImpl_$Lambda$1 *new_ASActionMenuViewImpl_CanvasImpl_$Lambda$1_initWithId_(id capture$0) {
+  J2OBJC_NEW_IMPL(ASActionMenuViewImpl_CanvasImpl_$Lambda$1, initWithId_, capture$0)
+}
+
+ASActionMenuViewImpl_CanvasImpl_$Lambda$1 *create_ASActionMenuViewImpl_CanvasImpl_$Lambda$1_initWithId_(id capture$0) {
+  J2OBJC_CREATE_IMPL(ASActionMenuViewImpl_CanvasImpl_$Lambda$1, initWithId_, capture$0)
+}
 
 @implementation ASActionMenuViewImpl_ActionMenuViewCommandBuilder
 

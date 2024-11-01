@@ -151,7 +151,7 @@ Context context = (Context) fragment.getRootActivity();
 	}
 
 	@Override
-	public boolean remove(IWidget w) {		
+	public boolean remove(IWidget w) {
 		boolean remove = super.remove(w);
 		toolbar.removeView((View) w.asWidget());
 		return remove;
@@ -389,7 +389,9 @@ Context context = (Context) fragment.getRootActivity();
         @Override
         public void drawableStateChanged() {
         	super.drawableStateChanged();
-        	ViewImpl.drawableStateChanged(ToolbarImpl.this);
+        	if (!isWidgetDisposed()) {
+        		ViewImpl.drawableStateChanged(ToolbarImpl.this);
+        	}
         }
         
     	public void setState0(float value) {
@@ -527,6 +529,7 @@ Context context = (Context) fragment.getRootActivity();
         	ViewImpl.stateNo(ToolbarImpl.this);
         }
      
+	
 	}
 	@Override
 	public Class getViewClass() {
@@ -1058,9 +1061,7 @@ private void setBadgeIsVisibles(Object objValue) {
 @SuppressLint("RestrictedApi")
 private void setTextAppearanceResources(Object objValue) {
 	setValueOnBadgeDrawable(objValue, (badge, value) -> {
-		//badge.setTextAppearanceResource((int) value);
-		invokePrivateMethodUsingReflection(badge, "setTextAppearance",
-				new com.google.android.material.resources.TextAppearance(toolbar.getContext(), (int) value));
+		badge.setTextAppearance((int) value);
 	});
 }
 

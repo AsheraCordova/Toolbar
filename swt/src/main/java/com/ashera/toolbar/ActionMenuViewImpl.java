@@ -127,7 +127,7 @@ public class ActionMenuViewImpl extends BaseHasWidgets {
 	}
 
 	@Override
-	public boolean remove(IWidget w) {		
+	public boolean remove(IWidget w) {
 		boolean remove = super.remove(w);
 		actionMenuView.removeView((View) w.asWidget());
 		 nativeRemoveView(w);            
@@ -371,7 +371,9 @@ return layoutParams.weight;			}
         @Override
         public void drawableStateChanged() {
         	super.drawableStateChanged();
-        	ViewImpl.drawableStateChanged(ActionMenuViewImpl.this);
+        	if (!isWidgetDisposed()) {
+        		ViewImpl.drawableStateChanged(ActionMenuViewImpl.this);
+        	}
         }
         private Map<String, IWidget> templates;
     	@Override
@@ -384,9 +386,10 @@ return layoutParams.weight;			}
     			template = (IWidget) quickConvert(layout, "template");
     			templates.put(layout, template);
     		}
-    		IWidget widget = template.loadLazyWidgets(ActionMenuViewImpl.this.getParent());
-    		return (View) widget.asWidget();
-    	}        
+    		
+    		IWidget widget = template.loadLazyWidgets(ActionMenuViewImpl.this);
+			return (View) widget.asWidget();
+    	}   
         
     	@Override
 		public void remeasure() {
@@ -451,7 +454,10 @@ return layoutParams.weight;			}
         @Override
         public void setVisibility(int visibility) {
             super.setVisibility(visibility);
-            ((org.eclipse.swt.widgets.Control)asNativeWidget()).setVisible(View.VISIBLE == visibility);
+            org.eclipse.swt.widgets.Control control = ((org.eclipse.swt.widgets.Control)asNativeWidget());
+            if (!control.isDisposed()) {
+            	control.setVisible(View.VISIBLE == visibility);
+            }
             
         }
         @Override
@@ -513,6 +519,7 @@ return layoutParams.weight;			}
 			super.endViewTransition(view);
 			runBufferedRunnables();
 		}
+	
 	}
 	@Override
 	public Class getViewClass() {
@@ -716,6 +723,7 @@ return getDividerPadding();			}
 	private final static class CanvasImpl implements r.android.graphics.Canvas {
 		private List<org.eclipse.swt.widgets.Label> dividers = new java.util.ArrayList<>();
 		private boolean canvasReset = true;
+		private boolean requiresAttrChangeListener = false;
 		private IWidget widget;
 		public CanvasImpl(IWidget widget) {
 			this.widget = widget;
@@ -731,6 +739,27 @@ return getDividerPadding();			}
 			org.eclipse.swt.widgets.Label myLabel = new org.eclipse.swt.widgets.Label( (org.eclipse.swt.widgets.Composite) widget.asNativeWidget(), org.eclipse.swt.SWT.NONE );
 			dividers.add(myLabel);
 			myLabel.setBounds(mDivider.getLeft(), mDivider.getTop(), mDivider.getRight() - mDivider.getLeft(), mDivider.getBottom() - mDivider.getTop());
+			myLabel.moveAbove(null);
+			
+			if (requiresAttrChangeListener) {
+				mDivider.setAttributeChangeListener((name, value) -> {
+					if (!myLabel.isDisposed()) {
+						switch (name) {
+						case "bounds":
+							r.android.graphics.Rect rect = (r.android.graphics.Rect) value;
+							myLabel.setBounds(rect.left, rect.top, rect.width(), rect.height());
+							break;
+						case "alpha":
+							int alpha = (int) value;
+							break;
+						default:
+							break;
+						}
+					} else {
+						mDivider.setAttributeChangeListener(null);
+					}
+				});
+			}
 			
 			Object drawable = mDivider.getDrawable();
 			if (drawable instanceof org.eclipse.swt.graphics.Image) {
@@ -746,6 +775,9 @@ return getDividerPadding();			}
 				widget.getFragment().addDisposable(myLabel);
 			} else if (drawable instanceof org.eclipse.swt.graphics.Color){
 				myLabel.setBackground((org.eclipse.swt.graphics.Color) drawable);
+				myLabel.setImage(null);
+			} else if (drawable instanceof Integer){
+				myLabel.setBackground((org.eclipse.swt.graphics.Color)ViewImpl.getColor(drawable));
 				myLabel.setImage(null);
 			}
 		}
