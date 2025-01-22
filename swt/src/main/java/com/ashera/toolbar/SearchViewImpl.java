@@ -68,6 +68,7 @@ public class SearchViewImpl extends BaseHasWidgets {
 		
 		
 		ViewGroupImpl.registerCommandConveter(this);
+
 	}
 
 	@Override
@@ -445,7 +446,7 @@ public class SearchViewImpl extends BaseHasWidgets {
 	@SuppressLint("NewApi")
 	@Override
 	public void setAttribute(WidgetAttribute key, String strValue, Object objValue, ILifeCycleDecorator decorator) {
-				ViewGroupImpl.setAttribute(this, key, strValue, objValue, decorator);
+				ViewGroupImpl.setAttribute(this,  key, strValue, objValue, decorator);
 		Object nativeWidget = asNativeWidget();
 		switch (key.getAttributeName()) {
 			case "attributeUnderTest": {
@@ -534,87 +535,7 @@ public class SearchViewImpl extends BaseHasWidgets {
 		return getStyle("swtStyle", initStyle, params, fragment);
 	}
 
-	
-private SearchViewCommandBuilder builder;
-private SearchViewBean bean;
-public Object getPlugin(String plugin) {
-	return WidgetFactory.getAttributable(plugin).newInstance(this);
-}
-public SearchViewBean getBean() {
-	if (bean == null) {
-		bean = new SearchViewBean();
-	}
-	return bean;
-}
-public SearchViewCommandBuilder getBuilder() {
-	if (builder == null) {
-		builder = new SearchViewCommandBuilder();
-	}
-	return builder;
-}
-
-
-public  class SearchViewCommandBuilder extends com.ashera.layout.ViewGroupImpl.ViewGroupCommandBuilder <SearchViewCommandBuilder> {
-    public SearchViewCommandBuilder() {
-	}
-	
-	public SearchViewCommandBuilder execute(boolean setter) {
-		if (setter) {
-			executeCommand(command, null, IWidget.COMMAND_EXEC_SETTER_METHOD);
-			getFragment().remeasure();
-		}
-		executeCommand(command, null, IWidget.COMMAND_EXEC_GETTER_METHOD);
-return this;	}
-
-public SearchViewCommandBuilder setAttributeUnderTest(String value) {
-	Map<String, Object> attrs = initCommand("attributeUnderTest");
-	attrs.put("type", "attribute");
-	attrs.put("setter", true);
-	attrs.put("orderSet", ++orderSet);
-
-	attrs.put("value", value);
-return this;}
-}
-public class SearchViewBean extends com.ashera.layout.ViewGroupImpl.ViewGroupBean{
-		public SearchViewBean() {
-			super(SearchViewImpl.this);
-		}
-public void setAttributeUnderTest(String value) {
-	getBuilder().reset().setAttributeUnderTest(value).execute(true);
-}
-
-}
-
-
-private SearchViewCommandParamsBuilder paramsBuilder;
-private SearchViewParamsBean paramsBean;
-
-public SearchViewParamsBean getParamsBean() {
-	if (paramsBean == null) {
-		paramsBean = new SearchViewParamsBean();
-	}
-	return paramsBean;
-}
-public SearchViewCommandParamsBuilder getParamsBuilder() {
-	if (paramsBuilder == null) {
-		paramsBuilder = new SearchViewCommandParamsBuilder();
-	}
-	return paramsBuilder;
-}
-
-
-
-public class SearchViewParamsBean extends com.ashera.layout.ViewGroupImpl.ViewGroupParamsBean{
-}
-
-
-
-
-
-public class SearchViewCommandParamsBuilder extends com.ashera.layout.ViewGroupImpl.ViewGroupCommandParamsBuilder<SearchViewCommandParamsBuilder>{
-}
-
-	//end - body
+		//end - body
 
 private void nativeCreate(Map<String, Object> params) {
     pane = new org.eclipse.swt.widgets.Composite((org.eclipse.swt.widgets.Composite)ViewImpl.getParent(this), getStyle(params, fragment));

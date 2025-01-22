@@ -5,7 +5,6 @@
 
 #include "BaseHasWidgets.h"
 #include "HasWidgets.h"
-#include "IAttributable.h"
 #include "IFragment.h"
 #include "ILifeCycleDecorator.h"
 #include "IOSClass.h"
@@ -27,7 +26,6 @@
 #include "ViewImpl.h"
 #include "WidgetAttribute.h"
 #include "WidgetFactory.h"
-#include "java/lang/Boolean.h"
 #include "java/lang/Integer.h"
 #include "java/lang/Runnable.h"
 #include "java/lang/UnsupportedOperationException.h"
@@ -44,16 +42,11 @@
 
 
 #pragma clang diagnostic ignored "-Wprotocol"
-#pragma clang diagnostic ignored "-Wincomplete-implementation"
 
 @interface ASSearchViewImpl () {
  @public
   id uiView_;
   ADXSearchView *searchView_;
-  ASSearchViewImpl_SearchViewCommandBuilder *builder_;
-  ASSearchViewImpl_SearchViewBean *bean_;
-  ASSearchViewImpl_SearchViewCommandParamsBuilder *paramsBuilder_;
-  ASSearchViewImpl_SearchViewParamsBean *paramsBean_;
 }
 
 - (void)setWidgetOnNativeClass;
@@ -70,10 +63,6 @@
 
 J2OBJC_FIELD_SETTER(ASSearchViewImpl, uiView_, id)
 J2OBJC_FIELD_SETTER(ASSearchViewImpl, searchView_, ADXSearchView *)
-J2OBJC_FIELD_SETTER(ASSearchViewImpl, builder_, ASSearchViewImpl_SearchViewCommandBuilder *)
-J2OBJC_FIELD_SETTER(ASSearchViewImpl, bean_, ASSearchViewImpl_SearchViewBean *)
-J2OBJC_FIELD_SETTER(ASSearchViewImpl, paramsBuilder_, ASSearchViewImpl_SearchViewCommandParamsBuilder *)
-J2OBJC_FIELD_SETTER(ASSearchViewImpl, paramsBean_, ASSearchViewImpl_SearchViewParamsBean *)
 
 __attribute__((unused)) static void ASSearchViewImpl_setWidgetOnNativeClass(ASSearchViewImpl *self);
 
@@ -102,20 +91,6 @@ J2OBJC_FIELD_SETTER(ASSearchViewImpl_SearchViewExt, measureFinished_, ASMeasureE
 J2OBJC_FIELD_SETTER(ASSearchViewImpl_SearchViewExt, onLayoutEvent_, ASOnLayoutEvent *)
 J2OBJC_FIELD_SETTER(ASSearchViewImpl_SearchViewExt, overlays_, id<JavaUtilList>)
 J2OBJC_FIELD_SETTER(ASSearchViewImpl_SearchViewExt, templates_, id<JavaUtilMap>)
-
-@interface ASSearchViewImpl_SearchViewCommandBuilder () {
- @public
-  ASSearchViewImpl *this$0_;
-}
-
-@end
-
-@interface ASSearchViewImpl_SearchViewBean () {
- @public
-  ASSearchViewImpl *this$0_;
-}
-
-@end
 
 @interface ASSearchViewImpl_$Lambda$1 : NSObject < JavaLangRunnable > {
  @public
@@ -330,38 +305,6 @@ J2OBJC_IGNORE_DESIGNATED_END
   [((ADView *) nil_chk(((ADView *) cast_chk([self asWidget], [ADView class])))) setVisibilityWithInt:b ? ADView_VISIBLE : ADView_GONE];
 }
 
-- (id)getPluginWithNSString:(NSString *)plugin {
-  return [((id<ASIAttributable>) nil_chk(ASWidgetFactory_getAttributableWithNSString_(plugin))) newInstanceWithASIWidget:self];
-}
-
-- (ASSearchViewImpl_SearchViewBean *)getBean {
-  if (bean_ == nil) {
-    bean_ = new_ASSearchViewImpl_SearchViewBean_initWithASSearchViewImpl_(self);
-  }
-  return bean_;
-}
-
-- (ASSearchViewImpl_SearchViewCommandBuilder *)getBuilder {
-  if (builder_ == nil) {
-    builder_ = new_ASSearchViewImpl_SearchViewCommandBuilder_initWithASSearchViewImpl_(self);
-  }
-  return builder_;
-}
-
-- (ASSearchViewImpl_SearchViewParamsBean *)getParamsBean {
-  if (paramsBean_ == nil) {
-    paramsBean_ = new_ASSearchViewImpl_SearchViewParamsBean_initWithASSearchViewImpl_(self);
-  }
-  return paramsBean_;
-}
-
-- (ASSearchViewImpl_SearchViewCommandParamsBuilder *)getParamsBuilder {
-  if (paramsBuilder_ == nil) {
-    paramsBuilder_ = new_ASSearchViewImpl_SearchViewCommandParamsBuilder_initWithASSearchViewImpl_(self);
-  }
-  return paramsBuilder_;
-}
-
 - (void)nativeCreateWithJavaUtilMap:(id<JavaUtilMap>)params {
   ASSearchViewImpl_nativeCreateWithJavaUtilMap_(self, params);
 }
@@ -399,13 +342,8 @@ J2OBJC_IGNORE_DESIGNATED_END
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 24, 1, -1, -1, -1, -1 },
     { NULL, "V", 0x1, 25, 26, -1, -1, -1, -1 },
-    { NULL, "LNSObject;", 0x1, 27, 1, -1, -1, -1, -1 },
-    { NULL, "LASSearchViewImpl_SearchViewBean;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LASSearchViewImpl_SearchViewCommandBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LASSearchViewImpl_SearchViewParamsBean;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LASSearchViewImpl_SearchViewCommandParamsBuilder;", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 28, 29, -1, 30, -1, -1 },
-    { NULL, "V", 0x101, 31, 29, -1, 30, -1, -1 },
+    { NULL, "V", 0x2, 27, 28, -1, 29, -1, -1 },
+    { NULL, "V", 0x101, 30, 28, -1, 29, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
@@ -435,26 +373,17 @@ J2OBJC_IGNORE_DESIGNATED_END
   methods[22].selector = @selector(invalidate);
   methods[23].selector = @selector(setIdWithNSString:);
   methods[24].selector = @selector(setVisibleWithBoolean:);
-  methods[25].selector = @selector(getPluginWithNSString:);
-  methods[26].selector = @selector(getBean);
-  methods[27].selector = @selector(getBuilder);
-  methods[28].selector = @selector(getParamsBean);
-  methods[29].selector = @selector(getParamsBuilder);
-  methods[30].selector = @selector(nativeCreateWithJavaUtilMap:);
-  methods[31].selector = @selector(nativeCreateViewWithJavaUtilMap:);
+  methods[25].selector = @selector(nativeCreateWithJavaUtilMap:);
+  methods[26].selector = @selector(nativeCreateViewWithJavaUtilMap:);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "uiView_", "LNSObject;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "LOCAL_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 32, -1, -1 },
-    { "GROUP_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 33, -1, -1 },
+    { "LOCAL_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 31, -1, -1 },
+    { "GROUP_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 32, -1, -1 },
     { "searchView_", "LADXSearchView;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "builder_", "LASSearchViewImpl_SearchViewCommandBuilder;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "bean_", "LASSearchViewImpl_SearchViewBean;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "paramsBuilder_", "LASSearchViewImpl_SearchViewCommandParamsBuilder;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "paramsBean_", "LASSearchViewImpl_SearchViewParamsBean;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
   };
-  static const void *ptrTable[] = { "loadAttributes", "LNSString;", "LNSString;LNSString;", "create", "LASIFragment;LJavaUtilMap;", "(Lcom/ashera/core/IFragment;Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "remove", "LASIWidget;", "I", "nativeRemoveView", "add", "LASIWidget;I", "createLayoutParams", "LADView;", "getLayoutParams", "setChildAttribute", "LASIWidget;LASWidgetAttribute;LNSString;LNSObject;", "getChildAttribute", "LASIWidget;LASWidgetAttribute;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;LASILifeCycleDecorator;", "getAttribute", "LASWidgetAttribute;LASILifeCycleDecorator;", "checkIosVersion", "setId", "setVisible", "Z", "getPlugin", "nativeCreate", "LJavaUtilMap;", "(Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "nativeCreateView", &ASSearchViewImpl_LOCAL_NAME, &ASSearchViewImpl_GROUP_NAME, "LASSearchViewImpl_SearchViewExt;LASSearchViewImpl_SearchViewCommandBuilder;LASSearchViewImpl_SearchViewBean;LASSearchViewImpl_SearchViewParamsBean;LASSearchViewImpl_SearchViewCommandParamsBuilder;" };
-  static const J2ObjcClassInfo _ASSearchViewImpl = { "SearchViewImpl", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 32, 8, -1, 34, -1, -1, -1 };
+  static const void *ptrTable[] = { "loadAttributes", "LNSString;", "LNSString;LNSString;", "create", "LASIFragment;LJavaUtilMap;", "(Lcom/ashera/core/IFragment;Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "remove", "LASIWidget;", "I", "nativeRemoveView", "add", "LASIWidget;I", "createLayoutParams", "LADView;", "getLayoutParams", "setChildAttribute", "LASIWidget;LASWidgetAttribute;LNSString;LNSObject;", "getChildAttribute", "LASIWidget;LASWidgetAttribute;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;LASILifeCycleDecorator;", "getAttribute", "LASWidgetAttribute;LASILifeCycleDecorator;", "checkIosVersion", "setId", "setVisible", "Z", "nativeCreate", "LJavaUtilMap;", "(Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "nativeCreateView", &ASSearchViewImpl_LOCAL_NAME, &ASSearchViewImpl_GROUP_NAME, "LASSearchViewImpl_SearchViewExt;" };
+  static const J2ObjcClassInfo _ASSearchViewImpl = { "SearchViewImpl", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 27, 4, -1, 33, -1, -1, -1 };
   return &_ASSearchViewImpl;
 }
 
@@ -895,190 +824,6 @@ ASSearchViewImpl_SearchViewExt *create_ASSearchViewImpl_SearchViewExt_initWithAS
 }
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASSearchViewImpl_SearchViewExt)
-
-@implementation ASSearchViewImpl_SearchViewCommandBuilder
-
-- (instancetype)initWithASSearchViewImpl:(ASSearchViewImpl *)outer$ {
-  ASSearchViewImpl_SearchViewCommandBuilder_initWithASSearchViewImpl_(self, outer$);
-  return self;
-}
-
-- (ASSearchViewImpl_SearchViewCommandBuilder *)executeWithBoolean:(jboolean)setter {
-  if (setter) {
-    [this$0_ executeCommandWithJavaUtilMap:command_ withASIWidget_CommandCallBack:nil withInt:ASIWidget_COMMAND_EXEC_SETTER_METHOD];
-    [((id<ASIFragment>) nil_chk([this$0_ getFragment])) remeasure];
-  }
-  [this$0_ executeCommandWithJavaUtilMap:command_ withASIWidget_CommandCallBack:nil withInt:ASIWidget_COMMAND_EXEC_GETTER_METHOD];
-  return self;
-}
-
-- (ASSearchViewImpl_SearchViewCommandBuilder *)setAttributeUnderTestWithNSString:(NSString *)value {
-  id<JavaUtilMap> attrs = [self initCommandWithNSString:@"attributeUnderTest"];
-  (void) [((id<JavaUtilMap>) nil_chk(attrs)) putWithId:@"type" withId:@"attribute"];
-  (void) [attrs putWithId:@"setter" withId:JavaLangBoolean_valueOfWithBoolean_(true)];
-  (void) [attrs putWithId:@"orderSet" withId:JavaLangInteger_valueOfWithInt_(++orderSet_)];
-  (void) [attrs putWithId:@"value" withId:value];
-  return self;
-}
-
-+ (const J2ObjcClassInfo *)__metadata {
-  static J2ObjcMethodInfo methods[] = {
-    { NULL, NULL, 0x1, -1, 0, -1, -1, -1, -1 },
-    { NULL, "LASSearchViewImpl_SearchViewCommandBuilder;", 0x1, 1, 2, -1, -1, -1, -1 },
-    { NULL, "LASSearchViewImpl_SearchViewCommandBuilder;", 0x1, 3, 4, -1, -1, -1, -1 },
-  };
-  #pragma clang diagnostic push
-  #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
-  #pragma clang diagnostic ignored "-Wundeclared-selector"
-  methods[0].selector = @selector(initWithASSearchViewImpl:);
-  methods[1].selector = @selector(executeWithBoolean:);
-  methods[2].selector = @selector(setAttributeUnderTestWithNSString:);
-  #pragma clang diagnostic pop
-  static const J2ObjcFieldInfo fields[] = {
-    { "this$0_", "LASSearchViewImpl;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
-  };
-  static const void *ptrTable[] = { "LASSearchViewImpl;", "execute", "Z", "setAttributeUnderTest", "LNSString;", "Lcom/ashera/layout/ViewGroupImpl$ViewGroupCommandBuilder<Lcom/ashera/toolbar/SearchViewImpl$SearchViewCommandBuilder;>;" };
-  static const J2ObjcClassInfo _ASSearchViewImpl_SearchViewCommandBuilder = { "SearchViewCommandBuilder", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 3, 1, 0, -1, -1, 5, -1 };
-  return &_ASSearchViewImpl_SearchViewCommandBuilder;
-}
-
-@end
-
-void ASSearchViewImpl_SearchViewCommandBuilder_initWithASSearchViewImpl_(ASSearchViewImpl_SearchViewCommandBuilder *self, ASSearchViewImpl *outer$) {
-  self->this$0_ = outer$;
-  ASViewGroupImpl_ViewGroupCommandBuilder_init(self);
-}
-
-ASSearchViewImpl_SearchViewCommandBuilder *new_ASSearchViewImpl_SearchViewCommandBuilder_initWithASSearchViewImpl_(ASSearchViewImpl *outer$) {
-  J2OBJC_NEW_IMPL(ASSearchViewImpl_SearchViewCommandBuilder, initWithASSearchViewImpl_, outer$)
-}
-
-ASSearchViewImpl_SearchViewCommandBuilder *create_ASSearchViewImpl_SearchViewCommandBuilder_initWithASSearchViewImpl_(ASSearchViewImpl *outer$) {
-  J2OBJC_CREATE_IMPL(ASSearchViewImpl_SearchViewCommandBuilder, initWithASSearchViewImpl_, outer$)
-}
-
-J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASSearchViewImpl_SearchViewCommandBuilder)
-
-@implementation ASSearchViewImpl_SearchViewBean
-
-- (instancetype)initWithASSearchViewImpl:(ASSearchViewImpl *)outer$ {
-  ASSearchViewImpl_SearchViewBean_initWithASSearchViewImpl_(self, outer$);
-  return self;
-}
-
-- (void)setAttributeUnderTestWithNSString:(NSString *)value {
-  (void) [((ASSearchViewImpl_SearchViewCommandBuilder *) nil_chk([((ASSearchViewImpl_SearchViewCommandBuilder *) nil_chk([((ASSearchViewImpl_SearchViewCommandBuilder *) nil_chk([this$0_ getBuilder])) reset])) setAttributeUnderTestWithNSString:value])) executeWithBoolean:true];
-}
-
-+ (const J2ObjcClassInfo *)__metadata {
-  static J2ObjcMethodInfo methods[] = {
-    { NULL, NULL, 0x1, -1, 0, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 1, 2, -1, -1, -1, -1 },
-  };
-  #pragma clang diagnostic push
-  #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
-  #pragma clang diagnostic ignored "-Wundeclared-selector"
-  methods[0].selector = @selector(initWithASSearchViewImpl:);
-  methods[1].selector = @selector(setAttributeUnderTestWithNSString:);
-  #pragma clang diagnostic pop
-  static const J2ObjcFieldInfo fields[] = {
-    { "this$0_", "LASSearchViewImpl;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
-  };
-  static const void *ptrTable[] = { "LASSearchViewImpl;", "setAttributeUnderTest", "LNSString;" };
-  static const J2ObjcClassInfo _ASSearchViewImpl_SearchViewBean = { "SearchViewBean", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 2, 1, 0, -1, -1, -1, -1 };
-  return &_ASSearchViewImpl_SearchViewBean;
-}
-
-@end
-
-void ASSearchViewImpl_SearchViewBean_initWithASSearchViewImpl_(ASSearchViewImpl_SearchViewBean *self, ASSearchViewImpl *outer$) {
-  self->this$0_ = outer$;
-  ASViewGroupImpl_ViewGroupBean_initWithASIWidget_(self, outer$);
-}
-
-ASSearchViewImpl_SearchViewBean *new_ASSearchViewImpl_SearchViewBean_initWithASSearchViewImpl_(ASSearchViewImpl *outer$) {
-  J2OBJC_NEW_IMPL(ASSearchViewImpl_SearchViewBean, initWithASSearchViewImpl_, outer$)
-}
-
-ASSearchViewImpl_SearchViewBean *create_ASSearchViewImpl_SearchViewBean_initWithASSearchViewImpl_(ASSearchViewImpl *outer$) {
-  J2OBJC_CREATE_IMPL(ASSearchViewImpl_SearchViewBean, initWithASSearchViewImpl_, outer$)
-}
-
-J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASSearchViewImpl_SearchViewBean)
-
-@implementation ASSearchViewImpl_SearchViewParamsBean
-
-- (instancetype)initWithASSearchViewImpl:(ASSearchViewImpl *)outer$ {
-  ASSearchViewImpl_SearchViewParamsBean_initWithASSearchViewImpl_(self, outer$);
-  return self;
-}
-
-+ (const J2ObjcClassInfo *)__metadata {
-  static J2ObjcMethodInfo methods[] = {
-    { NULL, NULL, 0x1, -1, 0, -1, -1, -1, -1 },
-  };
-  #pragma clang diagnostic push
-  #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
-  #pragma clang diagnostic ignored "-Wundeclared-selector"
-  methods[0].selector = @selector(initWithASSearchViewImpl:);
-  #pragma clang diagnostic pop
-  static const void *ptrTable[] = { "LASSearchViewImpl;" };
-  static const J2ObjcClassInfo _ASSearchViewImpl_SearchViewParamsBean = { "SearchViewParamsBean", "com.ashera.toolbar", ptrTable, methods, NULL, 7, 0x1, 1, 0, 0, -1, -1, -1, -1 };
-  return &_ASSearchViewImpl_SearchViewParamsBean;
-}
-
-@end
-
-void ASSearchViewImpl_SearchViewParamsBean_initWithASSearchViewImpl_(ASSearchViewImpl_SearchViewParamsBean *self, ASSearchViewImpl *outer$) {
-  ASViewGroupImpl_ViewGroupParamsBean_init(self);
-}
-
-ASSearchViewImpl_SearchViewParamsBean *new_ASSearchViewImpl_SearchViewParamsBean_initWithASSearchViewImpl_(ASSearchViewImpl *outer$) {
-  J2OBJC_NEW_IMPL(ASSearchViewImpl_SearchViewParamsBean, initWithASSearchViewImpl_, outer$)
-}
-
-ASSearchViewImpl_SearchViewParamsBean *create_ASSearchViewImpl_SearchViewParamsBean_initWithASSearchViewImpl_(ASSearchViewImpl *outer$) {
-  J2OBJC_CREATE_IMPL(ASSearchViewImpl_SearchViewParamsBean, initWithASSearchViewImpl_, outer$)
-}
-
-J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASSearchViewImpl_SearchViewParamsBean)
-
-@implementation ASSearchViewImpl_SearchViewCommandParamsBuilder
-
-- (instancetype)initWithASSearchViewImpl:(ASSearchViewImpl *)outer$ {
-  ASSearchViewImpl_SearchViewCommandParamsBuilder_initWithASSearchViewImpl_(self, outer$);
-  return self;
-}
-
-+ (const J2ObjcClassInfo *)__metadata {
-  static J2ObjcMethodInfo methods[] = {
-    { NULL, NULL, 0x1, -1, 0, -1, -1, -1, -1 },
-  };
-  #pragma clang diagnostic push
-  #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
-  #pragma clang diagnostic ignored "-Wundeclared-selector"
-  methods[0].selector = @selector(initWithASSearchViewImpl:);
-  #pragma clang diagnostic pop
-  static const void *ptrTable[] = { "LASSearchViewImpl;", "Lcom/ashera/layout/ViewGroupImpl$ViewGroupCommandParamsBuilder<Lcom/ashera/toolbar/SearchViewImpl$SearchViewCommandParamsBuilder;>;" };
-  static const J2ObjcClassInfo _ASSearchViewImpl_SearchViewCommandParamsBuilder = { "SearchViewCommandParamsBuilder", "com.ashera.toolbar", ptrTable, methods, NULL, 7, 0x1, 1, 0, 0, -1, -1, 1, -1 };
-  return &_ASSearchViewImpl_SearchViewCommandParamsBuilder;
-}
-
-@end
-
-void ASSearchViewImpl_SearchViewCommandParamsBuilder_initWithASSearchViewImpl_(ASSearchViewImpl_SearchViewCommandParamsBuilder *self, ASSearchViewImpl *outer$) {
-  ASViewGroupImpl_ViewGroupCommandParamsBuilder_init(self);
-}
-
-ASSearchViewImpl_SearchViewCommandParamsBuilder *new_ASSearchViewImpl_SearchViewCommandParamsBuilder_initWithASSearchViewImpl_(ASSearchViewImpl *outer$) {
-  J2OBJC_NEW_IMPL(ASSearchViewImpl_SearchViewCommandParamsBuilder, initWithASSearchViewImpl_, outer$)
-}
-
-ASSearchViewImpl_SearchViewCommandParamsBuilder *create_ASSearchViewImpl_SearchViewCommandParamsBuilder_initWithASSearchViewImpl_(ASSearchViewImpl *outer$) {
-  J2OBJC_CREATE_IMPL(ASSearchViewImpl_SearchViewCommandParamsBuilder, initWithASSearchViewImpl_, outer$)
-}
-
-J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASSearchViewImpl_SearchViewCommandParamsBuilder)
 
 @implementation ASSearchViewImpl_$Lambda$1
 
