@@ -33,6 +33,7 @@
 #include "J2ObjC_source.h"
 #include "LayoutTransition.h"
 #include "MeasureEvent.h"
+#include "Menu.h"
 #include "MenuBuilder.h"
 #include "MenuItem.h"
 #include "MenuParser.h"
@@ -141,6 +142,10 @@
 - (void)setMenuWithId:(id)objValue;
 
 - (void)createMenu;
+
+- (void)parseMenuWithNSString:(NSString *)menuId
+                   withADMenu:(id<ADMenu>)menu
+             withASHasWidgets:(id<ASHasWidgets>)parent;
 
 - (void)setOnMenuItemClickListenerWithNSString:(NSString *)strValue
                                         withId:(id)objValue;
@@ -261,6 +266,8 @@ __attribute__((unused)) static void ASToolbarImpl_setNavigationIconWithASWidgetA
 __attribute__((unused)) static void ASToolbarImpl_setMenuWithId_(ASToolbarImpl *self, id objValue);
 
 __attribute__((unused)) static void ASToolbarImpl_createMenu(ASToolbarImpl *self);
+
+__attribute__((unused)) static void ASToolbarImpl_parseMenuWithNSString_withADMenu_withASHasWidgets_(ASToolbarImpl *self, NSString *menuId, id<ADMenu> menu, id<ASHasWidgets> parent);
 
 __attribute__((unused)) static void ASToolbarImpl_setOnMenuItemClickListenerWithNSString_withId_(ASToolbarImpl *self, NSString *strValue, id objValue);
 
@@ -1229,6 +1236,12 @@ J2OBJC_IGNORE_DESIGNATED_END
   ASToolbarImpl_createMenu(self);
 }
 
+- (void)parseMenuWithNSString:(NSString *)menuId
+                   withADMenu:(id<ADMenu>)menu
+             withASHasWidgets:(id<ASHasWidgets>)parent {
+  ASToolbarImpl_parseMenuWithNSString_withADMenu_withASHasWidgets_(self, menuId, menu, parent);
+}
+
 - (id<ADXToolbar_OnMenuItemClickListener>)getOnMenuItemClickListener {
   return onMenuItemClickListener_;
 }
@@ -1436,30 +1449,29 @@ J2OBJC_IGNORE_DESIGNATED_END
     { NULL, "V", 0x2, 32, 20, -1, -1, -1, -1 },
     { NULL, "V", 0x2, 33, 34, -1, -1, -1, -1 },
     { NULL, "V", 0x2, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LADXToolbar_OnMenuItemClickListener;", 0x1, -1, -1, -1, -1, -1, -1 },
     { NULL, "V", 0x2, 35, 36, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 37, 20, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 38, 34, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 39, 34, -1, -1, -1, -1 },
+    { NULL, "LADXToolbar_OnMenuItemClickListener;", 0x1, -1, -1, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 37, 38, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 39, 20, -1, -1, -1, -1 },
     { NULL, "V", 0x2, 40, 34, -1, -1, -1, -1 },
     { NULL, "V", 0x2, 41, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 42, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 43, 34, -1, -1, -1, -1 },
     { NULL, "V", 0x1, -1, -1, -1, -1, -1, -1 },
-    { NULL, "LASIWidget;", 0x2, 42, 43, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 44, 45, -1, -1, -1, -1 },
-    { NULL, "LADXBadgeDrawable;", 0x2, 46, 8, -1, -1, -1, -1 },
+    { NULL, "LASIWidget;", 0x2, 44, 45, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 46, 47, -1, -1, -1, -1 },
+    { NULL, "LADXBadgeDrawable;", 0x2, 48, 8, -1, -1, -1, -1 },
     { NULL, "V", 0x2, -1, -1, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 47, 34, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 48, 34, -1, -1, -1, -1 },
     { NULL, "V", 0x2, 49, 34, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 50, 51, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 52, 34, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 53, 54, -1, -1, -1, -1 },
-    { NULL, "LADAutoCompleteTextView;", 0x2, 55, 56, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 57, 34, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 58, 34, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 59, 60, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 61, 34, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 62, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 50, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 51, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 52, 53, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 54, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 55, 56, -1, -1, -1, -1 },
+    { NULL, "LADAutoCompleteTextView;", 0x2, 57, 58, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 59, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 60, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 61, 62, -1, -1, -1, -1 },
     { NULL, "V", 0x2, 63, 34, -1, -1, -1, -1 },
     { NULL, "V", 0x2, 64, 34, -1, -1, -1, -1 },
     { NULL, "V", 0x2, 65, 34, -1, -1, -1, -1 },
@@ -1468,9 +1480,11 @@ J2OBJC_IGNORE_DESIGNATED_END
     { NULL, "V", 0x2, 68, 34, -1, -1, -1, -1 },
     { NULL, "V", 0x2, 69, 34, -1, -1, -1, -1 },
     { NULL, "V", 0x2, 70, 34, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 71, 1, -1, -1, -1, -1 },
-    { NULL, "V", 0x1, 72, 73, -1, -1, -1, -1 },
-    { NULL, "V", 0x2, 74, 75, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 71, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 72, 34, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 73, 1, -1, -1, -1, -1 },
+    { NULL, "V", 0x1, 74, 75, -1, -1, -1, -1 },
+    { NULL, "V", 0x2, 76, 77, -1, -1, -1, -1 },
   };
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wobjc-multiple-method-names"
@@ -1510,46 +1524,47 @@ J2OBJC_IGNORE_DESIGNATED_END
   methods[32].selector = @selector(setNavigationIconWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
   methods[33].selector = @selector(setMenuWithId:);
   methods[34].selector = @selector(createMenu);
-  methods[35].selector = @selector(getOnMenuItemClickListener);
-  methods[36].selector = @selector(setOnMenuItemClickListenerWithNSString:withId:);
-  methods[37].selector = @selector(setOverflowIconWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
-  methods[38].selector = @selector(setGravityWithId:);
-  methods[39].selector = @selector(setMaxButtonHeightWithId:);
-  methods[40].selector = @selector(setButtonGravityWithId:);
-  methods[41].selector = @selector(handlePreMeasureWithId:);
-  methods[42].selector = @selector(initialized);
-  methods[43].selector = @selector(getAutoCompleteImplWithADAutoCompleteTextView:);
-  methods[44].selector = @selector(setOnSuggestionListenerWithADMenuItem:withADAutoCompleteTextView:);
-  methods[45].selector = @selector(getOrCreateBadgeWithInt:);
-  methods[46].selector = @selector(reapplyBadgeDrawables);
-  methods[47].selector = @selector(setContentInsetEndWithId:);
-  methods[48].selector = @selector(setContentInsetStartWithId:);
-  methods[49].selector = @selector(setTitleMarginWithId:);
-  methods[50].selector = @selector(setOnQueryTextListenerWithNSString:withNSString:withId:);
-  methods[51].selector = @selector(setActionLayoutEventIdsWithId:);
-  methods[52].selector = @selector(applySearchViewAttributesWithADMenuItem:);
-  methods[53].selector = @selector(findAutoCompleteWithADViewGroup:);
-  methods[54].selector = @selector(setSearchviewAttributesWithId:);
-  methods[55].selector = @selector(setBadgeBackgroundColorsWithId:);
-  methods[56].selector = @selector(setValueOnBadgeDrawableWithId:withASToolbarImpl_ValueSetter:);
-  methods[57].selector = @selector(setBadgeMenuItemIdsWithId:);
-  methods[58].selector = @selector(setBadgeNumbersWithId:);
-  methods[59].selector = @selector(setBadgeVerticalOffsetsWithId:);
-  methods[60].selector = @selector(setBadgeHorizontalOffsetsWithId:);
-  methods[61].selector = @selector(setBadgeGravitiesWithId:);
-  methods[62].selector = @selector(setBadgeMaxCharacterCountsWithId:);
-  methods[63].selector = @selector(setBadgeAlphasWithId:);
-  methods[64].selector = @selector(setBadgeTextColorsWithId:);
-  methods[65].selector = @selector(setBadgeIsVisiblesWithId:);
-  methods[66].selector = @selector(setTextAppearanceResourcesWithId:);
-  methods[67].selector = @selector(setIdWithNSString:);
-  methods[68].selector = @selector(setVisibleWithBoolean:);
-  methods[69].selector = @selector(setNavigationOnClickListenerWithASToolbarImpl_OnClickListener:);
+  methods[35].selector = @selector(parseMenuWithNSString:withADMenu:withASHasWidgets:);
+  methods[36].selector = @selector(getOnMenuItemClickListener);
+  methods[37].selector = @selector(setOnMenuItemClickListenerWithNSString:withId:);
+  methods[38].selector = @selector(setOverflowIconWithASWidgetAttribute:withNSString:withId:withASILifeCycleDecorator:);
+  methods[39].selector = @selector(setGravityWithId:);
+  methods[40].selector = @selector(setMaxButtonHeightWithId:);
+  methods[41].selector = @selector(setButtonGravityWithId:);
+  methods[42].selector = @selector(handlePreMeasureWithId:);
+  methods[43].selector = @selector(initialized);
+  methods[44].selector = @selector(getAutoCompleteImplWithADAutoCompleteTextView:);
+  methods[45].selector = @selector(setOnSuggestionListenerWithADMenuItem:withADAutoCompleteTextView:);
+  methods[46].selector = @selector(getOrCreateBadgeWithInt:);
+  methods[47].selector = @selector(reapplyBadgeDrawables);
+  methods[48].selector = @selector(setContentInsetEndWithId:);
+  methods[49].selector = @selector(setContentInsetStartWithId:);
+  methods[50].selector = @selector(setTitleMarginWithId:);
+  methods[51].selector = @selector(setOnQueryTextListenerWithNSString:withNSString:withId:);
+  methods[52].selector = @selector(setActionLayoutEventIdsWithId:);
+  methods[53].selector = @selector(applySearchViewAttributesWithADMenuItem:);
+  methods[54].selector = @selector(findAutoCompleteWithADViewGroup:);
+  methods[55].selector = @selector(setSearchviewAttributesWithId:);
+  methods[56].selector = @selector(setBadgeBackgroundColorsWithId:);
+  methods[57].selector = @selector(setValueOnBadgeDrawableWithId:withASToolbarImpl_ValueSetter:);
+  methods[58].selector = @selector(setBadgeMenuItemIdsWithId:);
+  methods[59].selector = @selector(setBadgeNumbersWithId:);
+  methods[60].selector = @selector(setBadgeVerticalOffsetsWithId:);
+  methods[61].selector = @selector(setBadgeHorizontalOffsetsWithId:);
+  methods[62].selector = @selector(setBadgeGravitiesWithId:);
+  methods[63].selector = @selector(setBadgeMaxCharacterCountsWithId:);
+  methods[64].selector = @selector(setBadgeAlphasWithId:);
+  methods[65].selector = @selector(setBadgeTextColorsWithId:);
+  methods[66].selector = @selector(setBadgeIsVisiblesWithId:);
+  methods[67].selector = @selector(setTextAppearanceResourcesWithId:);
+  methods[68].selector = @selector(setIdWithNSString:);
+  methods[69].selector = @selector(setVisibleWithBoolean:);
+  methods[70].selector = @selector(setNavigationOnClickListenerWithASToolbarImpl_OnClickListener:);
   #pragma clang diagnostic pop
   static const J2ObjcFieldInfo fields[] = {
     { "uiView_", "LNSObject;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "LOCAL_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 76, -1, -1 },
-    { "GROUP_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 77, -1, -1 },
+    { "LOCAL_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 78, -1, -1 },
+    { "GROUP_NAME", "LNSString;", .constantValue.asLong = 0, 0x19, -1, 79, -1, -1 },
     { "toolbar_", "LADXToolbar;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "PREMEASURE_EVENT_", "LNSString;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "titleView_", "LASIWidget;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
@@ -1562,15 +1577,15 @@ J2OBJC_IGNORE_DESIGNATED_END
     { "overflowIcon_", "LNSObject;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "mButtonGravity_", "I", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "screenWidth_", "I", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "badgeDrawables_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 78, -1 },
+    { "badgeDrawables_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 80, -1 },
     { "onQueryTextSubmit_", "LADXSearchView_OnQueryTextListener;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
     { "onQueryTextChange_", "LADXSearchView_OnQueryTextListener;", .constantValue.asLong = 0, 0x2, -1, -1, -1, -1 },
-    { "actionLayoutEventIds_", "LJavaUtilList;", .constantValue.asLong = 0, 0x2, -1, -1, 79, -1 },
-    { "searchviewAttributes_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 80, -1 },
-    { "badgeMenuItemIds_", "LJavaUtilList;", .constantValue.asLong = 0, 0x2, -1, -1, 81, -1 },
+    { "actionLayoutEventIds_", "LJavaUtilList;", .constantValue.asLong = 0, 0x2, -1, -1, 81, -1 },
+    { "searchviewAttributes_", "LJavaUtilMap;", .constantValue.asLong = 0, 0x2, -1, -1, 82, -1 },
+    { "badgeMenuItemIds_", "LJavaUtilList;", .constantValue.asLong = 0, 0x2, -1, -1, 83, -1 },
   };
-  static const void *ptrTable[] = { "loadAttributes", "LNSString;", "LNSString;LNSString;", "create", "LASIFragment;LJavaUtilMap;", "(Lcom/ashera/core/IFragment;Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "remove", "LASIWidget;", "I", "nativeRemoveView", "add", "LASIWidget;I", "createLayoutParams", "LADView;", "getLayoutParams", "setChildAttribute", "LASIWidget;LASWidgetAttribute;LNSString;LNSObject;", "getChildAttribute", "LASIWidget;LASWidgetAttribute;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;LASILifeCycleDecorator;", "getAttribute", "LASWidgetAttribute;LASILifeCycleDecorator;", "checkIosVersion", "nativeCreate", "LJavaUtilMap;", "(Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "setTitle", "setSubtitleColor", "setTitleTextColor", "setSubtitle", "setLogo", "setNavigationIcon", "setMenu", "LNSObject;", "setOnMenuItemClickListener", "LNSString;LNSObject;", "setOverflowIcon", "setGravity", "setMaxButtonHeight", "setButtonGravity", "handlePreMeasure", "getAutoCompleteImpl", "LADAutoCompleteTextView;", "setOnSuggestionListener", "LADMenuItem;LADAutoCompleteTextView;", "getOrCreateBadge", "setContentInsetEnd", "setContentInsetStart", "setTitleMargin", "setOnQueryTextListener", "LNSString;LNSString;LNSObject;", "setActionLayoutEventIds", "applySearchViewAttributes", "LADMenuItem;", "findAutoComplete", "LADViewGroup;", "setSearchviewAttributes", "setBadgeBackgroundColors", "setValueOnBadgeDrawable", "LNSObject;LASToolbarImpl_ValueSetter;", "setBadgeMenuItemIds", "setBadgeNumbers", "setBadgeVerticalOffsets", "setBadgeHorizontalOffsets", "setBadgeGravities", "setBadgeMaxCharacterCounts", "setBadgeAlphas", "setBadgeTextColors", "setBadgeIsVisibles", "setTextAppearanceResources", "setId", "setVisible", "Z", "setNavigationOnClickListener", "LASToolbarImpl_OnClickListener;", &ASToolbarImpl_LOCAL_NAME, &ASToolbarImpl_GROUP_NAME, "Ljava/util/Map<Ljava/lang/Integer;Lcom/google/android/material/badge/BadgeDrawable;>;", "Ljava/util/List<Ljava/lang/String;>;", "Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;", "Ljava/util/List<Ljava/lang/Object;>;", "LASToolbarImpl_PreMeasureHandler;LASToolbarImpl_ToolbarExt;LASToolbarImpl_ValueSetter;LASToolbarImpl_OnQueryTextListener;LASToolbarImpl_OnClickListener;LASToolbarImpl_OnMenuItemClickListener;" };
-  static const J2ObjcClassInfo _ASToolbarImpl = { "ToolbarImpl", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 70, 21, -1, 82, -1, -1, -1 };
+  static const void *ptrTable[] = { "loadAttributes", "LNSString;", "LNSString;LNSString;", "create", "LASIFragment;LJavaUtilMap;", "(Lcom/ashera/core/IFragment;Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "remove", "LASIWidget;", "I", "nativeRemoveView", "add", "LASIWidget;I", "createLayoutParams", "LADView;", "getLayoutParams", "setChildAttribute", "LASIWidget;LASWidgetAttribute;LNSString;LNSObject;", "getChildAttribute", "LASIWidget;LASWidgetAttribute;", "setAttribute", "LASWidgetAttribute;LNSString;LNSObject;LASILifeCycleDecorator;", "getAttribute", "LASWidgetAttribute;LASILifeCycleDecorator;", "checkIosVersion", "nativeCreate", "LJavaUtilMap;", "(Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;)V", "setTitle", "setSubtitleColor", "setTitleTextColor", "setSubtitle", "setLogo", "setNavigationIcon", "setMenu", "LNSObject;", "parseMenu", "LNSString;LADMenu;LASHasWidgets;", "setOnMenuItemClickListener", "LNSString;LNSObject;", "setOverflowIcon", "setGravity", "setMaxButtonHeight", "setButtonGravity", "handlePreMeasure", "getAutoCompleteImpl", "LADAutoCompleteTextView;", "setOnSuggestionListener", "LADMenuItem;LADAutoCompleteTextView;", "getOrCreateBadge", "setContentInsetEnd", "setContentInsetStart", "setTitleMargin", "setOnQueryTextListener", "LNSString;LNSString;LNSObject;", "setActionLayoutEventIds", "applySearchViewAttributes", "LADMenuItem;", "findAutoComplete", "LADViewGroup;", "setSearchviewAttributes", "setBadgeBackgroundColors", "setValueOnBadgeDrawable", "LNSObject;LASToolbarImpl_ValueSetter;", "setBadgeMenuItemIds", "setBadgeNumbers", "setBadgeVerticalOffsets", "setBadgeHorizontalOffsets", "setBadgeGravities", "setBadgeMaxCharacterCounts", "setBadgeAlphas", "setBadgeTextColors", "setBadgeIsVisibles", "setTextAppearanceResources", "setId", "setVisible", "Z", "setNavigationOnClickListener", "LASToolbarImpl_OnClickListener;", &ASToolbarImpl_LOCAL_NAME, &ASToolbarImpl_GROUP_NAME, "Ljava/util/Map<Ljava/lang/Integer;Lcom/google/android/material/badge/BadgeDrawable;>;", "Ljava/util/List<Ljava/lang/String;>;", "Ljava/util/Map<Ljava/lang/String;Ljava/lang/Object;>;", "Ljava/util/List<Ljava/lang/Object;>;", "LASToolbarImpl_PreMeasureHandler;LASToolbarImpl_ToolbarExt;LASToolbarImpl_ValueSetter;LASToolbarImpl_OnQueryTextListener;LASToolbarImpl_OnClickListener;LASToolbarImpl_OnMenuItemClickListener;" };
+  static const J2ObjcClassInfo _ASToolbarImpl = { "ToolbarImpl", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x1, 71, 21, -1, 84, -1, -1, -1 };
   return &_ASToolbarImpl;
 }
 
@@ -1735,10 +1750,8 @@ void ASToolbarImpl_createMenu(ASToolbarImpl *self) {
       ADXToolbar_LayoutParams *lp = (ADXToolbar_LayoutParams *) cast_chk([((ADXActionMenuView *) nil_chk(((ADXActionMenuView *) cast_chk([((id<ASIWidget>) nil_chk(self->actionMenuView_)) asWidget], [ADXActionMenuView class])))) getLayoutParams], [ADXToolbar_LayoutParams class]);
       ((ADXToolbar_LayoutParams *) nil_chk(lp))->gravity_ = ADXGravityCompat_END | (self->mButtonGravity_ & ADGravity_VERTICAL_GRAVITY_MASK);
     }
-    NSString *key = [((NSString *) nil_chk(self->menu_)) java_replace:@"@menu/" withSequence:@""];
-    NSString *json = ASResourceBundleUtils_getStringWithNSString_withNSString_withASIFragment_(@"menu/menu", key, self->fragment_);
     ADXActionMenuView *actionMenu = (ADXActionMenuView *) cast_chk([((id<ASIWidget>) nil_chk(self->actionMenuView_)) asWidget], [ADXActionMenuView class]);
-    ADXMenuParser_parseMenuWithASHasWidgets_withADXMenuBuilder_withNSString_withASIFragment_((id<ASHasWidgets>) cast_check(self->actionMenuView_, ASHasWidgets_class_()), [((ADXActionMenuView *) nil_chk(actionMenu)) getMenu], json, self->fragment_);
+    ASToolbarImpl_parseMenuWithNSString_withADMenu_withASHasWidgets_(self, self->menu_, [((ADXActionMenuView *) nil_chk(actionMenu)) getMenu], (id<ASHasWidgets>) cast_check(self->actionMenuView_, ASHasWidgets_class_()));
     [actionMenu updateMenuView];
     id<ASIWidget> overFlowButton = [((ASActionMenuViewImpl *) nil_chk(((ASActionMenuViewImpl *) cast_chk(self->actionMenuView_, [ASActionMenuViewImpl class])))) getOverFlowButtonWidget];
     if (overFlowButton != nil && self->overflowIcon_ != nil) {
@@ -1747,6 +1760,19 @@ void ASToolbarImpl_createMenu(ASToolbarImpl *self) {
     [((id<ASIWidget>) nil_chk(self->actionMenuView_)) initialized];
     ASToolbarImpl_reapplyBadgeDrawables(self);
   }
+}
+
+void ASToolbarImpl_parseMenuWithNSString_withADMenu_withASHasWidgets_(ASToolbarImpl *self, NSString *menuId, id<ADMenu> menu, id<ASHasWidgets> parent) {
+  NSString *inlineResource = [((id<ASIFragment>) nil_chk(self->fragment_)) getInlineResourceWithNSString:menuId];
+  NSString *json;
+  if (inlineResource != nil) {
+    json = ASPluginInvoker_xml2jsonWithNSString_withASIFragment_(inlineResource, self->fragment_);
+  }
+  else {
+    NSString *key = [((NSString *) nil_chk(menuId)) java_replace:@"@menu/" withSequence:@""];
+    json = ASResourceBundleUtils_getStringWithNSString_withNSString_withASIFragment_(@"menu/menu", key, self->fragment_);
+  }
+  ADXMenuParser_parseMenuWithASHasWidgets_withADMenu_withNSString_withASIFragment_(parent, menu, json, self->fragment_);
 }
 
 void ASToolbarImpl_setOnMenuItemClickListenerWithNSString_withId_(ASToolbarImpl *self, NSString *strValue, id objValue) {
@@ -2571,6 +2597,7 @@ J2OBJC_INTERFACE_TYPE_LITERAL_SOURCE(ASToolbarImpl_ValueSetter)
   (void) [obj putWithId:@"eventType" withId:@"querytextsubmit"];
   (void) [obj putWithId:@"fragmentId" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getFragmentId]];
   (void) [obj putWithId:@"actionUrl" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getActionUrl]];
+  (void) [obj putWithId:@"namespace" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getNamespace]];
   if ([((id<ASIWidget>) nil_chk(w_)) getComponentId] != nil) {
     (void) [obj putWithId:@"componentId" withId:[((id<ASIWidget>) nil_chk(w_)) getComponentId]];
   }
@@ -2623,6 +2650,7 @@ J2OBJC_INTERFACE_TYPE_LITERAL_SOURCE(ASToolbarImpl_ValueSetter)
   (void) [obj putWithId:@"eventType" withId:@"querytextchange"];
   (void) [obj putWithId:@"fragmentId" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getFragmentId]];
   (void) [obj putWithId:@"actionUrl" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getActionUrl]];
+  (void) [obj putWithId:@"namespace" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getNamespace]];
   if ([((id<ASIWidget>) nil_chk(w_)) getComponentId] != nil) {
     (void) [obj putWithId:@"componentId" withId:[((id<ASIWidget>) nil_chk(w_)) getComponentId]];
   }
@@ -2755,6 +2783,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_OnQueryTextListener)
   (void) [obj putWithId:@"eventType" withId:@"click"];
   (void) [obj putWithId:@"fragmentId" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getFragmentId]];
   (void) [obj putWithId:@"actionUrl" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getActionUrl]];
+  (void) [obj putWithId:@"namespace" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getNamespace]];
   if ([((id<ASIWidget>) nil_chk(w_)) getComponentId] != nil) {
     (void) [obj putWithId:@"componentId" withId:[((id<ASIWidget>) nil_chk(w_)) getComponentId]];
   }
@@ -2886,6 +2915,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_OnClickListener)
   (void) [obj putWithId:@"eventType" withId:@"menuitemclick"];
   (void) [obj putWithId:@"fragmentId" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getFragmentId]];
   (void) [obj putWithId:@"actionUrl" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getActionUrl]];
+  (void) [obj putWithId:@"namespace" withId:[((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getNamespace]];
   if ([((id<ASIWidget>) nil_chk(w_)) getComponentId] != nil) {
     (void) [obj putWithId:@"componentId" withId:[((id<ASIWidget>) nil_chk(w_)) getComponentId]];
   }

@@ -4,18 +4,12 @@
 //
 
 #include "CollapsibleActionView.h"
-#include "IOSClass.h"
-#include "IOSObjectArray.h"
 #include "J2ObjC_source.h"
-#include "java/lang/Deprecated.h"
-#include "java/lang/annotation/Annotation.h"
 
 
 @interface ADXCollapsibleActionView : NSObject
 
 @end
-
-__attribute__((unused)) static IOSObjectArray *ADXCollapsibleActionView__Annotations$0(void);
 
 @implementation ADXCollapsibleActionView
 
@@ -30,15 +24,10 @@ __attribute__((unused)) static IOSObjectArray *ADXCollapsibleActionView__Annotat
   methods[0].selector = @selector(onActionViewExpanded);
   methods[1].selector = @selector(onActionViewCollapsed);
   #pragma clang diagnostic pop
-  static const void *ptrTable[] = { (void *)&ADXCollapsibleActionView__Annotations$0 };
-  static const J2ObjcClassInfo _ADXCollapsibleActionView = { "CollapsibleActionView", "androidx.appcompat.view", ptrTable, methods, NULL, 7, 0x609, 2, 0, -1, -1, -1, -1, 0 };
+  static const J2ObjcClassInfo _ADXCollapsibleActionView = { "CollapsibleActionView", "androidx.appcompat.view", NULL, methods, NULL, 7, 0x609, 2, 0, -1, -1, -1, -1, -1 };
   return &_ADXCollapsibleActionView;
 }
 
 @end
-
-IOSObjectArray *ADXCollapsibleActionView__Annotations$0() {
-  return [IOSObjectArray arrayWithObjects:(id[]){ create_JavaLangDeprecated() } count:1 type:JavaLangAnnotationAnnotation_class_()];
-}
 
 J2OBJC_INTERFACE_TYPE_LITERAL_SOURCE(ADXCollapsibleActionView)

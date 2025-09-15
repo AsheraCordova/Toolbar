@@ -1018,11 +1018,9 @@ public class ToolbarImpl extends BaseHasWidgets {
 				lp.gravity = GravityCompat.END | (mButtonGravity & Gravity.VERTICAL_GRAVITY_MASK);
 			}
 			
-			String key = this.menu.replace("@menu/", "");
-	
-			String json = com.ashera.utils.ResourceBundleUtils.getString("menu/menu", key, fragment);
+			
 			androidx.appcompat.widget.ActionMenuView actionMenu = (androidx.appcompat.widget.ActionMenuView) actionMenuView.asWidget();
-			androidx.appcompat.view.menu.MenuParser.parseMenu((HasWidgets) actionMenuView, actionMenu.getMenu(), json, fragment);
+			parseMenu(this.menu, actionMenu.getMenu(), (HasWidgets) actionMenuView);
 			actionMenu.updateMenuView();
 			
 			IWidget overFlowButton = ((ActionMenuViewImpl) actionMenuView).getOverFlowButtonWidget();
@@ -1034,6 +1032,20 @@ public class ToolbarImpl extends BaseHasWidgets {
 			actionMenuView.initialized();
 			reapplyBadgeDrawables();
 		}
+	}
+
+
+	private void parseMenu(String menuId, Menu menu, HasWidgets parent) {
+		String inlineResource = fragment.getInlineResource(menuId);
+		String json;
+		if (inlineResource != null) {
+			json = PluginInvoker.xml2json(inlineResource, fragment);
+		} else {
+			String key = menuId.replace("@menu/", "");
+			json = com.ashera.utils.ResourceBundleUtils.getString("menu/menu", key, fragment);
+		}
+		
+		androidx.appcompat.view.menu.MenuParser.parseMenu(parent, menu, json, fragment);
 	}
 
 	private Toolbar.OnMenuItemClickListener onMenuItemClickListener;
@@ -1423,6 +1435,7 @@ public java.util.Map<String, Object> getOnQueryTextSubmitEventObj(String query) 
     obj.put("eventType", "querytextsubmit");
     obj.put("fragmentId", w.getFragment().getFragmentId());
     obj.put("actionUrl", w.getFragment().getActionUrl());
+    obj.put("namespace", w.getFragment().getNamespace());
     
     if (w.getComponentId() != null) {
     	obj.put("componentId", w.getComponentId());
@@ -1486,6 +1499,7 @@ public java.util.Map<String, Object> getOnQueryTextChangeEventObj(String newText
     obj.put("eventType", "querytextchange");
     obj.put("fragmentId", w.getFragment().getFragmentId());
     obj.put("actionUrl", w.getFragment().getActionUrl());
+    obj.put("namespace", w.getFragment().getNamespace());
     
     if (w.getComponentId() != null) {
     	obj.put("componentId", w.getComponentId());
@@ -1558,6 +1572,7 @@ public java.util.Map<String, Object> getOnClickEventObj(View v) {
     obj.put("eventType", "click");
     obj.put("fragmentId", w.getFragment().getFragmentId());
     obj.put("actionUrl", w.getFragment().getActionUrl());
+    obj.put("namespace", w.getFragment().getNamespace());
     
     if (w.getComponentId() != null) {
     	obj.put("componentId", w.getComponentId());
@@ -1633,6 +1648,7 @@ public java.util.Map<String, Object> getOnMenuItemClickEventObj(MenuItem item) {
     obj.put("eventType", "menuitemclick");
     obj.put("fragmentId", w.getFragment().getFragmentId());
     obj.put("actionUrl", w.getFragment().getActionUrl());
+    obj.put("namespace", w.getFragment().getNamespace());
     
     if (w.getComponentId() != null) {
     	obj.put("componentId", w.getComponentId());

@@ -33,6 +33,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.graphics.drawable.Drawable;
 import androidx.appcompat.widget.SearchView;
 import com.google.android.material.badge.BadgeDrawable;
+import java.util.Map.Entry;
 
 @SuppressLint("NewApi")
 public class ToolbarImpl extends BaseHasWidgets {
@@ -92,6 +93,7 @@ public class ToolbarImpl extends BaseHasWidgets {
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("onQueryTextSubmit").withType("string"));
 		WidgetFactory.registerAttribute(localName, new WidgetAttribute.Builder().withName("onQueryTextChange").withType("string"));
 	
+	loadCustomAttributes(localName);
 	}
 	
 	public ToolbarImpl() {
@@ -1067,6 +1069,138 @@ private void setTextAppearanceResources(Object objValue) {
 }
 
 
+
+	public static void parseMenu(com.ashera.widget.HasWidgets parent, Menu menu, String json, com.ashera.core.IFragment fragment) {
+		Map<String, Object> jsonMap = com.ashera.widget.PluginInvoker.unmarshal(json, java.util.Map.class);
+		
+		if (jsonMap.containsKey("menu")) {
+			Map<String, Object> menuMap = com.ashera.widget.PluginInvoker.getMap(jsonMap.get("menu"));
+			parseGroupAndItem(parent, menu, fragment, menuMap, 0); 			
+		}
+	}
+
+	private static void parseGroupAndItem(com.ashera.widget.HasWidgets parent, Menu menu,
+			com.ashera.core.IFragment fragment, Map<String, Object> parentMap, int groupId) {
+		for (Iterator<Entry<String, Object>> iterator = parentMap.entrySet().iterator(); iterator.hasNext();) {
+			Entry<String, Object> entry = iterator.next();
+			Object item = entry.getValue();
+			switch (entry.getKey()) {
+			case "item":
+				createMenuItemMapOrList(parent, menu, fragment, item, groupId);
+				break;
+			case "group":
+				List<Object> itemList = com.ashera.widget.PluginInvoker.getList(item);
+				if (itemList != null) {
+					for (Object itemObj : itemList) {
+						parseGroup(parent, menu, fragment, itemObj);
+					}
+				} else {
+					parseGroup(parent, menu, fragment, item);
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	private static void parseGroup(com.ashera.widget.HasWidgets parent, Menu menu,
+			com.ashera.core.IFragment fragment, Object item) {
+		Map<String, Object> itemMap = com.ashera.widget.PluginInvoker.getMap(item);
+		int menugroupId = 0;
+		if (itemMap.containsKey("@android:id")) {
+			menugroupId = (int) com.ashera.widget.PluginInvoker.convertFrom(com.ashera.widget.PluginInvoker.getConverter("id"), 
+					null, itemMap.get("@android:id"), fragment);
+		}
+		
+		parseGroupAndItem(parent, menu, fragment, itemMap, menugroupId);
+	}
+
+	private static void createMenuItemMapOrList(com.ashera.widget.HasWidgets parent, Menu menu,
+			com.ashera.core.IFragment fragment, Object item, int groupId) {
+		List<Object> itemList = com.ashera.widget.PluginInvoker.getList(item);
+		if (itemList != null) {
+			for (Object itemObj : itemList) {
+				createMenuItem(parent, menu, fragment, itemObj, groupId);
+			}
+		} else {
+			createMenuItem(parent, menu, fragment, item, groupId);
+		}
+	}
+
+	private static void createMenuItem(com.ashera.widget.HasWidgets parent, Menu menu, com.ashera.core.IFragment fragment, Object payLoad, int groupId) {
+		Map<String, Object> itemMap = com.ashera.widget.PluginInvoker.getMap(payLoad);
+		
+		//"@android:id" : "@+id/menu_main_setting", "@android:icon" : "@drawable/icon", "@app:showAsAction" : "always", "@android:title" : "Setting"
+		int id = 0;
+		int categoryOrder = 0;
+		String title = "";
+		Drawable icon = null;
+		int showAsAction = -1;
+		if (itemMap.containsKey("@android:id")) {
+			id = (int) com.ashera.widget.PluginInvoker.convertFrom(com.ashera.widget.PluginInvoker.getConverter("id"), 
+					null, itemMap.get("@android:id"), fragment);
+		}
+
+		if (itemMap.containsKey("@android:title")) {
+			title = (String) com.ashera.widget.PluginInvoker.convertFrom(com.ashera.widget.PluginInvoker.getConverter("resourcestring"), 
+					null, itemMap.get("@android:title"), fragment);
+		}
+		
+		if (itemMap.containsKey("@android:icon")) {
+			icon = (Drawable) com.ashera.widget.PluginInvoker.convertFrom(com.ashera.widget.PluginInvoker.getConverter("drawable"), 
+					null, itemMap.get("@android:icon"), fragment);
+		}
+		
+		if (itemMap.containsKey("@app:showAsAction")) {
+			// load attributes of ActionMenuView do not remove this
+			com.ashera.widget.WidgetFactory.get("androidx.appcompat.widget.ActionMenuView", false);
+			showAsAction = (int) com.ashera.widget.PluginInvoker.convertFrom(com.ashera.widget.PluginInvoker.getConverter("androidx.appcompat.widget.ActionMenuView.showAsAction"), 
+					null, itemMap.get("@app:showAsAction"), fragment);
+		}
+		MenuItem menuItem = menu.add(groupId, id, categoryOrder, title);
+		menuItem.setEnabled(true);
+		menuItem.setVisible(true);
+		boolean actionViewSpecified = false;
+        if (itemMap.containsKey("@app:actionViewClass")) {
+            View actionView = getActionView(parent, (String) itemMap.get("@app:actionViewClass"));
+            menuItem.setActionView(actionView);
+            actionViewSpecified = true;
+        }
+        
+        if (itemMap.containsKey("@app:actionLayout")) {
+        	String actionLayout = (String) itemMap.get("@app:actionLayout");
+			createActionLayout(parent, menuItem, actionLayout);
+        }
+        
+        if (itemMap.containsKey("@android:actionLayout")) {
+        	String actionLayout = (String) itemMap.get("@android:actionLayout");
+			createActionLayout(parent, menuItem, actionLayout);
+        }
+		
+		if (icon != null) {
+			menuItem.setIcon(icon);
+		}
+		if (showAsAction != -1) {
+			menuItem.setShowAsAction(showAsAction);
+		}
+		
+		if (itemMap.containsKey("menu")) {
+			Map<String, Object> menuMap = com.ashera.widget.PluginInvoker.getMap(itemMap.get("menu"));			
+			Menu subMenu = getSubMenu(menu, menuItem);			
+			parseGroupAndItem(parent, subMenu, fragment, menuMap, 0);
+		}
+	}
+
+	private static void createActionLayout(com.ashera.widget.HasWidgets parent, MenuItem menuItem,
+			String actionLayout) {
+		IWidget template = (IWidget) parent.quickConvert(actionLayout, "template");
+		IWidget widget = template.loadLazyWidgets(parent);
+		menuItem.setActionView((View) widget.asWidget());
+	}
+	
+	
+
 	@SuppressLint("NewApi")
 private static class OnClickListener implements View.OnClickListener, com.ashera.widget.IListener{
 private IWidget w; private View view; private String strValue; private String action;
@@ -1121,6 +1255,7 @@ public java.util.Map<String, Object> getOnClickEventObj(View v) {
     obj.put("eventType", "click");
     obj.put("fragmentId", w.getFragment().getFragmentId());
     obj.put("actionUrl", w.getFragment().getActionUrl());
+    obj.put("namespace", w.getFragment().getNamespace());
     
     if (w.getComponentId() != null) {
     	obj.put("componentId", w.getComponentId());
@@ -1196,6 +1331,7 @@ public java.util.Map<String, Object> getOnMenuItemClickEventObj(MenuItem item) {
     obj.put("eventType", "menuitemclick");
     obj.put("fragmentId", w.getFragment().getFragmentId());
     obj.put("actionUrl", w.getFragment().getActionUrl());
+    obj.put("namespace", w.getFragment().getNamespace());
     
     if (w.getComponentId() != null) {
     	obj.put("componentId", w.getComponentId());
@@ -1272,6 +1408,7 @@ public java.util.Map<String, Object> getOnQueryTextSubmitEventObj(String query) 
     obj.put("eventType", "querytextsubmit");
     obj.put("fragmentId", w.getFragment().getFragmentId());
     obj.put("actionUrl", w.getFragment().getActionUrl());
+    obj.put("namespace", w.getFragment().getNamespace());
     
     if (w.getComponentId() != null) {
     	obj.put("componentId", w.getComponentId());
@@ -1335,6 +1472,7 @@ public java.util.Map<String, Object> getOnQueryTextChangeEventObj(String newText
     obj.put("eventType", "querytextchange");
     obj.put("fragmentId", w.getFragment().getFragmentId());
     obj.put("actionUrl", w.getFragment().getActionUrl());
+    obj.put("namespace", w.getFragment().getNamespace());
     
     if (w.getComponentId() != null) {
     	obj.put("componentId", w.getComponentId());
@@ -1371,7 +1509,20 @@ public java.util.Map<String, Object> getOnQueryTextChangeEventObj(String newText
 		com.ashera.core.IActivity activity = fragment.getRootActivity();
 		androidx.fragment.app.FragmentActivity fragmentActivity = (androidx.fragment.app.FragmentActivity) activity;
 		toolbar.getMenu().clear();
-		toolbar.inflateMenu(toolbar.getResources().getIdentifier((String) objValue, "menu", fragmentActivity.getPackageName()));
+		String menuId = (String) objValue;
+		String inlineResource = fragment.getInlineResource(menuId);
+		if (fragment.getRootDirectory() == null && inlineResource == null) {
+			toolbar.inflateMenu(toolbar.getResources().getIdentifier(menuId, "menu", fragmentActivity.getPackageName()));
+		} else {
+			String json;
+			if (inlineResource != null) {
+				json = PluginInvoker.xml2json(inlineResource, fragment);
+			} else {
+				String key = menuId.replace("@menu/", "");
+				json = com.ashera.utils.ResourceBundleUtils.getString("menu/menu", key, fragment);
+			}
+			parseMenu(this, toolbar.getMenu(), json, fragment);
+		}
 		MenuCompat.setGroupDividerEnabled(toolbar.getMenu(), true);
 	}
 	
@@ -1511,9 +1662,15 @@ public java.util.Map<String, Object> getOnQueryTextChangeEventObj(String newText
 						actionLayoutEventId = actionLayoutEventId.replace("@+id/", "").replace("@id/", "");
 
 						final String myactionLayoutEventId = actionLayoutEventId;
-						View view = menu.getActionView().findViewById(
-								menu.getActionView().getContext().getResources().getIdentifier(actionLayoutEventId,
-										"id", menu.getActionView().getContext().getPackageName()));
+						int menuId = 0;
+						
+						if (fragment.getRootDirectory() == null) {
+							menuId = menu.getActionView().getContext().getResources().getIdentifier(actionLayoutEventId,
+									"id", menu.getActionView().getContext().getPackageName());
+						} else {
+							menuId = (Integer) quickConvert("@+id/" + actionLayoutEventId, "id");
+						}
+						View view = menu.getActionView().findViewById(menuId);
 						if (view != null) {
 							view.setOnClickListener(new View.OnClickListener() {
 								@Override
@@ -1574,5 +1731,57 @@ public java.util.Map<String, Object> getOnQueryTextChangeEventObj(String newText
 		}
 		
 		return badgeDrawables.get(id);
+	}
+	
+
+	//start - menu
+	private static Menu getSubMenu(Menu menu, MenuItem menuItem) {
+		menu.removeItem(menuItem.getItemId());
+		return menu.addSubMenu(menuItem.getTitle());
+	}
+	
+	private static View getActionView(com.ashera.widget.HasWidgets parent, String actionViewClass) {
+		Context rootActivity = (Context) parent.getFragment().getRootActivity();
+		View actionView = (View) newInstance(actionViewClass, new Class<?>[] { Context.class },
+				new Object[] { rootActivity }, rootActivity);
+		return actionView;
+	}
+
+	private static <T> T newInstance(String className, Class<?>[] constructorSignature,
+			Object[] arguments, Context mContext) {
+		try {
+			Class<?> clazz = Class.forName(className, false, mContext.getClassLoader());
+			java.lang.reflect.Constructor<?> constructor = clazz.getConstructor(constructorSignature);
+			constructor.setAccessible(true);
+			return (T) constructor.newInstance(arguments);
+		} catch (Exception e) {
+		}
+		return null;
+	}
+	//end - menu
+
+	private void loadCustomAttributes(String localName) {
+		ConverterFactory.register("androidx.appcompat.widget.ActionMenuView.showAsAction", new ShowAsAction());
+	}
+
+	final static class ShowAsAction extends AbstractBitFlagConverter {
+		private Map<String, Integer> mapping = new HashMap<>();
+		{
+			mapping.put("always", MenuItem.SHOW_AS_ACTION_ALWAYS);
+			mapping.put("ifRoom", MenuItem.SHOW_AS_ACTION_IF_ROOM);
+			mapping.put("never", MenuItem.SHOW_AS_ACTION_NEVER);
+			mapping.put("collapseActionView", MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+			mapping.put("withText", MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+		}
+
+		@Override
+		public Map<String, Integer> getMapping() {
+			return mapping;
+		}
+
+		@Override
+		public Integer getDefault() {
+			return 0;
+		}
 	}
 }
