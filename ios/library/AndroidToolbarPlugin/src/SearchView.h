@@ -3,6 +3,7 @@
 //  source: D:\Java\git\core-javafx-widget\SWTAndroidToolBar\src\main\java\androidx\appcompat\widget\SearchView.java
 //
 
+#import <Foundation/Foundation.h>
 #include "J2ObjC_header.h"
 
 #pragma push_macro("INCLUDE_ALL_SearchView")
@@ -27,6 +28,9 @@
 @class ADAutoCompleteTextView;
 @class ADImageView;
 @class ADXSearchView_SearchableInfo;
+@class JavaLangBoolean;
+@class JavaLangInteger;
+@class NSString;
 @protocol ADXSearchView_OnQueryTextListener;
 @protocol ASIWidget;
 @protocol JavaLangCharSequence;
@@ -47,37 +51,37 @@
 
 - (id<JavaLangCharSequence>)getQueryHint;
 
-- (jboolean)hasFocus;
+- (bool)hasFocus;
 
 - (void)init__WithASIWidget:(id<ASIWidget>)root OBJC_METHOD_FAMILY_NONE;
 
-- (jboolean)isIconified;
+- (bool)isIconified;
 
 - (void)onActionViewCollapsed;
 
 - (void)onActionViewExpanded;
 
-- (void)setIconifiedWithBoolean:(jboolean)iconify;
+- (void)setIconifiedWithBoolean:(bool)iconify;
 
 - (void)setOnQueryTextListenerWithADXSearchView_OnQueryTextListener:(id<ADXSearchView_OnQueryTextListener>)listener;
 
 - (void)setQueryWithJavaLangCharSequence:(id<JavaLangCharSequence>)query
-                             withBoolean:(jboolean)submit;
+                             withBoolean:(bool)submit;
 
 #pragma mark Protected
 
-- (void)onMeasureWithInt:(jint)widthMeasureSpec
-                 withInt:(jint)heightMeasureSpec;
+- (void)onMeasureWithInt:(int32_t)widthMeasureSpec
+                 withInt:(int32_t)heightMeasureSpec;
 
 #pragma mark Package-Private
 
 - (id<JavaLangCharSequence>)getDecoratedHintWithJavaLangCharSequence:(id<JavaLangCharSequence>)hintText;
 
-- (jint)getPreferredHeight;
+- (int32_t)getPreferredHeight;
 
-- (jint)getPreferredWidth;
+- (int32_t)getPreferredWidth;
 
-- (void)launchQuerySearchWithInt:(jint)actionKey
+- (void)launchQuerySearchWithInt:(int32_t)actionKey
                     withNSString:(NSString *)actionMsg
                     withNSString:(NSString *)query;
 
@@ -100,9 +104,9 @@ J2OBJC_FIELD_SETTER(ADXSearchView, mCloseButton_, ADImageView *)
 J2OBJC_FIELD_SETTER(ADXSearchView, mVoiceButton_, ADImageView *)
 J2OBJC_FIELD_SETTER(ADXSearchView, mSearchable_, ADXSearchView_SearchableInfo *)
 
-inline jboolean ADXSearchView_get_DBG(void);
+inline bool ADXSearchView_get_DBG(void);
 #define ADXSearchView_DBG false
-J2OBJC_STATIC_FIELD_CONSTANT(ADXSearchView, DBG, jboolean)
+J2OBJC_STATIC_FIELD_CONSTANT(ADXSearchView, DBG, bool)
 
 FOUNDATION_EXPORT void ADXSearchView_init(ADXSearchView *self);
 
@@ -114,16 +118,20 @@ J2OBJC_TYPE_LITERAL_HEADER(ADXSearchView)
 
 @compatibility_alias AndroidxAppcompatWidgetSearchView ADXSearchView;
 
+
 #endif
 
 #if !defined (ADXSearchView_OnQueryTextListener_) && (INCLUDE_ALL_SearchView || defined(INCLUDE_ADXSearchView_OnQueryTextListener))
 #define ADXSearchView_OnQueryTextListener_
 
+@class JavaLangBoolean;
+@class NSString;
+
 @protocol ADXSearchView_OnQueryTextListener < JavaObject >
 
-- (jboolean)onQueryTextSubmitWithNSString:(NSString *)query;
+- (bool)onQueryTextSubmitWithNSString:(NSString *)query;
 
-- (jboolean)onQueryTextChangeWithNSString:(NSString *)newText;
+- (bool)onQueryTextChangeWithNSString:(NSString *)newText;
 
 @end
 
@@ -131,14 +139,17 @@ J2OBJC_EMPTY_STATIC_INIT(ADXSearchView_OnQueryTextListener)
 
 J2OBJC_TYPE_LITERAL_HEADER(ADXSearchView_OnQueryTextListener)
 
+
 #endif
 
 #if !defined (ADXSearchView_OnCloseListener_) && (INCLUDE_ALL_SearchView || defined(INCLUDE_ADXSearchView_OnCloseListener))
 #define ADXSearchView_OnCloseListener_
 
+@class JavaLangBoolean;
+
 @protocol ADXSearchView_OnCloseListener < JavaObject >
 
-- (jboolean)onClose;
+- (bool)onClose;
 
 @end
 
@@ -146,18 +157,20 @@ J2OBJC_EMPTY_STATIC_INIT(ADXSearchView_OnCloseListener)
 
 J2OBJC_TYPE_LITERAL_HEADER(ADXSearchView_OnCloseListener)
 
+
 #endif
 
 #if !defined (ADXSearchView_SearchableInfo_) && (INCLUDE_ALL_SearchView || defined(INCLUDE_ADXSearchView_SearchableInfo))
 #define ADXSearchView_SearchableInfo_
 
 @class ADXSearchView;
+@class JavaLangInteger;
 
 @interface ADXSearchView_SearchableInfo : NSObject
 
 #pragma mark Public
 
-- (jint)getHintId;
+- (int32_t)getHintId;
 
 #pragma mark Package-Private
 
@@ -178,6 +191,7 @@ FOUNDATION_EXPORT ADXSearchView_SearchableInfo *new_ADXSearchView_SearchableInfo
 FOUNDATION_EXPORT ADXSearchView_SearchableInfo *create_ADXSearchView_SearchableInfo_initWithADXSearchView_(ADXSearchView *outer$);
 
 J2OBJC_TYPE_LITERAL_HEADER(ADXSearchView_SearchableInfo)
+
 
 #endif
 

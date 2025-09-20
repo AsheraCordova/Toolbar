@@ -3,6 +3,11 @@
 //  source: D:\Java\git\core-ios-widgets\IOSToolbarPlugin\src\main\java\com\ashera\toolbar\ActionMenuViewImpl.java
 //
 
+#define J2OBJC_IMPORTED_BY_JAVA_IMPLEMENTATION 1
+
+
+
+
 #include "AbstractBitFlagConverter.h"
 #include "AbstractEnumToIntConverter.h"
 #include "ActionMenuView.h"
@@ -55,8 +60,12 @@
 #include "ASUIImageView.h"
 #include "KxMenu.h"
 
-@protocol JavaUtilList;
-@protocol JavaUtilMap;
+
+@class NSString;
+
+
+#pragma clang diagnostic error "-Wreturn-type"
+#pragma clang diagnostic ignored "-Wswitch"
 
 
 #pragma clang diagnostic ignored "-Wprotocol"
@@ -84,7 +93,7 @@
 
 - (void)loadCustomAttributesWithNSString:(NSString *)localName;
 
-- (jboolean)shouldAllowTextWithIcon;
+- (bool)shouldAllowTextWithIcon;
 
 - (ADView *)getOverFlowButton;
 
@@ -105,10 +114,10 @@
 - (IOSIntArray *)getImageDimensionWithADDrawable:(ADDrawable *)drawable;
 
 - (void)resizeImageIfRequiredWithADDrawable:(ADDrawable *)drawable
-                                    withInt:(jint)width
-                                    withInt:(jint)height;
+                                    withInt:(int32_t)width
+                                    withInt:(int32_t)height;
 
-- (jboolean)isLandScape;
+- (bool)isLandScape;
 
 - (void)createPopUpMenuWithASToolbarImpl:(ASToolbarImpl *)toolbar;
 
@@ -119,11 +128,11 @@
                withJavaUtilList:(id<JavaUtilList>)actionsObjs;
 
 - (id)getKXMenuWithNSString:(NSString *)title
-                withBoolean:(jboolean)border;
+                withBoolean:(bool)border;
 
 - (void)handleOnKxMenuItemClickWithId:(id)kxmenuItem;
 
-- (jboolean)isKxMenuToBeShown;
+- (bool)isKxMenuToBeShown;
 
 - (void)setMenuOnButtonWithId:(id)button
              withJavaUtilList:(id<JavaUtilList>)actionsObjs;
@@ -163,7 +172,7 @@ __attribute__((unused)) static ADXActionMenuView_LayoutParams *ASActionMenuViewI
 
 __attribute__((unused)) static void ASActionMenuViewImpl_loadCustomAttributesWithNSString_(ASActionMenuViewImpl *self, NSString *localName);
 
-__attribute__((unused)) static jboolean ASActionMenuViewImpl_shouldAllowTextWithIcon(ASActionMenuViewImpl *self);
+__attribute__((unused)) static bool ASActionMenuViewImpl_shouldAllowTextWithIcon(ASActionMenuViewImpl *self);
 
 __attribute__((unused)) static ADView *ASActionMenuViewImpl_getOverFlowButton(ASActionMenuViewImpl *self);
 
@@ -181,9 +190,9 @@ __attribute__((unused)) static void ASActionMenuViewImpl_addMenuClickListenerWit
 
 __attribute__((unused)) static IOSIntArray *ASActionMenuViewImpl_getImageDimensionWithADDrawable_(ASActionMenuViewImpl *self, ADDrawable *drawable);
 
-__attribute__((unused)) static void ASActionMenuViewImpl_resizeImageIfRequiredWithADDrawable_withInt_withInt_(ASActionMenuViewImpl *self, ADDrawable *drawable, jint width, jint height);
+__attribute__((unused)) static void ASActionMenuViewImpl_resizeImageIfRequiredWithADDrawable_withInt_withInt_(ASActionMenuViewImpl *self, ADDrawable *drawable, int32_t width, int32_t height);
 
-__attribute__((unused)) static jboolean ASActionMenuViewImpl_isLandScape(ASActionMenuViewImpl *self);
+__attribute__((unused)) static bool ASActionMenuViewImpl_isLandScape(ASActionMenuViewImpl *self);
 
 __attribute__((unused)) static void ASActionMenuViewImpl_createPopUpMenuWithASToolbarImpl_(ASActionMenuViewImpl *self, ASToolbarImpl *toolbar);
 
@@ -191,11 +200,11 @@ __attribute__((unused)) static void ASActionMenuViewImpl_nativeShowKxMenuWithId_
 
 __attribute__((unused)) static void ASActionMenuViewImpl_setKxMenuOnButtonWithId_withJavaUtilList_(ASActionMenuViewImpl *self, id button, id<JavaUtilList> actionsObjs);
 
-__attribute__((unused)) static id ASActionMenuViewImpl_getKXMenuWithNSString_withBoolean_(ASActionMenuViewImpl *self, NSString *title, jboolean border);
+__attribute__((unused)) static id ASActionMenuViewImpl_getKXMenuWithNSString_withBoolean_(ASActionMenuViewImpl *self, NSString *title, bool border);
 
 __attribute__((unused)) static void ASActionMenuViewImpl_handleOnKxMenuItemClickWithId_(ASActionMenuViewImpl *self, id kxmenuItem);
 
-__attribute__((unused)) static jboolean ASActionMenuViewImpl_isKxMenuToBeShown(ASActionMenuViewImpl *self);
+__attribute__((unused)) static bool ASActionMenuViewImpl_isKxMenuToBeShown(ASActionMenuViewImpl *self);
 
 __attribute__((unused)) static void ASActionMenuViewImpl_setMenuOnButtonWithId_withJavaUtilList_(ASActionMenuViewImpl *self, id button, id<JavaUtilList> actionsObjs);
 
@@ -225,12 +234,12 @@ J2OBJC_FIELD_SETTER(ASActionMenuViewImpl_Orientation, mapping_, id<JavaUtilMap>)
 
 @interface ASActionMenuViewImpl_ActionMenuViewExt () {
  @public
-  __unsafe_unretained ASActionMenuViewImpl *this$0_;
+  WEAK_ ASActionMenuViewImpl *this$0_;
   ASMeasureEvent *measureFinished_;
   ASOnLayoutEvent *onLayoutEvent_;
   id<JavaUtilList> overlays_;
-  jint mMaxWidth_;
-  jint mMaxHeight_;
+  int32_t mMaxWidth_;
+  int32_t mMaxHeight_;
   id<JavaUtilMap> templates_;
 }
 
@@ -252,10 +261,10 @@ J2OBJC_FIELD_SETTER(ASActionMenuViewImpl_ShowAsAction, mapping_, id<JavaUtilMap>
 
 @interface ASActionMenuViewImpl_CanvasImpl : NSObject < ADCanvas > {
  @public
-  jboolean canvasReset_;
-  jboolean requiresAttrChangeListener_;
+  bool canvasReset_;
+  bool requiresAttrChangeListener_;
   id<JavaUtilList> imageViews_;
-  __unsafe_unretained id<ASIWidget> widget_;
+  WEAK_ id<ASIWidget> widget_;
 }
 
 - (instancetype)initWithASIWidget:(id<ASIWidget>)widget;
@@ -280,6 +289,7 @@ __attribute__((unused)) static ASActionMenuViewImpl_CanvasImpl *create_ASActionM
 
 J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_CanvasImpl)
 
+
 @interface ASActionMenuViewImpl_CanvasImpl_$Lambda$1 : NSObject < ADDrawable_AttributeChangeListener > {
  @public
   id val$imageView_;
@@ -297,6 +307,7 @@ __attribute__((unused)) static void ASActionMenuViewImpl_CanvasImpl_$Lambda$1_in
 __attribute__((unused)) static ASActionMenuViewImpl_CanvasImpl_$Lambda$1 *new_ASActionMenuViewImpl_CanvasImpl_$Lambda$1_initWithId_(id capture$0) NS_RETURNS_RETAINED;
 
 __attribute__((unused)) static ASActionMenuViewImpl_CanvasImpl_$Lambda$1 *create_ASActionMenuViewImpl_CanvasImpl_$Lambda$1_initWithId_(id capture$0);
+
 
 @interface ASActionMenuViewImpl_MenuOnClickListener : NSObject < ADView_OnClickListener > {
  @public
@@ -325,9 +336,10 @@ __attribute__((unused)) static ASActionMenuViewImpl_MenuOnClickListener *create_
 
 J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_MenuOnClickListener)
 
+
 @interface ASActionMenuViewImpl_MenuClickListener : NSObject < ADView_OnClickListener > {
  @public
-  __unsafe_unretained ASActionMenuViewImpl *this$0_;
+  WEAK_ ASActionMenuViewImpl *this$0_;
 }
 
 - (instancetype)initWithASActionMenuViewImpl:(ASActionMenuViewImpl *)outer$;
@@ -346,6 +358,7 @@ __attribute__((unused)) static ASActionMenuViewImpl_MenuClickListener *create_AS
 
 J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_MenuClickListener)
 
+
 @interface ASActionMenuViewImpl_$Lambda$1 : NSObject < JavaLangRunnable > {
  @public
   id<ASIWidget> val$widget_;
@@ -362,6 +375,7 @@ __attribute__((unused)) static void ASActionMenuViewImpl_$Lambda$1_initWithASIWi
 __attribute__((unused)) static ASActionMenuViewImpl_$Lambda$1 *new_ASActionMenuViewImpl_$Lambda$1_initWithASIWidget_(id<ASIWidget> capture$0) NS_RETURNS_RETAINED;
 
 __attribute__((unused)) static ASActionMenuViewImpl_$Lambda$1 *create_ASActionMenuViewImpl_$Lambda$1_initWithASIWidget_(id<ASIWidget> capture$0);
+
 
 NSString *ASActionMenuViewImpl_LOCAL_NAME = @"androidx.appcompat.widget.ActionMenuView";
 NSString *ASActionMenuViewImpl_GROUP_NAME = @"androidx.appcompat.widget.ActionMenuView";
@@ -428,16 +442,16 @@ J2OBJC_IGNORE_DESIGNATED_END
   return actionMenuView_;
 }
 
-- (jboolean)removeWithASIWidget:(id<ASIWidget>)w {
-  jboolean remove = [super removeWithASIWidget:w];
+- (bool)removeWithASIWidget:(id<ASIWidget>)w {
+  bool remove = [super removeWithASIWidget:w];
   [((ADXActionMenuView *) nil_chk(actionMenuView_)) removeViewWithADView:(ADView *) cast_chk([((id<ASIWidget>) nil_chk(w)) asWidget], [ADView class])];
   ASActionMenuViewImpl_nativeRemoveViewWithASIWidget_(self, w);
   return remove;
 }
 
-- (jboolean)removeWithInt:(jint)index {
+- (bool)removeWithInt:(int32_t)index {
   id<ASIWidget> widget = [((id<JavaUtilList>) nil_chk(widgets_)) getWithInt:index];
-  jboolean remove = [super removeWithInt:index];
+  bool remove = [super removeWithInt:index];
   if (index + 1 <= [((ADXActionMenuView *) nil_chk(actionMenuView_)) getChildCount]) {
     [((ADXActionMenuView *) nil_chk(actionMenuView_)) removeViewAtWithInt:index];
     ASActionMenuViewImpl_nativeRemoveViewWithASIWidget_(self, widget);
@@ -450,7 +464,7 @@ J2OBJC_IGNORE_DESIGNATED_END
 }
 
 - (void)addWithASIWidget:(id<ASIWidget>)w
-                 withInt:(jint)index {
+                 withInt:(int32_t)index {
   if (index != -2) {
     ADView *view = (ADView *) cast_chk([((id<ASIWidget>) nil_chk(w)) asWidget], [ADView class]);
     ASActionMenuViewImpl_createLayoutParamsWithADView_(self, view);
@@ -647,7 +661,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   return uiView_;
 }
 
-- (jboolean)checkIosVersionWithNSString:(NSString *)v {
+- (bool)checkIosVersionWithNSString:(NSString *)v {
   return ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending);
 }
 
@@ -673,7 +687,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   ASActionMenuViewImpl_loadCustomAttributesWithNSString_(self, localName);
 }
 
-- (jboolean)hasItemViewWithADMenuItem:(id<ADMenuItem>)item {
+- (bool)hasItemViewWithADMenuItem:(id<ADMenuItem>)item {
   return [((id<JavaUtilMap>) nil_chk(menuItemMap_)) containsKeyWithId:item];
 }
 
@@ -684,17 +698,17 @@ J2OBJC_IGNORE_DESIGNATED_END
     (void) [((id<JavaUtilMap>) nil_chk(menuItemMap_)) putWithId:item withId:widget];
     ADDrawable *drawable = [((id<ADMenuItem>) nil_chk(item)) getIcon];
     if (drawable != nil) {
-      jint mMaxIconSize = [((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk([self quickConvertWithId:ASActionMenuViewImpl_MAX_ICON_SIZE withNSString:@"dimension"], [JavaLangInteger class]))) intValue];
+      int32_t mMaxIconSize = [((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk([self quickConvertWithId:ASActionMenuViewImpl_MAX_ICON_SIZE withNSString:@"dimension"], [JavaLangInteger class]))) intValue];
       IOSIntArray *widthHeightArr = ASActionMenuViewImpl_getImageDimensionWithADDrawable_(self, drawable);
-      jint width = IOSIntArray_Get(nil_chk(widthHeightArr), 0);
-      jint height = IOSIntArray_Get(widthHeightArr, 1);
+      int32_t width = IOSIntArray_Get(nil_chk(widthHeightArr), 0);
+      int32_t height = IOSIntArray_Get(widthHeightArr, 1);
       if (width > mMaxIconSize) {
-        jfloat scale_ = (jfloat) mMaxIconSize / width;
+        float scale_ = (float) mMaxIconSize / width;
         width = mMaxIconSize;
         JreTimesAssignIntF(&height, scale_);
       }
       if (height > mMaxIconSize) {
-        jfloat scale_ = (jfloat) mMaxIconSize / height;
+        float scale_ = (float) mMaxIconSize / height;
         height = mMaxIconSize;
         JreTimesAssignIntF(&width, scale_);
       }
@@ -719,7 +733,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   return view;
 }
 
-- (jboolean)shouldAllowTextWithIcon {
+- (bool)shouldAllowTextWithIcon {
   return ASActionMenuViewImpl_shouldAllowTextWithIcon(self);
 }
 
@@ -758,7 +772,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   }
 }
 
-- (void)setVisibleWithBoolean:(jboolean)b {
+- (void)setVisibleWithBoolean:(bool)b {
   [((ADView *) nil_chk(((ADView *) cast_chk([self asWidget], [ADView class])))) setVisibilityWithInt:b ? ADView_VISIBLE : ADView_GONE];
 }
 
@@ -773,12 +787,12 @@ J2OBJC_IGNORE_DESIGNATED_END
 }
 
 - (void)resizeImageIfRequiredWithADDrawable:(ADDrawable *)drawable
-                                    withInt:(jint)width
-                                    withInt:(jint)height {
+                                    withInt:(int32_t)width
+                                    withInt:(int32_t)height {
   ASActionMenuViewImpl_resizeImageIfRequiredWithADDrawable_withInt_withInt_(self, drawable, width, height);
 }
 
-- (jboolean)isLandScape {
+- (bool)isLandScape {
   return ASActionMenuViewImpl_isLandScape(self);
 }
 
@@ -797,7 +811,7 @@ J2OBJC_IGNORE_DESIGNATED_END
 }
 
 - (id)getKXMenuWithNSString:(NSString *)title
-                withBoolean:(jboolean)border {
+                withBoolean:(bool)border {
   return ASActionMenuViewImpl_getKXMenuWithNSString_withBoolean_(self, title, border);
 }
 
@@ -809,7 +823,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   ASActionMenuViewImpl_handleOnKxMenuItemClickWithId_(self, kxmenuItem);
 }
 
-- (jboolean)isKxMenuToBeShown {
+- (bool)isKxMenuToBeShown {
   return ASActionMenuViewImpl_isKxMenuToBeShown(self);
 }
 
@@ -840,8 +854,8 @@ J2OBJC_IGNORE_DESIGNATED_END
     if (menuItemToNativeMenuItemMap_ == nil && ASActionMenuViewImpl_isKxMenuToBeShown(self)) {
       menuItemToNativeMenuItemMap_ = new_JavaUtilHashMap_init();
     }
-    jint menuGroupId = -1;
-    jint prevMenuGroupId = -1;
+    int32_t menuGroupId = -1;
+    int32_t prevMenuGroupId = -1;
     for (ADXMenuItemImpl * __strong menuItem in nil_chk([((ADXMenuBuilder *) nil_chk([((ADXActionMenuView *) nil_chk(actionMenuView_)) getMenu])) getNonActionItems])) {
       menuGroupId = [((ADXMenuItemImpl *) nil_chk(menuItem)) getGroupId];
       if (menuItemToNativeMenuItemMap_ != nil) {
@@ -1078,10 +1092,10 @@ void ASActionMenuViewImpl_loadCustomAttributesWithNSString_(ASActionMenuViewImpl
   ASConverterFactory_register__WithNSString_withASIConverter_(@"androidx.appcompat.widget.ActionMenuView.showAsAction", new_ASActionMenuViewImpl_ShowAsAction_init());
 }
 
-jboolean ASActionMenuViewImpl_shouldAllowTextWithIcon(ASActionMenuViewImpl *self) {
-  jint width = ASPluginInvoker_getScreenWidthDp();
-  jint height = ASPluginInvoker_getScreenHeightDp();
-  jint scale_ = 2;
+bool ASActionMenuViewImpl_shouldAllowTextWithIcon(ASActionMenuViewImpl *self) {
+  int32_t width = ASPluginInvoker_getScreenWidthDp();
+  int32_t height = ASPluginInvoker_getScreenHeightDp();
+  int32_t scale_ = 2;
   return width >= (480 * scale_) || (width >= 640 * scale_ && height >= 480 * scale_) || ASActionMenuViewImpl_isLandScape(self);
 }
 
@@ -1127,13 +1141,13 @@ void ASActionMenuViewImpl_addMenuClickListenerWithADMenuItem_withASIWidget_withA
 }
 
 IOSIntArray *ASActionMenuViewImpl_getImageDimensionWithADDrawable_(ASActionMenuViewImpl *self, ADDrawable *drawable) {
-  return [IOSIntArray newArrayWithInts:(jint[]){ [((ADDrawable *) nil_chk(drawable)) getMinimumWidth], [drawable getMinimumHeight] } count:2];
+  return [IOSIntArray newArrayWithInts:(int32_t[]){ [((ADDrawable *) nil_chk(drawable)) getMinimumWidth], [drawable getMinimumHeight] } count:2];
 }
 
-void ASActionMenuViewImpl_resizeImageIfRequiredWithADDrawable_withInt_withInt_(ASActionMenuViewImpl *self, ADDrawable *drawable, jint width, jint height) {
+void ASActionMenuViewImpl_resizeImageIfRequiredWithADDrawable_withInt_withInt_(ASActionMenuViewImpl *self, ADDrawable *drawable, int32_t width, int32_t height) {
 }
 
-jboolean ASActionMenuViewImpl_isLandScape(ASActionMenuViewImpl *self) {
+bool ASActionMenuViewImpl_isLandScape(ASActionMenuViewImpl *self) {
   return [((NSString *) nil_chk(ASPluginInvoker_getOrientation())) isEqual:@"landscape"];
 }
 
@@ -1157,7 +1171,7 @@ void ASActionMenuViewImpl_setKxMenuOnButtonWithId_withJavaUtilList_(ASActionMenu
   self->itemArray_ = actions;
 }
 
-id ASActionMenuViewImpl_getKXMenuWithNSString_withBoolean_(ASActionMenuViewImpl *self, NSString *title, jboolean border) {
+id ASActionMenuViewImpl_getKXMenuWithNSString_withBoolean_(ASActionMenuViewImpl *self, NSString *title, bool border) {
   KxMenuItem* item = [KxMenuItem menuItem:title image:nil target:self action:@selector(menuItemClicked:)];
   item.border = border;
   return item;
@@ -1172,7 +1186,7 @@ void ASActionMenuViewImpl_handleOnKxMenuItemClickWithId_(ASActionMenuViewImpl *s
   }
 }
 
-jboolean ASActionMenuViewImpl_isKxMenuToBeShown(ASActionMenuViewImpl *self) {
+bool ASActionMenuViewImpl_isKxMenuToBeShown(ASActionMenuViewImpl *self) {
   return ![self checkIosVersionWithNSString:@"13.0"];
 }
 
@@ -1211,6 +1225,8 @@ void ASActionMenuViewImpl_handleOnMenuItemClickWithASToolbarImpl_withADXMenuItem
 }
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl)
+
+J2OBJC_NAME_MAPPING(ASActionMenuViewImpl, "com.ashera.toolbar", "AS")
 
 @implementation ASActionMenuViewImpl_Divider
 
@@ -1256,10 +1272,10 @@ void ASActionMenuViewImpl_Divider_init(ASActionMenuViewImpl_Divider *self) {
   ASAbstractBitFlagConverter_init(self);
   self->mapping_ = new_JavaUtilHashMap_init();
   {
-    (void) [self->mapping_ putWithId:@"none" withId:JavaLangInteger_valueOfWithInt_((jint) 0x0)];
-    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"beginning" withId:JavaLangInteger_valueOfWithInt_((jint) 0x1)];
-    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"end" withId:JavaLangInteger_valueOfWithInt_((jint) 0x4)];
-    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"middle" withId:JavaLangInteger_valueOfWithInt_((jint) 0x2)];
+    (void) [self->mapping_ putWithId:@"none" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x0)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"beginning" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x1)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"end" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x4)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"middle" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x2)];
   }
 }
 
@@ -1317,8 +1333,8 @@ void ASActionMenuViewImpl_Orientation_init(ASActionMenuViewImpl_Orientation *sel
   ASAbstractEnumToIntConverter_init(self);
   self->mapping_ = new_JavaUtilHashMap_init();
   {
-    (void) [self->mapping_ putWithId:@"horizontal" withId:JavaLangInteger_valueOfWithInt_((jint) 0x0)];
-    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"vertical" withId:JavaLangInteger_valueOfWithInt_((jint) 0x1)];
+    (void) [self->mapping_ putWithId:@"horizontal" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x0)];
+    (void) [((id<JavaUtilMap>) nil_chk(self->mapping_)) putWithId:@"vertical" withId:JavaLangInteger_valueOfWithInt_((int32_t) 0x1)];
   }
 }
 
@@ -1338,19 +1354,19 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Orientation)
   return this$0_;
 }
 
-- (void)setMaxWidthWithInt:(jint)width {
+- (void)setMaxWidthWithInt:(int32_t)width {
   mMaxWidth_ = width;
 }
 
-- (void)setMaxHeightWithInt:(jint)height {
+- (void)setMaxHeightWithInt:(int32_t)height {
   mMaxHeight_ = height;
 }
 
-- (jint)getMaxWidth {
+- (int32_t)getMaxWidth {
   return mMaxWidth_;
 }
 
-- (jint)getMaxHeight {
+- (int32_t)getMaxHeight {
   return mMaxHeight_;
 }
 
@@ -1359,8 +1375,8 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Orientation)
   return self;
 }
 
-- (void)onMeasureWithInt:(jint)widthMeasureSpec
-                 withInt:(jint)heightMeasureSpec {
+- (void)onMeasureWithInt:(int32_t)widthMeasureSpec
+                 withInt:(int32_t)heightMeasureSpec {
   if (mMaxWidth_ > 0) {
     widthMeasureSpec = ADView_MeasureSpec_makeMeasureSpecWithInt_withInt_(mMaxWidth_, ADView_MeasureSpec_AT_MOST);
   }
@@ -1376,11 +1392,11 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Orientation)
   }
 }
 
-- (void)onLayoutWithBoolean:(jboolean)changed
-                    withInt:(jint)l
-                    withInt:(jint)t
-                    withInt:(jint)r
-                    withInt:(jint)b {
+- (void)onLayoutWithBoolean:(bool)changed
+                    withInt:(int32_t)l
+                    withInt:(int32_t)t
+                    withInt:(int32_t)r
+                    withInt:(int32_t)b {
   [super onLayoutWithBoolean:changed withInt:l withInt:t withInt:r withInt:b];
   ASViewImpl_setDrawableBoundsWithASIWidget_withInt_withInt_withInt_withInt_(this$0_, l, t, r, b);
   if (![self isOverlay]) {
@@ -1409,8 +1425,8 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Orientation)
           withNSObjectArray:(IOSObjectArray *)canvas {
 }
 
-- (void)updateMeasuredDimensionWithInt:(jint)width
-                               withInt:(jint)height {
+- (void)updateMeasuredDimensionWithInt:(int32_t)width
+                               withInt:(int32_t)height {
   [self setMeasuredDimensionWithInt:width withInt:height];
 }
 
@@ -1478,12 +1494,12 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Orientation)
   displayFrame->bottom_ = displayFrame->top_ + [self getHeight];
 }
 
-- (void)offsetTopAndBottomWithInt:(jint)offset {
+- (void)offsetTopAndBottomWithInt:(int32_t)offset {
   [super offsetTopAndBottomWithInt:offset];
   ASViewImpl_nativeMakeFrameWithId_withInt_withInt_withInt_withInt_([this$0_ asNativeWidget], [self getLeft], [self getTop], [self getRight], [self getBottom]);
 }
 
-- (void)offsetLeftAndRightWithInt:(jint)offset {
+- (void)offsetLeftAndRightWithInt:(int32_t)offset {
   [super offsetLeftAndRightWithInt:offset];
   ASViewImpl_nativeMakeFrameWithId_withInt_withInt_withInt_withInt_([this$0_ asNativeWidget], [self getLeft], [self getTop], [self getRight], [self getBottom]);
 }
@@ -1513,7 +1529,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Orientation)
   [this$0_ setAttributeWithNSString:name withId:value withBoolean:!([value isKindOfClass:[NSString class]])];
 }
 
-- (void)setVisibilityWithInt:(jint)visibility {
+- (void)setVisibilityWithInt:(int32_t)visibility {
   [super setVisibilityWithInt:visibility];
   ASViewImpl_nativeSetVisibilityWithId_withBoolean_([this$0_ asNativeWidget], visibility != ADView_VISIBLE);
 }
@@ -1522,7 +1538,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_Orientation)
   return [this$0_ getItemViewWithADMenuItem:item];
 }
 
-- (jboolean)hasItemViewWithADMenuItem:(id<ADMenuItem>)item {
+- (bool)hasItemViewWithADMenuItem:(id<ADMenuItem>)item {
   return [this$0_ hasItemViewWithADMenuItem:item];
 }
 
@@ -1823,8 +1839,8 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_ShowAsAction)
   return imageView;
 }
 
-- (void)translateWithInt:(jint)arg0
-                 withInt:(jint)arg1 {
+- (void)translateWithInt:(int32_t)arg0
+                 withInt:(int32_t)arg1 {
   ADCanvas_translateWithInt_withInt_(self, arg0, arg1);
 }
 
@@ -1885,7 +1901,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASActionMenuViewImpl_CanvasImpl)
                                withId:(id)value {
   {
     ADRect *rect;
-    jint alpha;
+    int32_t alpha;
     switch (JreIndexOfStr(name, (id[]){ @"bounds", @"alpha" }, 2)) {
       case 0:
       rect = (ADRect *) cast_chk(value, [ADRect class]);

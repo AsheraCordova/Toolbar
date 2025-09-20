@@ -3,6 +3,7 @@
 //  source: D:\Java\git\core-javafx-widget\SWTAndroidToolBar\src\main\java\androidx\appcompat\widget\ActionMenuView.java
 //
 
+#import <Foundation/Foundation.h>
 #include "J2ObjC_header.h"
 
 #pragma push_macro("INCLUDE_ALL_ActionMenuView")
@@ -25,6 +26,8 @@
 @class ADXActionMenuPresenter;
 @class ADXActionMenuView_LayoutParams;
 @class ADXMenuBuilder;
+@class JavaLangBoolean;
+@class JavaLangInteger;
 @protocol ADMenuItem;
 
 @interface ADXActionMenuView : ADXLinearLayoutCompat {
@@ -38,7 +41,7 @@
 
 - (ADXActionMenuView_LayoutParams *)generateOverflowButtonLayoutParams;
 
-- (jint)getDividerWidth;
+- (int32_t)getDividerWidth;
 
 - (ADView *)getItemViewWithADMenuItem:(id<ADMenuItem>)item;
 
@@ -46,44 +49,44 @@
 
 - (ADView *)getOverFlowButton;
 
-- (jboolean)hasItemViewWithADMenuItem:(id<ADMenuItem>)item;
+- (bool)hasItemViewWithADMenuItem:(id<ADMenuItem>)item;
 
-- (jboolean)hasTextWithADView:(ADView *)child;
+- (bool)hasTextWithADView:(ADView *)child;
 
 - (void)initialize__WithADXMenuBuilder:(ADXMenuBuilder *)menu OBJC_METHOD_FAMILY_NONE;
 
-+ (jboolean)isActionMenuItemViewWithADView:(ADView *)child;
++ (bool)isActionMenuItemViewWithADView:(ADView *)child;
 
-- (void)setOverflowReservedWithBoolean:(jboolean)reserveOverflow;
+- (void)setOverflowReservedWithBoolean:(bool)reserveOverflow;
 
 - (void)updateMenuView;
 
 #pragma mark Protected
 
-- (jboolean)checkLayoutParamsWithADViewGroup_LayoutParams:(ADViewGroup_LayoutParams *)p;
+- (bool)checkLayoutParamsWithADViewGroup_LayoutParams:(ADViewGroup_LayoutParams *)p;
 
 - (ADXActionMenuView_LayoutParams *)generateDefaultLayoutParams;
 
 - (ADXActionMenuView_LayoutParams *)generateLayoutParamsWithADViewGroup_LayoutParams:(ADViewGroup_LayoutParams *)p;
 
-- (jboolean)hasSupportDividerBeforeChildAtWithInt:(jint)childIndex;
+- (bool)hasSupportDividerBeforeChildAtWithInt:(int32_t)childIndex;
 
-- (void)onLayoutWithBoolean:(jboolean)changed
-                    withInt:(jint)left
-                    withInt:(jint)top
-                    withInt:(jint)right
-                    withInt:(jint)bottom;
+- (void)onLayoutWithBoolean:(bool)changed
+                    withInt:(int32_t)left
+                    withInt:(int32_t)top
+                    withInt:(int32_t)right
+                    withInt:(int32_t)bottom;
 
-- (void)onMeasureWithInt:(jint)widthMeasureSpec
-                 withInt:(jint)heightMeasureSpec;
+- (void)onMeasureWithInt:(int32_t)widthMeasureSpec
+                 withInt:(int32_t)heightMeasureSpec;
 
 #pragma mark Package-Private
 
-+ (jint)measureChildForCellsWithADView:(ADView *)child
-                               withInt:(jint)cellSize
-                               withInt:(jint)cellsRemaining
-                               withInt:(jint)parentHeightMeasureSpec
-                               withInt:(jint)parentHeightPadding;
++ (int32_t)measureChildForCellsWithADView:(ADView *)child
+                                  withInt:(int32_t)cellSize
+                                  withInt:(int32_t)cellsRemaining
+                                  withInt:(int32_t)parentHeightMeasureSpec
+                                  withInt:(int32_t)parentHeightPadding;
 
 @end
 
@@ -91,15 +94,15 @@ J2OBJC_EMPTY_STATIC_INIT(ADXActionMenuView)
 
 J2OBJC_FIELD_SETTER(ADXActionMenuView, mPresenter_, ADXActionMenuPresenter *)
 
-inline jint ADXActionMenuView_get_MIN_CELL_SIZE(void);
+inline int32_t ADXActionMenuView_get_MIN_CELL_SIZE(void);
 #define ADXActionMenuView_MIN_CELL_SIZE 56
-J2OBJC_STATIC_FIELD_CONSTANT(ADXActionMenuView, MIN_CELL_SIZE, jint)
+J2OBJC_STATIC_FIELD_CONSTANT(ADXActionMenuView, MIN_CELL_SIZE, int32_t)
 
-inline jint ADXActionMenuView_get_GENERATED_ITEM_PADDING(void);
+inline int32_t ADXActionMenuView_get_GENERATED_ITEM_PADDING(void);
 #define ADXActionMenuView_GENERATED_ITEM_PADDING 4
-J2OBJC_STATIC_FIELD_CONSTANT(ADXActionMenuView, GENERATED_ITEM_PADDING, jint)
+J2OBJC_STATIC_FIELD_CONSTANT(ADXActionMenuView, GENERATED_ITEM_PADDING, int32_t)
 
-FOUNDATION_EXPORT jint ADXActionMenuView_measureChildForCellsWithADView_withInt_withInt_withInt_withInt_(ADView *child, jint cellSize, jint cellsRemaining, jint parentHeightMeasureSpec, jint parentHeightPadding);
+FOUNDATION_EXPORT int32_t ADXActionMenuView_measureChildForCellsWithADView_withInt_withInt_withInt_withInt_(ADView *child, int32_t cellSize, int32_t cellsRemaining, int32_t parentHeightMeasureSpec, int32_t parentHeightPadding);
 
 FOUNDATION_EXPORT void ADXActionMenuView_init(ADXActionMenuView *self);
 
@@ -107,11 +110,12 @@ FOUNDATION_EXPORT ADXActionMenuView *new_ADXActionMenuView_init(void) NS_RETURNS
 
 FOUNDATION_EXPORT ADXActionMenuView *create_ADXActionMenuView_init(void);
 
-FOUNDATION_EXPORT jboolean ADXActionMenuView_isActionMenuItemViewWithADView_(ADView *child);
+FOUNDATION_EXPORT bool ADXActionMenuView_isActionMenuItemViewWithADView_(ADView *child);
 
 J2OBJC_TYPE_LITERAL_HEADER(ADXActionMenuView)
 
 @compatibility_alias AndroidxAppcompatWidgetActionMenuView ADXActionMenuView;
+
 
 #endif
 
@@ -123,21 +127,23 @@ J2OBJC_TYPE_LITERAL_HEADER(ADXActionMenuView)
 #include "LinearLayoutCompat.h"
 
 @class ADViewGroup_LayoutParams;
+@class JavaLangBoolean;
+@class JavaLangInteger;
 
 @interface ADXActionMenuView_LayoutParams : ADXLinearLayoutCompat_LayoutParams {
  @public
-  jboolean isOverflowButton_;
-  jint cellsUsed_;
-  jint extraPixels_;
-  jboolean expandable_;
-  jboolean preventEdgeOffset_;
-  jboolean expanded_;
+  bool isOverflowButton_;
+  int32_t cellsUsed_;
+  int32_t extraPixels_;
+  bool expandable_;
+  bool preventEdgeOffset_;
+  bool expanded_;
 }
 
 #pragma mark Public
 
-- (instancetype)initWithInt:(jint)width
-                    withInt:(jint)height;
+- (instancetype)initWithInt:(int32_t)width
+                    withInt:(int32_t)height;
 
 - (instancetype)initWithADViewGroup_LayoutParams:(ADViewGroup_LayoutParams *)other;
 
@@ -159,13 +165,14 @@ FOUNDATION_EXPORT ADXActionMenuView_LayoutParams *new_ADXActionMenuView_LayoutPa
 
 FOUNDATION_EXPORT ADXActionMenuView_LayoutParams *create_ADXActionMenuView_LayoutParams_initWithADXActionMenuView_LayoutParams_(ADXActionMenuView_LayoutParams *other);
 
-FOUNDATION_EXPORT void ADXActionMenuView_LayoutParams_initWithInt_withInt_(ADXActionMenuView_LayoutParams *self, jint width, jint height);
+FOUNDATION_EXPORT void ADXActionMenuView_LayoutParams_initWithInt_withInt_(ADXActionMenuView_LayoutParams *self, int32_t width, int32_t height);
 
-FOUNDATION_EXPORT ADXActionMenuView_LayoutParams *new_ADXActionMenuView_LayoutParams_initWithInt_withInt_(jint width, jint height) NS_RETURNS_RETAINED;
+FOUNDATION_EXPORT ADXActionMenuView_LayoutParams *new_ADXActionMenuView_LayoutParams_initWithInt_withInt_(int32_t width, int32_t height) NS_RETURNS_RETAINED;
 
-FOUNDATION_EXPORT ADXActionMenuView_LayoutParams *create_ADXActionMenuView_LayoutParams_initWithInt_withInt_(jint width, jint height);
+FOUNDATION_EXPORT ADXActionMenuView_LayoutParams *create_ADXActionMenuView_LayoutParams_initWithInt_withInt_(int32_t width, int32_t height);
 
 J2OBJC_TYPE_LITERAL_HEADER(ADXActionMenuView_LayoutParams)
+
 
 #endif
 
@@ -177,6 +184,7 @@ J2OBJC_TYPE_LITERAL_HEADER(ADXActionMenuView_LayoutParams)
 #include "View.h"
 
 @class ADXActionMenuView;
+@class JavaLangBoolean;
 
 @interface ADXActionMenuView_ActionMenuChildView : ADView
 
@@ -184,9 +192,9 @@ J2OBJC_TYPE_LITERAL_HEADER(ADXActionMenuView_LayoutParams)
 
 - (instancetype)initWithADXActionMenuView:(ADXActionMenuView *)outer$;
 
-- (jboolean)needsDividerAfter;
+- (bool)needsDividerAfter;
 
-- (jboolean)needsDividerBefore;
+- (bool)needsDividerBefore;
 
 // Disallowed inherited constructors, do not use.
 
@@ -203,6 +211,7 @@ FOUNDATION_EXPORT ADXActionMenuView_ActionMenuChildView *new_ADXActionMenuView_A
 FOUNDATION_EXPORT ADXActionMenuView_ActionMenuChildView *create_ADXActionMenuView_ActionMenuChildView_initWithADXActionMenuView_(ADXActionMenuView *outer$);
 
 J2OBJC_TYPE_LITERAL_HEADER(ADXActionMenuView_ActionMenuChildView)
+
 
 #endif
 

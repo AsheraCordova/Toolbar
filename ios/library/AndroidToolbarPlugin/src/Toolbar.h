@@ -3,6 +3,7 @@
 //  source: D:\Java\git\core-javafx-widget\SWTAndroidToolBar\src\main\java\androidx\appcompat\widget\Toolbar.java
 //
 
+#import <Foundation/Foundation.h>
 #include "J2ObjC_header.h"
 
 #pragma push_macro("INCLUDE_ALL_Toolbar")
@@ -29,31 +30,33 @@
 @class ADXMenuBuilder;
 @class ADXToolbar_LayoutParams;
 @class ASBaseMeasurableImageView;
+@class JavaLangBoolean;
+@class JavaLangInteger;
 
 @interface ADXToolbar : ADViewGroup {
  @public
-  jint mButtonGravity_;
+  int32_t mButtonGravity_;
 }
 
 #pragma mark Public
 
 - (instancetype)init;
 
-- (jint)getContentInsetEnd;
+- (int32_t)getContentInsetEnd;
 
-- (jint)getContentInsetLeft;
+- (int32_t)getContentInsetLeft;
 
-- (jint)getContentInsetRight;
+- (int32_t)getContentInsetRight;
 
-- (jint)getContentInsetStart;
+- (int32_t)getContentInsetStart;
 
-- (jint)getCurrentContentInsetEnd;
+- (int32_t)getCurrentContentInsetEnd;
 
-- (jint)getCurrentContentInsetLeft;
+- (int32_t)getCurrentContentInsetLeft;
 
-- (jint)getCurrentContentInsetRight;
+- (int32_t)getCurrentContentInsetRight;
 
-- (jint)getCurrentContentInsetStart;
+- (int32_t)getCurrentContentInsetStart;
 
 - (ADXMenuBuilder *)getMenu;
 
@@ -61,21 +64,21 @@
 
 - (void)requestLayout;
 
-- (void)setContentInsetEndWithActionsWithInt:(jint)insetEndWithActions;
+- (void)setContentInsetEndWithActionsWithInt:(int32_t)insetEndWithActions;
 
-- (void)setContentInsetsAbsoluteWithInt:(jint)contentInsetLeft
-                                withInt:(jint)contentInsetRight;
+- (void)setContentInsetsAbsoluteWithInt:(int32_t)contentInsetLeft
+                                withInt:(int32_t)contentInsetRight;
 
-- (void)setContentInsetsRelativeWithInt:(jint)contentInsetStart
-                                withInt:(jint)contentInsetEnd;
+- (void)setContentInsetsRelativeWithInt:(int32_t)contentInsetStart
+                                withInt:(int32_t)contentInsetEnd;
 
-- (void)setContentInsetStartWithNavigationWithInt:(jint)insetStartWithNavigation;
+- (void)setContentInsetStartWithNavigationWithInt:(int32_t)insetStartWithNavigation;
 
-- (void)setGravityWithInt:(jint)gravity;
+- (void)setGravityWithInt:(int32_t)gravity;
 
 - (void)setLogoViewWithADView:(ADView *)mLogoView;
 
-- (void)setMaxButtonHeightWithInt:(jint)height;
+- (void)setMaxButtonHeightWithInt:(int32_t)height;
 
 - (void)setMenuViewWithADView:(ADView *)mMenuView;
 
@@ -83,37 +86,37 @@
 
 - (void)setSubtitleTextViewWithADView:(ADView *)mSubtitleTextView;
 
-- (void)setTitleMarginWithInt:(jint)start
-                      withInt:(jint)top
-                      withInt:(jint)end
-                      withInt:(jint)bottom;
+- (void)setTitleMarginWithInt:(int32_t)start
+                      withInt:(int32_t)top
+                      withInt:(int32_t)end
+                      withInt:(int32_t)bottom;
 
-- (void)setTitleMarginBottomWithInt:(jint)margin;
+- (void)setTitleMarginBottomWithInt:(int32_t)margin;
 
-- (void)setTitleMarginEndWithInt:(jint)margin;
+- (void)setTitleMarginEndWithInt:(int32_t)margin;
 
-- (void)setTitleMarginStartWithInt:(jint)margin;
+- (void)setTitleMarginStartWithInt:(int32_t)margin;
 
-- (void)setTitleMarginTopWithInt:(jint)margin;
+- (void)setTitleMarginTopWithInt:(int32_t)margin;
 
 - (void)setTitleTextViewWithADView:(ADView *)mTitleTextView;
 
 #pragma mark Protected
 
-- (jboolean)checkLayoutParamsWithADViewGroup_LayoutParams:(ADViewGroup_LayoutParams *)p;
+- (bool)checkLayoutParamsWithADViewGroup_LayoutParams:(ADViewGroup_LayoutParams *)p;
 
 - (ADXToolbar_LayoutParams *)generateDefaultLayoutParams;
 
 - (ADXToolbar_LayoutParams *)generateLayoutParamsWithADViewGroup_LayoutParams:(ADViewGroup_LayoutParams *)p;
 
-- (void)onLayoutWithBoolean:(jboolean)changed
-                    withInt:(jint)l
-                    withInt:(jint)t
-                    withInt:(jint)r
-                    withInt:(jint)b;
+- (void)onLayoutWithBoolean:(bool)changed
+                    withInt:(int32_t)l
+                    withInt:(int32_t)t
+                    withInt:(int32_t)r
+                    withInt:(int32_t)b;
 
-- (void)onMeasureWithInt:(jint)widthMeasureSpec
-                 withInt:(jint)heightMeasureSpec;
+- (void)onMeasureWithInt:(int32_t)widthMeasureSpec
+                 withInt:(int32_t)heightMeasureSpec;
 
 @end
 
@@ -129,22 +132,25 @@ J2OBJC_TYPE_LITERAL_HEADER(ADXToolbar)
 
 @compatibility_alias AndroidxAppcompatWidgetToolbar ADXToolbar;
 
+
 #endif
 
 #if !defined (ADXToolbar_OnMenuItemClickListener_) && (INCLUDE_ALL_Toolbar || defined(INCLUDE_ADXToolbar_OnMenuItemClickListener))
 #define ADXToolbar_OnMenuItemClickListener_
 
+@class JavaLangBoolean;
 @protocol ADMenuItem;
 
 @protocol ADXToolbar_OnMenuItemClickListener < JavaObject >
 
-- (jboolean)onMenuItemClickWithADMenuItem:(id<ADMenuItem>)item;
+- (bool)onMenuItemClickWithADMenuItem:(id<ADMenuItem>)item;
 
 @end
 
 J2OBJC_EMPTY_STATIC_INIT(ADXToolbar_OnMenuItemClickListener)
 
 J2OBJC_TYPE_LITERAL_HEADER(ADXToolbar_OnMenuItemClickListener)
+
 
 #endif
 
@@ -156,20 +162,21 @@ J2OBJC_TYPE_LITERAL_HEADER(ADXToolbar_OnMenuItemClickListener)
 #include "ViewGroup.h"
 
 @class ADViewGroup_LayoutParams;
+@class JavaLangInteger;
 
 @interface ADXToolbar_ActionBar_LayoutParams : ADViewGroup_MarginLayoutParams {
  @public
-  jint gravity_;
+  int32_t gravity_;
 }
 
 #pragma mark Public
 
-- (instancetype)initWithInt:(jint)width
-                    withInt:(jint)height;
+- (instancetype)initWithInt:(int32_t)width
+                    withInt:(int32_t)height;
 
-- (instancetype)initWithInt:(jint)width
-                    withInt:(jint)height
-                    withInt:(jint)gravity;
+- (instancetype)initWithInt:(int32_t)width
+                    withInt:(int32_t)height
+                    withInt:(int32_t)gravity;
 
 - (instancetype)initWithADXToolbar_ActionBar_LayoutParams:(ADXToolbar_ActionBar_LayoutParams *)source;
 
@@ -183,17 +190,17 @@ J2OBJC_TYPE_LITERAL_HEADER(ADXToolbar_OnMenuItemClickListener)
 
 J2OBJC_EMPTY_STATIC_INIT(ADXToolbar_ActionBar_LayoutParams)
 
-FOUNDATION_EXPORT void ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_(ADXToolbar_ActionBar_LayoutParams *self, jint width, jint height);
+FOUNDATION_EXPORT void ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_(ADXToolbar_ActionBar_LayoutParams *self, int32_t width, int32_t height);
 
-FOUNDATION_EXPORT ADXToolbar_ActionBar_LayoutParams *new_ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_(jint width, jint height) NS_RETURNS_RETAINED;
+FOUNDATION_EXPORT ADXToolbar_ActionBar_LayoutParams *new_ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_(int32_t width, int32_t height) NS_RETURNS_RETAINED;
 
-FOUNDATION_EXPORT ADXToolbar_ActionBar_LayoutParams *create_ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_(jint width, jint height);
+FOUNDATION_EXPORT ADXToolbar_ActionBar_LayoutParams *create_ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_(int32_t width, int32_t height);
 
-FOUNDATION_EXPORT void ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_withInt_(ADXToolbar_ActionBar_LayoutParams *self, jint width, jint height, jint gravity);
+FOUNDATION_EXPORT void ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_withInt_(ADXToolbar_ActionBar_LayoutParams *self, int32_t width, int32_t height, int32_t gravity);
 
-FOUNDATION_EXPORT ADXToolbar_ActionBar_LayoutParams *new_ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_withInt_(jint width, jint height, jint gravity) NS_RETURNS_RETAINED;
+FOUNDATION_EXPORT ADXToolbar_ActionBar_LayoutParams *new_ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_withInt_(int32_t width, int32_t height, int32_t gravity) NS_RETURNS_RETAINED;
 
-FOUNDATION_EXPORT ADXToolbar_ActionBar_LayoutParams *create_ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_withInt_(jint width, jint height, jint gravity);
+FOUNDATION_EXPORT ADXToolbar_ActionBar_LayoutParams *create_ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_withInt_(int32_t width, int32_t height, int32_t gravity);
 
 FOUNDATION_EXPORT void ADXToolbar_ActionBar_LayoutParams_initWithADXToolbar_ActionBar_LayoutParams_(ADXToolbar_ActionBar_LayoutParams *self, ADXToolbar_ActionBar_LayoutParams *source);
 
@@ -209,6 +216,7 @@ FOUNDATION_EXPORT ADXToolbar_ActionBar_LayoutParams *create_ADXToolbar_ActionBar
 
 J2OBJC_TYPE_LITERAL_HEADER(ADXToolbar_ActionBar_LayoutParams)
 
+
 #endif
 
 #if !defined (ADXToolbar_LayoutParams_) && (INCLUDE_ALL_Toolbar || defined(INCLUDE_ADXToolbar_LayoutParams))
@@ -216,20 +224,21 @@ J2OBJC_TYPE_LITERAL_HEADER(ADXToolbar_ActionBar_LayoutParams)
 
 @class ADViewGroup_LayoutParams;
 @class ADXToolbar_ActionBar_LayoutParams;
+@class JavaLangInteger;
 
 @interface ADXToolbar_LayoutParams : ADXToolbar_ActionBar_LayoutParams {
  @public
-  jint mViewType_;
+  int32_t mViewType_;
 }
 
 #pragma mark Public
 
-- (instancetype)initWithInt:(jint)width
-                    withInt:(jint)height;
+- (instancetype)initWithInt:(int32_t)width
+                    withInt:(int32_t)height;
 
-- (instancetype)initWithInt:(jint)width
-                    withInt:(jint)height
-                    withInt:(jint)gravity;
+- (instancetype)initWithInt:(int32_t)width
+                    withInt:(int32_t)height
+                    withInt:(int32_t)gravity;
 
 - (instancetype)initWithADXToolbar_LayoutParams:(ADXToolbar_LayoutParams *)source;
 
@@ -243,29 +252,29 @@ J2OBJC_TYPE_LITERAL_HEADER(ADXToolbar_ActionBar_LayoutParams)
 
 J2OBJC_EMPTY_STATIC_INIT(ADXToolbar_LayoutParams)
 
-inline jint ADXToolbar_LayoutParams_get_CUSTOM(void);
+inline int32_t ADXToolbar_LayoutParams_get_CUSTOM(void);
 #define ADXToolbar_LayoutParams_CUSTOM 0
-J2OBJC_STATIC_FIELD_CONSTANT(ADXToolbar_LayoutParams, CUSTOM, jint)
+J2OBJC_STATIC_FIELD_CONSTANT(ADXToolbar_LayoutParams, CUSTOM, int32_t)
 
-inline jint ADXToolbar_LayoutParams_get_SYSTEM(void);
+inline int32_t ADXToolbar_LayoutParams_get_SYSTEM(void);
 #define ADXToolbar_LayoutParams_SYSTEM 1
-J2OBJC_STATIC_FIELD_CONSTANT(ADXToolbar_LayoutParams, SYSTEM, jint)
+J2OBJC_STATIC_FIELD_CONSTANT(ADXToolbar_LayoutParams, SYSTEM, int32_t)
 
-inline jint ADXToolbar_LayoutParams_get_EXPANDED(void);
+inline int32_t ADXToolbar_LayoutParams_get_EXPANDED(void);
 #define ADXToolbar_LayoutParams_EXPANDED 2
-J2OBJC_STATIC_FIELD_CONSTANT(ADXToolbar_LayoutParams, EXPANDED, jint)
+J2OBJC_STATIC_FIELD_CONSTANT(ADXToolbar_LayoutParams, EXPANDED, int32_t)
 
-FOUNDATION_EXPORT void ADXToolbar_LayoutParams_initWithInt_withInt_(ADXToolbar_LayoutParams *self, jint width, jint height);
+FOUNDATION_EXPORT void ADXToolbar_LayoutParams_initWithInt_withInt_(ADXToolbar_LayoutParams *self, int32_t width, int32_t height);
 
-FOUNDATION_EXPORT ADXToolbar_LayoutParams *new_ADXToolbar_LayoutParams_initWithInt_withInt_(jint width, jint height) NS_RETURNS_RETAINED;
+FOUNDATION_EXPORT ADXToolbar_LayoutParams *new_ADXToolbar_LayoutParams_initWithInt_withInt_(int32_t width, int32_t height) NS_RETURNS_RETAINED;
 
-FOUNDATION_EXPORT ADXToolbar_LayoutParams *create_ADXToolbar_LayoutParams_initWithInt_withInt_(jint width, jint height);
+FOUNDATION_EXPORT ADXToolbar_LayoutParams *create_ADXToolbar_LayoutParams_initWithInt_withInt_(int32_t width, int32_t height);
 
-FOUNDATION_EXPORT void ADXToolbar_LayoutParams_initWithInt_withInt_withInt_(ADXToolbar_LayoutParams *self, jint width, jint height, jint gravity);
+FOUNDATION_EXPORT void ADXToolbar_LayoutParams_initWithInt_withInt_withInt_(ADXToolbar_LayoutParams *self, int32_t width, int32_t height, int32_t gravity);
 
-FOUNDATION_EXPORT ADXToolbar_LayoutParams *new_ADXToolbar_LayoutParams_initWithInt_withInt_withInt_(jint width, jint height, jint gravity) NS_RETURNS_RETAINED;
+FOUNDATION_EXPORT ADXToolbar_LayoutParams *new_ADXToolbar_LayoutParams_initWithInt_withInt_withInt_(int32_t width, int32_t height, int32_t gravity) NS_RETURNS_RETAINED;
 
-FOUNDATION_EXPORT ADXToolbar_LayoutParams *create_ADXToolbar_LayoutParams_initWithInt_withInt_withInt_(jint width, jint height, jint gravity);
+FOUNDATION_EXPORT ADXToolbar_LayoutParams *create_ADXToolbar_LayoutParams_initWithInt_withInt_withInt_(int32_t width, int32_t height, int32_t gravity);
 
 FOUNDATION_EXPORT void ADXToolbar_LayoutParams_initWithADXToolbar_LayoutParams_(ADXToolbar_LayoutParams *self, ADXToolbar_LayoutParams *source);
 
@@ -280,6 +289,7 @@ FOUNDATION_EXPORT ADXToolbar_LayoutParams *new_ADXToolbar_LayoutParams_initWithA
 FOUNDATION_EXPORT ADXToolbar_LayoutParams *create_ADXToolbar_LayoutParams_initWithADViewGroup_LayoutParams_(ADViewGroup_LayoutParams *source);
 
 J2OBJC_TYPE_LITERAL_HEADER(ADXToolbar_LayoutParams)
+
 
 #endif
 
@@ -303,6 +313,7 @@ FOUNDATION_EXPORT ADXToolbar_ActionBar *new_ADXToolbar_ActionBar_init(void) NS_R
 FOUNDATION_EXPORT ADXToolbar_ActionBar *create_ADXToolbar_ActionBar_init(void);
 
 J2OBJC_TYPE_LITERAL_HEADER(ADXToolbar_ActionBar)
+
 
 #endif
 

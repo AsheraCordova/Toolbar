@@ -3,6 +3,11 @@
 //  source: D:\Java\git\core-javafx-widget\SWTAndroidToolBar\src\main\java\androidx\appcompat\widget\ActionMenuView.java
 //
 
+#define J2OBJC_IMPORTED_BY_JAVA_IMPLEMENTATION 1
+
+
+
+
 #include "ActionMenuPresenter.h"
 #include "ActionMenuView.h"
 #include "DisplayMetrics.h"
@@ -16,55 +21,63 @@
 #include "ViewGroup.h"
 #include "ViewParent.h"
 #include "ViewUtils.h"
+#include "java/lang/Boolean.h"
+#include "java/lang/Float.h"
 #include "java/lang/Integer.h"
 #include "java/lang/Long.h"
 #include "java/lang/Math.h"
 
 
+
+
+#pragma clang diagnostic error "-Wreturn-type"
+#pragma clang diagnostic ignored "-Wswitch"
+
+
 @interface ADXActionMenuView () {
  @public
   ADXMenuBuilder *mMenu_;
-  jint mPopupTheme_;
-  jboolean mReserveOverflow_;
-  jboolean mFormatItems_;
-  jint mFormatItemsWidth_;
-  jint mMinCellSize_;
-  jint mGeneratedItemPadding_;
+  int32_t mPopupTheme_;
+  bool mReserveOverflow_;
+  bool mFormatItems_;
+  int32_t mFormatItemsWidth_;
+  int32_t mMinCellSize_;
+  int32_t mGeneratedItemPadding_;
 }
 
-- (void)onMeasureExactFormatWithInt:(jint)widthMeasureSpec
-                            withInt:(jint)heightMeasureSpec;
+- (void)onMeasureExactFormatWithInt:(int32_t)widthMeasureSpec
+                            withInt:(int32_t)heightMeasureSpec;
 
-+ (jboolean)hasTextStaticWithADView:(ADView *)itemView;
++ (bool)hasTextStaticWithADView:(ADView *)itemView;
 
 @end
 
 J2OBJC_FIELD_SETTER(ADXActionMenuView, mMenu_, ADXMenuBuilder *)
 
-__attribute__((unused)) static void ADXActionMenuView_onMeasureExactFormatWithInt_withInt_(ADXActionMenuView *self, jint widthMeasureSpec, jint heightMeasureSpec);
+__attribute__((unused)) static void ADXActionMenuView_onMeasureExactFormatWithInt_withInt_(ADXActionMenuView *self, int32_t widthMeasureSpec, int32_t heightMeasureSpec);
 
-__attribute__((unused)) static jboolean ADXActionMenuView_hasTextStaticWithADView_(ADView *itemView);
+__attribute__((unused)) static bool ADXActionMenuView_hasTextStaticWithADView_(ADView *itemView);
 
 @implementation ADXActionMenuView
 
-- (void)onMeasureWithInt:(jint)widthMeasureSpec
-                 withInt:(jint)heightMeasureSpec {
-  jboolean wasFormatted = mFormatItems_;
+- (void)onMeasureWithInt:(int32_t)widthMeasureSpec
+                 withInt:(int32_t)heightMeasureSpec {
+  bool wasFormatted = mFormatItems_;
   mFormatItems_ = (ADView_MeasureSpec_getModeWithInt_(widthMeasureSpec) == ADView_MeasureSpec_EXACTLY);
   if (wasFormatted != mFormatItems_) {
     mFormatItemsWidth_ = 0;
   }
-  jint widthSize = ADView_MeasureSpec_getSizeWithInt_(widthMeasureSpec);
+  int32_t widthSize = ADView_MeasureSpec_getSizeWithInt_(widthMeasureSpec);
   if (mFormatItems_ && mMenu_ != nil && widthSize != mFormatItemsWidth_) {
     mFormatItemsWidth_ = widthSize;
     [mMenu_ onItemsChangedWithBoolean:true];
   }
-  jint childCount = [self getChildCount];
+  int32_t childCount = [self getChildCount];
   if (mFormatItems_ && childCount > 0) {
     ADXActionMenuView_onMeasureExactFormatWithInt_withInt_(self, widthMeasureSpec, heightMeasureSpec);
   }
   else {
-    for (jint i = 0; i < childCount; i++) {
+    for (int32_t i = 0; i < childCount; i++) {
       ADView *child = [self getChildAtWithInt:i];
       ADXActionMenuView_LayoutParams *lp = (ADXActionMenuView_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXActionMenuView_LayoutParams class]);
       ((ADXActionMenuView_LayoutParams *) nil_chk(lp))->leftMargin_ = lp->rightMargin_ = 0;
@@ -73,37 +86,37 @@ __attribute__((unused)) static jboolean ADXActionMenuView_hasTextStaticWithADVie
   }
 }
 
-- (void)onMeasureExactFormatWithInt:(jint)widthMeasureSpec
-                            withInt:(jint)heightMeasureSpec {
+- (void)onMeasureExactFormatWithInt:(int32_t)widthMeasureSpec
+                            withInt:(int32_t)heightMeasureSpec {
   ADXActionMenuView_onMeasureExactFormatWithInt_withInt_(self, widthMeasureSpec, heightMeasureSpec);
 }
 
-+ (jint)measureChildForCellsWithADView:(ADView *)child
-                               withInt:(jint)cellSize
-                               withInt:(jint)cellsRemaining
-                               withInt:(jint)parentHeightMeasureSpec
-                               withInt:(jint)parentHeightPadding {
++ (int32_t)measureChildForCellsWithADView:(ADView *)child
+                                  withInt:(int32_t)cellSize
+                                  withInt:(int32_t)cellsRemaining
+                                  withInt:(int32_t)parentHeightMeasureSpec
+                                  withInt:(int32_t)parentHeightPadding {
   return ADXActionMenuView_measureChildForCellsWithADView_withInt_withInt_withInt_withInt_(child, cellSize, cellsRemaining, parentHeightMeasureSpec, parentHeightPadding);
 }
 
-- (void)onLayoutWithBoolean:(jboolean)changed
-                    withInt:(jint)left
-                    withInt:(jint)top
-                    withInt:(jint)right
-                    withInt:(jint)bottom {
+- (void)onLayoutWithBoolean:(bool)changed
+                    withInt:(int32_t)left
+                    withInt:(int32_t)top
+                    withInt:(int32_t)right
+                    withInt:(int32_t)bottom {
   if (!mFormatItems_) {
     [super onLayoutWithBoolean:changed withInt:left withInt:top withInt:right withInt:bottom];
     return;
   }
-  jint childCount = [self getChildCount];
-  jint midVertical = JreIntDiv((bottom - top), 2);
-  jint dividerWidth = [self getDividerWidth];
-  jint overflowWidth = 0;
-  jint nonOverflowCount = 0;
-  jint widthRemaining = right - left - [self getPaddingRight] - [self getPaddingLeft];
-  jboolean hasOverflow = false;
-  jboolean isLayoutRtl = ADXViewUtils_isLayoutRtlWithADView_(self);
-  for (jint i = 0; i < childCount; i++) {
+  int32_t childCount = [self getChildCount];
+  int32_t midVertical = JreIntDiv((bottom - top), 2);
+  int32_t dividerWidth = [self getDividerWidth];
+  int32_t overflowWidth = 0;
+  int32_t nonOverflowCount = 0;
+  int32_t widthRemaining = right - left - [self getPaddingRight] - [self getPaddingLeft];
+  bool hasOverflow = false;
+  bool isLayoutRtl = ADXViewUtils_isLayoutRtlWithADView_(self);
+  for (int32_t i = 0; i < childCount; i++) {
     ADView *v = [self getChildAtWithInt:i];
     if ([((ADView *) nil_chk(v)) getVisibility] == ADView_GONE) {
       continue;
@@ -114,9 +127,9 @@ __attribute__((unused)) static jboolean ADXActionMenuView_hasTextStaticWithADVie
       if ([self hasSupportDividerBeforeChildAtWithInt:i]) {
         overflowWidth += dividerWidth;
       }
-      jint height = [v getMeasuredHeight];
-      jint r;
-      jint l;
+      int32_t height = [v getMeasuredHeight];
+      int32_t r;
+      int32_t l;
       if (isLayoutRtl) {
         l = [self getPaddingLeft] + p->leftMargin_;
         r = l + overflowWidth;
@@ -125,14 +138,14 @@ __attribute__((unused)) static jboolean ADXActionMenuView_hasTextStaticWithADVie
         r = [self getWidth] - [self getPaddingRight] - p->rightMargin_;
         l = r - overflowWidth;
       }
-      jint t = midVertical - (JreIntDiv(height, 2));
-      jint b = t + height;
+      int32_t t = midVertical - (JreIntDiv(height, 2));
+      int32_t b = t + height;
       [v layoutWithInt:l withInt:t withInt:r withInt:b];
       widthRemaining -= overflowWidth;
       hasOverflow = true;
     }
     else {
-      jint size = [v getMeasuredWidth] + p->leftMargin_ + p->rightMargin_;
+      int32_t size = [v getMeasuredWidth] + p->leftMargin_ + p->rightMargin_;
       widthRemaining -= size;
       if ([self hasSupportDividerBeforeChildAtWithInt:i]) {
       }
@@ -141,51 +154,51 @@ __attribute__((unused)) static jboolean ADXActionMenuView_hasTextStaticWithADVie
   }
   if (childCount == 1 && !hasOverflow) {
     ADView *v = [self getChildAtWithInt:0];
-    jint width = [((ADView *) nil_chk(v)) getMeasuredWidth];
-    jint height = [v getMeasuredHeight];
-    jint midHorizontal = JreIntDiv((right - left), 2);
-    jint l = midHorizontal - JreIntDiv(width, 2);
-    jint t = midVertical - JreIntDiv(height, 2);
+    int32_t width = [((ADView *) nil_chk(v)) getMeasuredWidth];
+    int32_t height = [v getMeasuredHeight];
+    int32_t midHorizontal = JreIntDiv((right - left), 2);
+    int32_t l = midHorizontal - JreIntDiv(width, 2);
+    int32_t t = midVertical - JreIntDiv(height, 2);
     [v layoutWithInt:l withInt:t withInt:l + width withInt:t + height];
     return;
   }
-  jint spacerCount = nonOverflowCount - (hasOverflow ? 0 : 1);
-  jint spacerSize = JavaLangMath_maxWithInt_withInt_(0, spacerCount > 0 ? JreIntDiv(widthRemaining, spacerCount) : 0);
+  int32_t spacerCount = nonOverflowCount - (hasOverflow ? 0 : 1);
+  int32_t spacerSize = JavaLangMath_maxWithInt_withInt_(0, spacerCount > 0 ? JreIntDiv(widthRemaining, spacerCount) : 0);
   if (isLayoutRtl) {
-    jint startRight = [self getWidth] - [self getPaddingRight];
-    for (jint i = 0; i < childCount; i++) {
+    int32_t startRight = [self getWidth] - [self getPaddingRight];
+    for (int32_t i = 0; i < childCount; i++) {
       ADView *v = [self getChildAtWithInt:i];
       ADXActionMenuView_LayoutParams *lp = (ADXActionMenuView_LayoutParams *) cast_chk([((ADView *) nil_chk(v)) getLayoutParams], [ADXActionMenuView_LayoutParams class]);
       if ([v getVisibility] == ADView_GONE || ((ADXActionMenuView_LayoutParams *) nil_chk(lp))->isOverflowButton_) {
         continue;
       }
       startRight -= ((ADXActionMenuView_LayoutParams *) nil_chk(lp))->rightMargin_;
-      jint width = [v getMeasuredWidth];
-      jint height = [v getMeasuredHeight];
-      jint t = midVertical - JreIntDiv(height, 2);
+      int32_t width = [v getMeasuredWidth];
+      int32_t height = [v getMeasuredHeight];
+      int32_t t = midVertical - JreIntDiv(height, 2);
       [v layoutWithInt:startRight - width withInt:t withInt:startRight withInt:t + height];
       startRight -= width + lp->leftMargin_ + spacerSize;
     }
   }
   else {
-    jint startLeft = [self getPaddingLeft];
-    for (jint i = 0; i < childCount; i++) {
+    int32_t startLeft = [self getPaddingLeft];
+    for (int32_t i = 0; i < childCount; i++) {
       ADView *v = [self getChildAtWithInt:i];
       ADXActionMenuView_LayoutParams *lp = (ADXActionMenuView_LayoutParams *) cast_chk([((ADView *) nil_chk(v)) getLayoutParams], [ADXActionMenuView_LayoutParams class]);
       if ([v getVisibility] == ADView_GONE || ((ADXActionMenuView_LayoutParams *) nil_chk(lp))->isOverflowButton_) {
         continue;
       }
       startLeft += ((ADXActionMenuView_LayoutParams *) nil_chk(lp))->leftMargin_;
-      jint width = [v getMeasuredWidth];
-      jint height = [v getMeasuredHeight];
-      jint t = midVertical - JreIntDiv(height, 2);
+      int32_t width = [v getMeasuredWidth];
+      int32_t height = [v getMeasuredHeight];
+      int32_t t = midVertical - JreIntDiv(height, 2);
       [v layoutWithInt:startLeft withInt:t withInt:startLeft + width withInt:t + height];
       startLeft += width + lp->rightMargin_ + spacerSize;
     }
   }
 }
 
-- (void)setOverflowReservedWithBoolean:(jboolean)reserveOverflow {
+- (void)setOverflowReservedWithBoolean:(bool)reserveOverflow {
   mReserveOverflow_ = reserveOverflow;
 }
 
@@ -195,7 +208,7 @@ __attribute__((unused)) static jboolean ADXActionMenuView_hasTextStaticWithADVie
   return params;
 }
 
-- (jboolean)checkLayoutParamsWithADViewGroup_LayoutParams:(ADViewGroup_LayoutParams *)p {
+- (bool)checkLayoutParamsWithADViewGroup_LayoutParams:(ADViewGroup_LayoutParams *)p {
   return [p isKindOfClass:[ADXActionMenuView_LayoutParams class]];
 }
 
@@ -209,13 +222,13 @@ __attribute__((unused)) static jboolean ADXActionMenuView_hasTextStaticWithADVie
   JreStrongAssign(&mMenu_, menu);
 }
 
-- (jboolean)hasSupportDividerBeforeChildAtWithInt:(jint)childIndex {
+- (bool)hasSupportDividerBeforeChildAtWithInt:(int32_t)childIndex {
   if (childIndex == 0) {
     return false;
   }
   ADView *childBefore = [self getChildAtWithInt:childIndex - 1];
   ADView *child = [self getChildAtWithInt:childIndex];
-  jboolean result = false;
+  bool result = false;
   if (childIndex < [self getChildCount] && [childBefore isKindOfClass:[ADXActionMenuView_ActionMenuChildView class]]) {
     result |= [((ADXActionMenuView_ActionMenuChildView *) nil_chk(((ADXActionMenuView_ActionMenuChildView *) cast_chk(childBefore, [ADXActionMenuView_ActionMenuChildView class])))) needsDividerAfter];
   }
@@ -232,7 +245,7 @@ J2OBJC_IGNORE_DESIGNATED_BEGIN
 }
 J2OBJC_IGNORE_DESIGNATED_END
 
-- (jint)getDividerWidth {
+- (int32_t)getDividerWidth {
   return 0;
 }
 
@@ -256,7 +269,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   [((ADXActionMenuPresenter *) nil_chk(mPresenter_)) updateMenuViewWithBoolean:true];
 }
 
-- (jboolean)hasItemViewWithADMenuItem:(id<ADMenuItem>)item {
+- (bool)hasItemViewWithADMenuItem:(id<ADMenuItem>)item {
   return false;
 }
 
@@ -268,15 +281,15 @@ J2OBJC_IGNORE_DESIGNATED_END
   return nil;
 }
 
-+ (jboolean)isActionMenuItemViewWithADView:(ADView *)child {
++ (bool)isActionMenuItemViewWithADView:(ADView *)child {
   return ADXActionMenuView_isActionMenuItemViewWithADView_(child);
 }
 
-+ (jboolean)hasTextStaticWithADView:(ADView *)itemView {
++ (bool)hasTextStaticWithADView:(ADView *)itemView {
   return ADXActionMenuView_hasTextStaticWithADView_(itemView);
 }
 
-- (jboolean)hasTextWithADView:(ADView *)child {
+- (bool)hasTextWithADView:(ADView *)child {
   return false;
 }
 
@@ -354,33 +367,33 @@ J2OBJC_IGNORE_DESIGNATED_END
 
 @end
 
-void ADXActionMenuView_onMeasureExactFormatWithInt_withInt_(ADXActionMenuView *self, jint widthMeasureSpec, jint heightMeasureSpec) {
-  jint heightMode = ADView_MeasureSpec_getModeWithInt_(heightMeasureSpec);
-  jint widthSize = ADView_MeasureSpec_getSizeWithInt_(widthMeasureSpec);
-  jint heightSize = ADView_MeasureSpec_getSizeWithInt_(heightMeasureSpec);
-  jint widthPadding = [self getPaddingLeft] + [self getPaddingRight];
-  jint heightPadding = [self getPaddingTop] + [self getPaddingBottom];
-  jint itemHeightSpec = ADViewGroup_getChildMeasureSpecWithInt_withInt_withInt_(heightMeasureSpec, heightPadding, ADViewGroup_LayoutParams_WRAP_CONTENT);
+void ADXActionMenuView_onMeasureExactFormatWithInt_withInt_(ADXActionMenuView *self, int32_t widthMeasureSpec, int32_t heightMeasureSpec) {
+  int32_t heightMode = ADView_MeasureSpec_getModeWithInt_(heightMeasureSpec);
+  int32_t widthSize = ADView_MeasureSpec_getSizeWithInt_(widthMeasureSpec);
+  int32_t heightSize = ADView_MeasureSpec_getSizeWithInt_(heightMeasureSpec);
+  int32_t widthPadding = [self getPaddingLeft] + [self getPaddingRight];
+  int32_t heightPadding = [self getPaddingTop] + [self getPaddingBottom];
+  int32_t itemHeightSpec = ADViewGroup_getChildMeasureSpecWithInt_withInt_withInt_(heightMeasureSpec, heightPadding, ADViewGroup_LayoutParams_WRAP_CONTENT);
   widthSize -= widthPadding;
-  jint cellCount = JreIntDiv(widthSize, self->mMinCellSize_);
-  jint cellSizeRemaining = JreIntMod(widthSize, self->mMinCellSize_);
+  int32_t cellCount = JreIntDiv(widthSize, self->mMinCellSize_);
+  int32_t cellSizeRemaining = JreIntMod(widthSize, self->mMinCellSize_);
   if (cellCount == 0) {
     [self setMeasuredDimensionWithInt:widthSize withInt:0];
     return;
   }
-  jint cellSize = self->mMinCellSize_ + JreIntDiv(cellSizeRemaining, cellCount);
-  jint cellsRemaining = cellCount;
-  jint maxChildHeight = 0;
-  jint maxCellsUsed = 0;
-  jint expandableItemCount = 0;
-  jint visibleItemCount = 0;
-  jboolean hasOverflow = false;
-  jlong smallestItemsAt = 0;
-  jint childCount = [self getChildCount];
-  for (jint i = 0; i < childCount; i++) {
+  int32_t cellSize = self->mMinCellSize_ + JreIntDiv(cellSizeRemaining, cellCount);
+  int32_t cellsRemaining = cellCount;
+  int32_t maxChildHeight = 0;
+  int32_t maxCellsUsed = 0;
+  int32_t expandableItemCount = 0;
+  int32_t visibleItemCount = 0;
+  bool hasOverflow = false;
+  int64_t smallestItemsAt = 0;
+  int32_t childCount = [self getChildCount];
+  for (int32_t i = 0; i < childCount; i++) {
     ADView *child = [self getChildAtWithInt:i];
     if ([((ADView *) nil_chk(child)) getVisibility] == ADView_GONE) continue;
-    jboolean isGeneratedItem = ADXActionMenuView_isActionMenuItemViewWithADView_(child);
+    bool isGeneratedItem = ADXActionMenuView_isActionMenuItemViewWithADView_(child);
     visibleItemCount++;
     if (isGeneratedItem) {
       [child setPaddingWithInt:self->mGeneratedItemPadding_ withInt:0 withInt:self->mGeneratedItemPadding_ withInt:0];
@@ -393,8 +406,8 @@ void ADXActionMenuView_onMeasureExactFormatWithInt_withInt_(ADXActionMenuView *s
     lp->leftMargin_ = 0;
     lp->rightMargin_ = 0;
     lp->preventEdgeOffset_ = (isGeneratedItem && [self hasTextWithADView:child]);
-    jint cellsAvailable = lp->isOverflowButton_ ? 1 : cellsRemaining;
-    jint cellsUsed = ADXActionMenuView_measureChildForCellsWithADView_withInt_withInt_withInt_withInt_(child, cellSize, cellsAvailable, itemHeightSpec, heightPadding);
+    int32_t cellsAvailable = lp->isOverflowButton_ ? 1 : cellsRemaining;
+    int32_t cellsUsed = ADXActionMenuView_measureChildForCellsWithADView_withInt_withInt_withInt_withInt_(child, cellSize, cellsAvailable, itemHeightSpec, heightPadding);
     maxCellsUsed = JavaLangMath_maxWithInt_withInt_(maxCellsUsed, cellsUsed);
     if (lp->expandable_) expandableItemCount++;
     if (lp->isOverflowButton_) hasOverflow = true;
@@ -402,13 +415,13 @@ void ADXActionMenuView_onMeasureExactFormatWithInt_withInt_(ADXActionMenuView *s
     maxChildHeight = JavaLangMath_maxWithInt_withInt_(maxChildHeight, [child getMeasuredHeight]);
     if (cellsUsed == 1) smallestItemsAt |= (JreLShift32(1, i));
   }
-  jboolean centerSingleExpandedItem = hasOverflow && visibleItemCount == 2;
-  jboolean needsExpansion = false;
+  bool centerSingleExpandedItem = hasOverflow && visibleItemCount == 2;
+  bool needsExpansion = false;
   while (expandableItemCount > 0 && cellsRemaining > 0) {
-    jint minCells = JavaLangInteger_MAX_VALUE;
-    jlong minCellsAt = 0;
-    jint minCellsItemCount = 0;
-    for (jint i = 0; i < childCount; i++) {
+    int32_t minCells = JavaLangInteger_MAX_VALUE;
+    int64_t minCellsAt = 0;
+    int32_t minCellsItemCount = 0;
+    for (int32_t i = 0; i < childCount; i++) {
       ADView *child = [self getChildAtWithInt:i];
       ADXActionMenuView_LayoutParams *lp = (ADXActionMenuView_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXActionMenuView_LayoutParams class]);
       if (!((ADXActionMenuView_LayoutParams *) nil_chk(lp))->expandable_) continue;
@@ -425,7 +438,7 @@ void ADXActionMenuView_onMeasureExactFormatWithInt_withInt_(ADXActionMenuView *s
     smallestItemsAt |= minCellsAt;
     if (minCellsItemCount > cellsRemaining) break;
     minCells++;
-    for (jint i = 0; i < childCount; i++) {
+    for (int32_t i = 0; i < childCount; i++) {
       ADView *child = [self getChildAtWithInt:i];
       ADXActionMenuView_LayoutParams *lp = (ADXActionMenuView_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXActionMenuView_LayoutParams class]);
       if ((minCellsAt & (JreLShift32(1, i))) == 0) {
@@ -441,9 +454,9 @@ void ADXActionMenuView_onMeasureExactFormatWithInt_withInt_(ADXActionMenuView *s
     }
     needsExpansion = true;
   }
-  jboolean singleItem = !hasOverflow && visibleItemCount == 1;
+  bool singleItem = !hasOverflow && visibleItemCount == 1;
   if (cellsRemaining > 0 && smallestItemsAt != 0 && (cellsRemaining < visibleItemCount - 1 || singleItem || maxCellsUsed > 1)) {
-    jfloat expandCount = JavaLangLong_bitCountWithLong_(smallestItemsAt);
+    float expandCount = JavaLangLong_bitCountWithLong_(smallestItemsAt);
     if (!singleItem) {
       if ((smallestItemsAt & 1) != 0) {
         ADXActionMenuView_LayoutParams *lp = (ADXActionMenuView_LayoutParams *) cast_chk([((ADView *) nil_chk([self getChildAtWithInt:0])) getLayoutParams], [ADXActionMenuView_LayoutParams class]);
@@ -454,8 +467,8 @@ void ADXActionMenuView_onMeasureExactFormatWithInt_withInt_(ADXActionMenuView *s
         if (!((ADXActionMenuView_LayoutParams *) nil_chk(lp))->preventEdgeOffset_) JreMinusAssignFloatF(&expandCount, 0.5f);
       }
     }
-    jint extraPixels = expandCount > 0 ? JreFpToInt((cellsRemaining * cellSize / expandCount)) : 0;
-    for (jint i = 0; i < childCount; i++) {
+    int32_t extraPixels = expandCount > 0 ? JreFpToInt((cellsRemaining * cellSize / expandCount)) : 0;
+    for (int32_t i = 0; i < childCount; i++) {
       if ((smallestItemsAt & (JreLShift32(1, i))) == 0) continue;
       ADView *child = [self getChildAtWithInt:i];
       ADXActionMenuView_LayoutParams *lp = (ADXActionMenuView_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXActionMenuView_LayoutParams class]);
@@ -485,11 +498,11 @@ void ADXActionMenuView_onMeasureExactFormatWithInt_withInt_(ADXActionMenuView *s
     cellsRemaining = 0;
   }
   if (needsExpansion) {
-    for (jint i = 0; i < childCount; i++) {
+    for (int32_t i = 0; i < childCount; i++) {
       ADView *child = [self getChildAtWithInt:i];
       ADXActionMenuView_LayoutParams *lp = (ADXActionMenuView_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXActionMenuView_LayoutParams class]);
       if (!((ADXActionMenuView_LayoutParams *) nil_chk(lp))->expanded_) continue;
-      jint width = lp->cellsUsed_ * cellSize + lp->extraPixels_;
+      int32_t width = lp->cellsUsed_ * cellSize + lp->extraPixels_;
       [child measureWithInt:ADView_MeasureSpec_makeMeasureSpecWithInt_withInt_(width, ADView_MeasureSpec_EXACTLY) withInt:itemHeightSpec];
     }
   }
@@ -499,27 +512,27 @@ void ADXActionMenuView_onMeasureExactFormatWithInt_withInt_(ADXActionMenuView *s
   [self setMeasuredDimensionWithInt:widthSize withInt:heightSize];
 }
 
-jint ADXActionMenuView_measureChildForCellsWithADView_withInt_withInt_withInt_withInt_(ADView *child, jint cellSize, jint cellsRemaining, jint parentHeightMeasureSpec, jint parentHeightPadding) {
+int32_t ADXActionMenuView_measureChildForCellsWithADView_withInt_withInt_withInt_withInt_(ADView *child, int32_t cellSize, int32_t cellsRemaining, int32_t parentHeightMeasureSpec, int32_t parentHeightPadding) {
   ADXActionMenuView_initialize();
   ADXActionMenuView_LayoutParams *lp = (ADXActionMenuView_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXActionMenuView_LayoutParams class]);
-  jint childHeightSize = ADView_MeasureSpec_getSizeWithInt_(parentHeightMeasureSpec) - parentHeightPadding;
-  jint childHeightMode = ADView_MeasureSpec_getModeWithInt_(parentHeightMeasureSpec);
-  jint childHeightSpec = ADView_MeasureSpec_makeMeasureSpecWithInt_withInt_(childHeightSize, childHeightMode);
+  int32_t childHeightSize = ADView_MeasureSpec_getSizeWithInt_(parentHeightMeasureSpec) - parentHeightPadding;
+  int32_t childHeightMode = ADView_MeasureSpec_getModeWithInt_(parentHeightMeasureSpec);
+  int32_t childHeightSpec = ADView_MeasureSpec_makeMeasureSpecWithInt_withInt_(childHeightSize, childHeightMode);
   ADView *itemView = ADXActionMenuView_isActionMenuItemViewWithADView_(child) ? child : nil;
-  jboolean hasText = itemView != nil && ADXActionMenuView_hasTextStaticWithADView_(itemView);
-  jint cellsUsed = 0;
+  bool hasText = itemView != nil && ADXActionMenuView_hasTextStaticWithADView_(itemView);
+  int32_t cellsUsed = 0;
   if (cellsRemaining > 0 && (!hasText || cellsRemaining >= 2)) {
-    jint childWidthSpec = ADView_MeasureSpec_makeMeasureSpecWithInt_withInt_(cellSize * cellsRemaining, ADView_MeasureSpec_AT_MOST);
+    int32_t childWidthSpec = ADView_MeasureSpec_makeMeasureSpecWithInt_withInt_(cellSize * cellsRemaining, ADView_MeasureSpec_AT_MOST);
     [child measureWithInt:childWidthSpec withInt:childHeightSpec];
-    jint measuredWidth = [child getMeasuredWidth];
+    int32_t measuredWidth = [child getMeasuredWidth];
     cellsUsed = JreIntDiv(measuredWidth, cellSize);
     if (JreIntMod(measuredWidth, cellSize) != 0) cellsUsed++;
     if (hasText && cellsUsed < 2) cellsUsed = 2;
   }
-  jboolean expandable = !((ADXActionMenuView_LayoutParams *) nil_chk(lp))->isOverflowButton_ && hasText;
+  bool expandable = !((ADXActionMenuView_LayoutParams *) nil_chk(lp))->isOverflowButton_ && hasText;
   lp->expandable_ = expandable;
   lp->cellsUsed_ = cellsUsed;
-  jint targetWidth = cellsUsed * cellSize;
+  int32_t targetWidth = cellsUsed * cellSize;
   [child measureWithInt:ADView_MeasureSpec_makeMeasureSpecWithInt_withInt_(targetWidth, ADView_MeasureSpec_EXACTLY) withInt:childHeightSpec];
   return cellsUsed;
 }
@@ -527,7 +540,7 @@ jint ADXActionMenuView_measureChildForCellsWithADView_withInt_withInt_withInt_wi
 void ADXActionMenuView_init(ADXActionMenuView *self) {
   ADXLinearLayoutCompat_init(self);
   [self setBaselineAlignedWithBoolean:false];
-  jfloat density = ((ADDisplayMetrics *) nil_chk([((ADResources *) nil_chk([self getResources])) getDisplayMetrics]))->density_;
+  float density = ((ADDisplayMetrics *) nil_chk([((ADResources *) nil_chk([self getResources])) getDisplayMetrics]))->density_;
   self->mMinCellSize_ = JreFpToInt((ADXActionMenuView_MIN_CELL_SIZE * density));
   self->mGeneratedItemPadding_ = JreFpToInt((ADXActionMenuView_GENERATED_ITEM_PADDING * density));
 }
@@ -540,17 +553,19 @@ ADXActionMenuView *create_ADXActionMenuView_init() {
   J2OBJC_CREATE_IMPL(ADXActionMenuView, init)
 }
 
-jboolean ADXActionMenuView_isActionMenuItemViewWithADView_(ADView *child) {
+bool ADXActionMenuView_isActionMenuItemViewWithADView_(ADView *child) {
   ADXActionMenuView_initialize();
   return child != nil && [child getTag] != nil && [nil_chk([child getTag]) isEqual:JavaLangInteger_valueOfWithInt_(1)];
 }
 
-jboolean ADXActionMenuView_hasTextStaticWithADView_(ADView *itemView) {
+bool ADXActionMenuView_hasTextStaticWithADView_(ADView *itemView) {
   ADXActionMenuView_initialize();
   return [((ADXActionMenuView *) nil_chk(((ADXActionMenuView *) cast_chk([((ADView *) nil_chk(itemView)) getParent], [ADXActionMenuView class])))) hasTextWithADView:itemView];
 }
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXActionMenuView)
+
+J2OBJC_NAME_MAPPING(ADXActionMenuView, "androidx.appcompat.widget", "ADX")
 
 @implementation ADXActionMenuView_LayoutParams
 
@@ -564,8 +579,8 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXActionMenuView)
   return self;
 }
 
-- (instancetype)initWithInt:(jint)width
-                    withInt:(jint)height {
+- (instancetype)initWithInt:(int32_t)width
+                    withInt:(int32_t)height {
   ADXActionMenuView_LayoutParams_initWithInt_withInt_(self, width, height);
   return self;
 }
@@ -623,16 +638,16 @@ ADXActionMenuView_LayoutParams *create_ADXActionMenuView_LayoutParams_initWithAD
   J2OBJC_CREATE_IMPL(ADXActionMenuView_LayoutParams, initWithADXActionMenuView_LayoutParams_, other)
 }
 
-void ADXActionMenuView_LayoutParams_initWithInt_withInt_(ADXActionMenuView_LayoutParams *self, jint width, jint height) {
+void ADXActionMenuView_LayoutParams_initWithInt_withInt_(ADXActionMenuView_LayoutParams *self, int32_t width, int32_t height) {
   ADXLinearLayoutCompat_LayoutParams_initWithInt_withInt_(self, width, height);
   self->isOverflowButton_ = false;
 }
 
-ADXActionMenuView_LayoutParams *new_ADXActionMenuView_LayoutParams_initWithInt_withInt_(jint width, jint height) {
+ADXActionMenuView_LayoutParams *new_ADXActionMenuView_LayoutParams_initWithInt_withInt_(int32_t width, int32_t height) {
   J2OBJC_NEW_IMPL(ADXActionMenuView_LayoutParams, initWithInt_withInt_, width, height)
 }
 
-ADXActionMenuView_LayoutParams *create_ADXActionMenuView_LayoutParams_initWithInt_withInt_(jint width, jint height) {
+ADXActionMenuView_LayoutParams *create_ADXActionMenuView_LayoutParams_initWithInt_withInt_(int32_t width, int32_t height) {
   J2OBJC_CREATE_IMPL(ADXActionMenuView_LayoutParams, initWithInt_withInt_, width, height)
 }
 
@@ -645,11 +660,11 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXActionMenuView_LayoutParams)
   return self;
 }
 
-- (jboolean)needsDividerAfter {
+- (bool)needsDividerAfter {
   return false;
 }
 
-- (jboolean)needsDividerBefore {
+- (bool)needsDividerBefore {
   return false;
 }
 

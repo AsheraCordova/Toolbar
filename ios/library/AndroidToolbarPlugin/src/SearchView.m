@@ -3,6 +3,11 @@
 //  source: D:\Java\git\core-javafx-widget\SWTAndroidToolBar\src\main\java\androidx\appcompat\widget\SearchView.java
 //
 
+#define J2OBJC_IMPORTED_BY_JAVA_IMPLEMENTATION 1
+
+
+
+
 #include "AutoCompleteTextView.h"
 #include "Context.h"
 #include "Drawable.h"
@@ -17,10 +22,17 @@
 #include "TextUtils.h"
 #include "TextWatcher.h"
 #include "View.h"
+#include "java/lang/Boolean.h"
 #include "java/lang/CharSequence.h"
+#include "java/lang/Float.h"
+#include "java/lang/Integer.h"
 #include "java/lang/Math.h"
 
-@protocol JavaLangCharSequence;
+
+
+
+#pragma clang diagnostic error "-Wreturn-type"
+#pragma clang diagnostic ignored "-Wswitch"
 
 
 @interface ADXSearchView () {
@@ -29,37 +41,37 @@
   ADView *mSubmitArea_;
   ADImageView *mCollapsedIcon_;
   ADDrawable *mSearchHintIcon_;
-  jint mSuggestionRowLayout_;
-  jint mSuggestionCommitIconResId_;
+  int32_t mSuggestionRowLayout_;
+  int32_t mSuggestionCommitIconResId_;
   id<JavaLangCharSequence> mDefaultQueryHint_;
   id<ADXSearchView_OnQueryTextListener> mOnQueryChangeListener_;
   id<ADXSearchView_OnCloseListener> mOnCloseListener_;
   id<ADView_OnClickListener> mOnSearchClickListener_;
-  jboolean mIconifiedByDefault_;
-  jboolean mIconified_;
-  jboolean mSubmitButtonEnabled_;
+  bool mIconifiedByDefault_;
+  bool mIconified_;
+  bool mSubmitButtonEnabled_;
   id<JavaLangCharSequence> mQueryHint_;
-  jboolean mQueryRefinement_;
-  jboolean mClearingFocus_;
-  jint mMaxWidth_;
-  jboolean mVoiceButtonEnabled_;
+  bool mQueryRefinement_;
+  bool mClearingFocus_;
+  int32_t mMaxWidth_;
+  bool mVoiceButtonEnabled_;
   id<JavaLangCharSequence> mOldQueryText_;
   id<JavaLangCharSequence> mUserQuery_;
-  jboolean mExpandedInActionView_;
-  jint mCollapsedImeOptions_;
+  bool mExpandedInActionView_;
+  int32_t mCollapsedImeOptions_;
 }
 
-- (void)updateViewsVisibilityWithBoolean:(jboolean)collapsed;
+- (void)updateViewsVisibilityWithBoolean:(bool)collapsed;
 
-- (jboolean)isSubmitAreaEnabled;
+- (bool)isSubmitAreaEnabled;
 
-- (void)updateSubmitButtonWithBoolean:(jboolean)hasText;
+- (void)updateSubmitButtonWithBoolean:(bool)hasText;
 
 - (void)updateSubmitArea;
 
 - (void)updateQueryHint;
 
-- (void)updateVoiceButtonWithBoolean:(jboolean)empty;
+- (void)updateVoiceButtonWithBoolean:(bool)empty;
 
 - (void)dismissSuggestions;
 
@@ -81,17 +93,17 @@ J2OBJC_FIELD_SETTER(ADXSearchView, mQueryHint_, id<JavaLangCharSequence>)
 J2OBJC_FIELD_SETTER(ADXSearchView, mOldQueryText_, id<JavaLangCharSequence>)
 J2OBJC_FIELD_SETTER(ADXSearchView, mUserQuery_, id<JavaLangCharSequence>)
 
-__attribute__((unused)) static void ADXSearchView_updateViewsVisibilityWithBoolean_(ADXSearchView *self, jboolean collapsed);
+__attribute__((unused)) static void ADXSearchView_updateViewsVisibilityWithBoolean_(ADXSearchView *self, bool collapsed);
 
-__attribute__((unused)) static jboolean ADXSearchView_isSubmitAreaEnabled(ADXSearchView *self);
+__attribute__((unused)) static bool ADXSearchView_isSubmitAreaEnabled(ADXSearchView *self);
 
-__attribute__((unused)) static void ADXSearchView_updateSubmitButtonWithBoolean_(ADXSearchView *self, jboolean hasText);
+__attribute__((unused)) static void ADXSearchView_updateSubmitButtonWithBoolean_(ADXSearchView *self, bool hasText);
 
 __attribute__((unused)) static void ADXSearchView_updateSubmitArea(ADXSearchView *self);
 
 __attribute__((unused)) static void ADXSearchView_updateQueryHint(ADXSearchView *self);
 
-__attribute__((unused)) static void ADXSearchView_updateVoiceButtonWithBoolean_(ADXSearchView *self, jboolean empty);
+__attribute__((unused)) static void ADXSearchView_updateVoiceButtonWithBoolean_(ADXSearchView *self, bool empty);
 
 __attribute__((unused)) static void ADXSearchView_dismissSuggestions(ADXSearchView *self);
 
@@ -126,6 +138,7 @@ __attribute__((unused)) static ADXSearchView_1 *new_ADXSearchView_1_initWithADXS
 
 __attribute__((unused)) static ADXSearchView_1 *create_ADXSearchView_1_initWithADXSearchView_(ADXSearchView *outer$);
 
+
 @interface ADXSearchView_2 : NSObject < ADView_OnClickListener > {
  @public
   ADXSearchView *this$0_;
@@ -144,6 +157,7 @@ __attribute__((unused)) static void ADXSearchView_2_initWithADXSearchView_(ADXSe
 __attribute__((unused)) static ADXSearchView_2 *new_ADXSearchView_2_initWithADXSearchView_(ADXSearchView *outer$) NS_RETURNS_RETAINED;
 
 __attribute__((unused)) static ADXSearchView_2 *create_ADXSearchView_2_initWithADXSearchView_(ADXSearchView *outer$);
+
 
 @interface ADXSearchView_3 : NSObject < ADView_OnClickListener > {
  @public
@@ -164,6 +178,7 @@ __attribute__((unused)) static ADXSearchView_3 *new_ADXSearchView_3_initWithADXS
 
 __attribute__((unused)) static ADXSearchView_3 *create_ADXSearchView_3_initWithADXSearchView_(ADXSearchView *outer$);
 
+
 @interface ADXSearchView_4 : NSObject < ADTextWatcher > {
  @public
   ADXSearchView *this$0_;
@@ -172,14 +187,14 @@ __attribute__((unused)) static ADXSearchView_3 *create_ADXSearchView_3_initWithA
 - (instancetype)initWithADXSearchView:(ADXSearchView *)outer$;
 
 - (void)beforeTextChangedWithJavaLangCharSequence:(id<JavaLangCharSequence>)s
-                                          withInt:(jint)start
-                                          withInt:(jint)count
-                                          withInt:(jint)after;
+                                          withInt:(int32_t)start
+                                          withInt:(int32_t)count
+                                          withInt:(int32_t)after;
 
 - (void)onTextChangedWithJavaLangCharSequence:(id<JavaLangCharSequence>)s
-                                      withInt:(jint)start
-                                      withInt:(jint)before
-                                      withInt:(jint)count;
+                                      withInt:(int32_t)start
+                                      withInt:(int32_t)before
+                                      withInt:(int32_t)count;
 
 - (void)afterTextChangedWithADEditable:(id<ADEditable>)s;
 
@@ -193,6 +208,7 @@ __attribute__((unused)) static ADXSearchView_4 *new_ADXSearchView_4_initWithADXS
 
 __attribute__((unused)) static ADXSearchView_4 *create_ADXSearchView_4_initWithADXSearchView_(ADXSearchView *outer$);
 
+
 @implementation ADXSearchView
 
 - (void)setOnQueryTextListenerWithADXSearchView_OnQueryTextListener:(id<ADXSearchView_OnQueryTextListener>)listener {
@@ -200,7 +216,7 @@ __attribute__((unused)) static ADXSearchView_4 *create_ADXSearchView_4_initWithA
 }
 
 - (void)setQueryWithJavaLangCharSequence:(id<JavaLangCharSequence>)query
-                             withBoolean:(jboolean)submit {
+                             withBoolean:(bool)submit {
   [((ADAutoCompleteTextView *) nil_chk(mSearchSrcTextView_)) setMyAttributeWithNSString:@"text" withId:query];
   if (query != nil) {
     JreStrongAssign(&mUserQuery_, query);
@@ -224,7 +240,7 @@ __attribute__((unused)) static ADXSearchView_4 *create_ADXSearchView_4_initWithA
   return hint;
 }
 
-- (void)setIconifiedWithBoolean:(jboolean)iconify {
+- (void)setIconifiedWithBoolean:(bool)iconify {
   if (iconify) {
     [self onCloseClicked];
   }
@@ -233,18 +249,18 @@ __attribute__((unused)) static ADXSearchView_4 *create_ADXSearchView_4_initWithA
   }
 }
 
-- (jboolean)isIconified {
+- (bool)isIconified {
   return mIconified_;
 }
 
-- (void)onMeasureWithInt:(jint)widthMeasureSpec
-                 withInt:(jint)heightMeasureSpec {
+- (void)onMeasureWithInt:(int32_t)widthMeasureSpec
+                 withInt:(int32_t)heightMeasureSpec {
   if ([self isIconified]) {
     [super onMeasureWithInt:widthMeasureSpec withInt:heightMeasureSpec];
     return;
   }
-  jint widthMode = ADView_MeasureSpec_getModeWithInt_(widthMeasureSpec);
-  jint width = ADView_MeasureSpec_getSizeWithInt_(widthMeasureSpec);
+  int32_t widthMode = ADView_MeasureSpec_getModeWithInt_(widthMeasureSpec);
+  int32_t width = ADView_MeasureSpec_getSizeWithInt_(widthMeasureSpec);
   switch (widthMode) {
     case ADView_MeasureSpec_AT_MOST:
     if (mMaxWidth_ > 0) {
@@ -264,8 +280,8 @@ __attribute__((unused)) static ADXSearchView_4 *create_ADXSearchView_4_initWithA
     break;
   }
   widthMode = ADView_MeasureSpec_EXACTLY;
-  jint heightMode = ADView_MeasureSpec_getModeWithInt_(heightMeasureSpec);
-  jint height = ADView_MeasureSpec_getSizeWithInt_(heightMeasureSpec);
+  int32_t heightMode = ADView_MeasureSpec_getModeWithInt_(heightMeasureSpec);
+  int32_t height = ADView_MeasureSpec_getSizeWithInt_(heightMeasureSpec);
   switch (heightMode) {
     case ADView_MeasureSpec_AT_MOST:
     height = JavaLangMath_minWithInt_withInt_([self getPreferredHeight], height);
@@ -278,15 +294,15 @@ __attribute__((unused)) static ADXSearchView_4 *create_ADXSearchView_4_initWithA
   [super onMeasureWithInt:ADView_MeasureSpec_makeMeasureSpecWithInt_withInt_(width, widthMode) withInt:ADView_MeasureSpec_makeMeasureSpecWithInt_withInt_(height, heightMode)];
 }
 
-- (void)updateViewsVisibilityWithBoolean:(jboolean)collapsed {
+- (void)updateViewsVisibilityWithBoolean:(bool)collapsed {
   ADXSearchView_updateViewsVisibilityWithBoolean_(self, collapsed);
 }
 
-- (jboolean)isSubmitAreaEnabled {
+- (bool)isSubmitAreaEnabled {
   return ADXSearchView_isSubmitAreaEnabled(self);
 }
 
-- (void)updateSubmitButtonWithBoolean:(jboolean)hasText {
+- (void)updateSubmitButtonWithBoolean:(bool)hasText {
   ADXSearchView_updateSubmitButtonWithBoolean_(self, hasText);
 }
 
@@ -298,14 +314,14 @@ __attribute__((unused)) static ADXSearchView_4 *create_ADXSearchView_4_initWithA
   ADXSearchView_updateQueryHint(self);
 }
 
-- (void)updateVoiceButtonWithBoolean:(jboolean)empty {
+- (void)updateVoiceButtonWithBoolean:(bool)empty {
   ADXSearchView_updateVoiceButtonWithBoolean_(self, empty);
 }
 
 - (void)onTextChangedWithJavaLangCharSequence:(id<JavaLangCharSequence>)newText {
   NSString *text = JreRetainedLocalValue([((ADAutoCompleteTextView *) nil_chk(mSearchSrcTextView_)) getText]);
   JreStrongAssign(&mUserQuery_, text);
-  jboolean hasText = !ADTextUtils_isEmptyWithNSString_(text);
+  bool hasText = !ADTextUtils_isEmptyWithNSString_(text);
   ADXSearchView_updateSubmitButtonWithBoolean_(self, hasText);
   ADXSearchView_updateVoiceButtonWithBoolean_(self, !hasText);
   ADXSearchView_updateCloseButton(self);
@@ -374,7 +390,7 @@ __attribute__((unused)) static ADXSearchView_4 *create_ADXSearchView_4_initWithA
   ADXSearchView_setQueryWithJavaLangCharSequence_(self, query);
 }
 
-- (void)launchQuerySearchWithInt:(jint)actionKey
+- (void)launchQuerySearchWithInt:(int32_t)actionKey
                     withNSString:(NSString *)actionMsg
                     withNSString:(NSString *)query {
 }
@@ -408,7 +424,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   [((ADAutoCompleteTextView *) nil_chk(mSearchSrcTextView_)) setMyAttributeWithNSString:@"onTextChange" withId:create_ADXSearchView_4_initWithADXSearchView_(self)];
 }
 
-- (jboolean)hasFocus {
+- (bool)hasFocus {
   return true;
 }
 
@@ -416,11 +432,11 @@ J2OBJC_IGNORE_DESIGNATED_END
   return hintText;
 }
 
-- (jint)getPreferredWidth {
+- (int32_t)getPreferredWidth {
   return JreFpToInt((ASPluginInvoker_getDisplayMetricDensity() * ASPluginInvoker_getScreenWidthDp()));
 }
 
-- (jint)getPreferredHeight {
+- (int32_t)getPreferredHeight {
   return JreFpToInt((ASPluginInvoker_getDisplayMetricDensity() * 60.0f));
 }
 
@@ -550,14 +566,14 @@ J2OBJC_IGNORE_DESIGNATED_END
 
 @end
 
-void ADXSearchView_updateViewsVisibilityWithBoolean_(ADXSearchView *self, jboolean collapsed) {
+void ADXSearchView_updateViewsVisibilityWithBoolean_(ADXSearchView *self, bool collapsed) {
   self->mIconified_ = collapsed;
-  jint visCollapsed = collapsed ? ADView_VISIBLE : ADView_GONE;
-  jboolean hasText = !ADTextUtils_isEmptyWithNSString_([((ADAutoCompleteTextView *) nil_chk(self->mSearchSrcTextView_)) getText]);
+  int32_t visCollapsed = collapsed ? ADView_VISIBLE : ADView_GONE;
+  bool hasText = !ADTextUtils_isEmptyWithNSString_([((ADAutoCompleteTextView *) nil_chk(self->mSearchSrcTextView_)) getText]);
   [((ADImageView *) nil_chk(self->mSearchButton_)) setVisibilityWithInt:visCollapsed];
   ADXSearchView_updateSubmitButtonWithBoolean_(self, hasText);
   [((ADView *) nil_chk(self->mSearchEditFrame_)) setVisibilityWithInt:collapsed ? ADView_GONE : ADView_VISIBLE];
-  jint iconVisibility;
+  int32_t iconVisibility;
   if (self->mCollapsedIcon_ == nil || self->mIconifiedByDefault_) {
     iconVisibility = ADView_GONE;
   }
@@ -570,12 +586,12 @@ void ADXSearchView_updateViewsVisibilityWithBoolean_(ADXSearchView *self, jboole
   ADXSearchView_updateSubmitArea(self);
 }
 
-jboolean ADXSearchView_isSubmitAreaEnabled(ADXSearchView *self) {
+bool ADXSearchView_isSubmitAreaEnabled(ADXSearchView *self) {
   return (self->mSubmitButtonEnabled_ || self->mVoiceButtonEnabled_) && ![self isIconified];
 }
 
-void ADXSearchView_updateSubmitButtonWithBoolean_(ADXSearchView *self, jboolean hasText) {
-  jint visibility = ADView_GONE;
+void ADXSearchView_updateSubmitButtonWithBoolean_(ADXSearchView *self, bool hasText) {
+  int32_t visibility = ADView_GONE;
   if (self->mSubmitButtonEnabled_ && ADXSearchView_isSubmitAreaEnabled(self) && [self hasFocus] && (hasText || !self->mVoiceButtonEnabled_)) {
     visibility = ADView_VISIBLE;
   }
@@ -583,7 +599,7 @@ void ADXSearchView_updateSubmitButtonWithBoolean_(ADXSearchView *self, jboolean 
 }
 
 void ADXSearchView_updateSubmitArea(ADXSearchView *self) {
-  jint visibility = ADView_GONE;
+  int32_t visibility = ADView_GONE;
   if (ADXSearchView_isSubmitAreaEnabled(self) && ([((ADImageView *) nil_chk(self->mGoButton_)) getVisibility] == ADView_VISIBLE || [((ADImageView *) nil_chk(self->mVoiceButton_)) getVisibility] == ADView_VISIBLE)) {
     visibility = ADView_VISIBLE;
   }
@@ -594,8 +610,8 @@ void ADXSearchView_updateQueryHint(ADXSearchView *self) {
   id<JavaLangCharSequence> hint = [self getQueryHint];
 }
 
-void ADXSearchView_updateVoiceButtonWithBoolean_(ADXSearchView *self, jboolean empty) {
-  jint visibility = ADView_GONE;
+void ADXSearchView_updateVoiceButtonWithBoolean_(ADXSearchView *self, bool empty) {
+  int32_t visibility = ADView_GONE;
   if (self->mVoiceButtonEnabled_ && ![self isIconified] && empty) {
     visibility = ADView_VISIBLE;
     [((ADImageView *) nil_chk(self->mGoButton_)) setVisibilityWithInt:ADView_GONE];
@@ -627,6 +643,8 @@ void ADXSearchView_updateCloseButton(ADXSearchView *self) {
 }
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXSearchView)
+
+J2OBJC_NAME_MAPPING(ADXSearchView, "androidx.appcompat.widget", "ADX")
 
 @implementation ADXSearchView_OnQueryTextListener
 
@@ -677,7 +695,7 @@ J2OBJC_INTERFACE_TYPE_LITERAL_SOURCE(ADXSearchView_OnCloseListener)
   return self;
 }
 
-- (jint)getHintId {
+- (int32_t)getHintId {
   return 0;
 }
 
@@ -747,7 +765,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXSearchView_SearchableInfo)
     { "this$0_", "LADXSearchView;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
   };
   static const void *ptrTable[] = { "LADXSearchView;", "onClick", "LADView;", "init__WithASIWidget:" };
-  static const J2ObjcClassInfo _ADXSearchView_1 = { "", "androidx.appcompat.widget", ptrTable, methods, fields, 7, 0x8010, 2, 1, 0, -1, 3, -1, -1 };
+  static const J2ObjcClassInfo _ADXSearchView_1 = { "", "androidx.appcompat.widget", ptrTable, methods, fields, 7, 0x8000, 2, 1, 0, -1, 3, -1, -1 };
   return &_ADXSearchView_1;
 }
 
@@ -799,7 +817,7 @@ ADXSearchView_1 *create_ADXSearchView_1_initWithADXSearchView_(ADXSearchView *ou
     { "this$0_", "LADXSearchView;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
   };
   static const void *ptrTable[] = { "LADXSearchView;", "onClick", "LADView;", "init__WithASIWidget:" };
-  static const J2ObjcClassInfo _ADXSearchView_2 = { "", "androidx.appcompat.widget", ptrTable, methods, fields, 7, 0x8010, 2, 1, 0, -1, 3, -1, -1 };
+  static const J2ObjcClassInfo _ADXSearchView_2 = { "", "androidx.appcompat.widget", ptrTable, methods, fields, 7, 0x8000, 2, 1, 0, -1, 3, -1, -1 };
   return &_ADXSearchView_2;
 }
 
@@ -852,7 +870,7 @@ ADXSearchView_2 *create_ADXSearchView_2_initWithADXSearchView_(ADXSearchView *ou
     { "this$0_", "LADXSearchView;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
   };
   static const void *ptrTable[] = { "LADXSearchView;", "onClick", "LADView;", "init__WithASIWidget:" };
-  static const J2ObjcClassInfo _ADXSearchView_3 = { "", "androidx.appcompat.widget", ptrTable, methods, fields, 7, 0x8010, 2, 1, 0, -1, 3, -1, -1 };
+  static const J2ObjcClassInfo _ADXSearchView_3 = { "", "androidx.appcompat.widget", ptrTable, methods, fields, 7, 0x8000, 2, 1, 0, -1, 3, -1, -1 };
   return &_ADXSearchView_3;
 }
 
@@ -879,15 +897,15 @@ ADXSearchView_3 *create_ADXSearchView_3_initWithADXSearchView_(ADXSearchView *ou
 }
 
 - (void)beforeTextChangedWithJavaLangCharSequence:(id<JavaLangCharSequence>)s
-                                          withInt:(jint)start
-                                          withInt:(jint)count
-                                          withInt:(jint)after {
+                                          withInt:(int32_t)start
+                                          withInt:(int32_t)count
+                                          withInt:(int32_t)after {
 }
 
 - (void)onTextChangedWithJavaLangCharSequence:(id<JavaLangCharSequence>)s
-                                      withInt:(jint)start
-                                      withInt:(jint)before
-                                      withInt:(jint)count {
+                                      withInt:(int32_t)start
+                                      withInt:(int32_t)before
+                                      withInt:(int32_t)count {
   [this$0_ onTextChangedWithJavaLangCharSequence:s];
   [this$0_ requestLayout];
   [this$0_ remeasure];
@@ -920,7 +938,7 @@ ADXSearchView_3 *create_ADXSearchView_3_initWithADXSearchView_(ADXSearchView *ou
     { "this$0_", "LADXSearchView;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
   };
   static const void *ptrTable[] = { "LADXSearchView;", "beforeTextChanged", "LJavaLangCharSequence;III", "onTextChanged", "afterTextChanged", "LADEditable;", "init__WithASIWidget:" };
-  static const J2ObjcClassInfo _ADXSearchView_4 = { "", "androidx.appcompat.widget", ptrTable, methods, fields, 7, 0x8010, 4, 1, 0, -1, 6, -1, -1 };
+  static const J2ObjcClassInfo _ADXSearchView_4 = { "", "androidx.appcompat.widget", ptrTable, methods, fields, 7, 0x8000, 4, 1, 0, -1, 6, -1, -1 };
   return &_ADXSearchView_4;
 }
 

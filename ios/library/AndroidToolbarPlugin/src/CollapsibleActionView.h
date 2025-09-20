@@ -3,6 +3,7 @@
 //  source: D:\Java\git\core-javafx-widget\SWTAndroidToolBar\src\main\java\androidx\appcompat\view\CollapsibleActionView.java
 //
 
+#import <Foundation/Foundation.h>
 #include "J2ObjC_header.h"
 
 #pragma push_macro("INCLUDE_ALL_CollapsibleActionView")
@@ -44,6 +45,7 @@ J2OBJC_EMPTY_STATIC_INIT(ADXCollapsibleActionView)
 J2OBJC_TYPE_LITERAL_HEADER(ADXCollapsibleActionView)
 
 #define AndroidxAppcompatViewCollapsibleActionView ADXCollapsibleActionView
+
 
 #endif
 

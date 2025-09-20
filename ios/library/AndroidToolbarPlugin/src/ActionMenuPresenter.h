@@ -3,6 +3,7 @@
 //  source: D:\Java\git\core-javafx-widget\SWTAndroidToolBar\src\main\java\androidx\appcompat\widget\ActionMenuPresenter.java
 //
 
+#import <Foundation/Foundation.h>
 #include "J2ObjC_header.h"
 
 #pragma push_macro("INCLUDE_ALL_ActionMenuPresenter")
@@ -26,17 +27,19 @@
 @class ADXActionMenuView;
 @class ADXMenuBuilder;
 @class ADXMenuItemImpl;
+@class JavaLangBoolean;
+@class JavaLangInteger;
 
 @interface ADXActionMenuPresenter : ADXBaseMenuPresenter {
  @public
-  jint mOpenSubMenuId_;
+  int32_t mOpenSubMenuId_;
 }
 
 #pragma mark Public
 
 - (instancetype)initPackagePrivate;
 
-- (jboolean)flagActionItems;
+- (bool)flagActionItems;
 
 - (ADView *)getItemViewWithADXMenuItemImpl:(ADXMenuItemImpl *)item
                                 withADView:(ADView *)convertView
@@ -45,23 +48,23 @@
 - (ADView *)getItemViewWithADView:(ADView *)parent
               withADXMenuItemImpl:(ADXMenuItemImpl *)item;
 
-- (jint)getMaxActionButtons;
+- (int32_t)getMaxActionButtons;
 
 - (void)initForMenuWithADContext:(ADContext *)menuContext
               withADXMenuBuilder:(ADXMenuBuilder *)menuBuilder OBJC_METHOD_FAMILY_NONE;
 
-- (jboolean)isMenuItemViewWithADView:(ADView *)convertView;
+- (bool)isMenuItemViewWithADView:(ADView *)convertView;
 
 - (void)setMenuViewWithADXActionMenuView:(ADXActionMenuView *)menuView;
 
 - (void)setOverFlowButtonWithADView:(ADView *)overflowButton;
 
-- (void)setReserveOverflowWithBoolean:(jboolean)reserveOverflow;
+- (void)setReserveOverflowWithBoolean:(bool)reserveOverflow;
 
-- (jboolean)shouldIncludeItemWithInt:(jint)childIndex
-                 withADXMenuItemImpl:(ADXMenuItemImpl *)item;
+- (bool)shouldIncludeItemWithInt:(int32_t)childIndex
+             withADXMenuItemImpl:(ADXMenuItemImpl *)item;
 
-- (void)updateMenuViewWithBoolean:(jboolean)cleared;
+- (void)updateMenuViewWithBoolean:(bool)cleared;
 
 // Disallowed inherited constructors, do not use.
 
@@ -80,6 +83,7 @@ FOUNDATION_EXPORT ADXActionMenuPresenter *create_ADXActionMenuPresenter_initPack
 J2OBJC_TYPE_LITERAL_HEADER(ADXActionMenuPresenter)
 
 @compatibility_alias AndroidxAppcompatWidgetActionMenuPresenter ADXActionMenuPresenter;
+
 
 #endif
 
@@ -113,6 +117,7 @@ FOUNDATION_EXPORT ADXActionMenuPresenter_ActionProvider *new_ADXActionMenuPresen
 FOUNDATION_EXPORT ADXActionMenuPresenter_ActionProvider *create_ADXActionMenuPresenter_ActionProvider_initWithADXActionMenuPresenter_(ADXActionMenuPresenter *outer$);
 
 J2OBJC_TYPE_LITERAL_HEADER(ADXActionMenuPresenter_ActionProvider)
+
 
 #endif
 

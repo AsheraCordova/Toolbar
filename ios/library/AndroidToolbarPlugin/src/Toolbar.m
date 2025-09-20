@@ -3,6 +3,11 @@
 //  source: D:\Java\git\core-javafx-widget\SWTAndroidToolBar\src\main\java\androidx\appcompat\widget\Toolbar.java
 //
 
+#define J2OBJC_IMPORTED_BY_JAVA_IMPLEMENTATION 1
+
+
+
+
 #include "ActionMenuView.h"
 #include "BaseMeasurableImageView.h"
 #include "DisplayMetrics.h"
@@ -22,34 +27,40 @@
 #include "ViewGroup.h"
 #include "ViewParent.h"
 #include "ViewUtils.h"
+#include "java/lang/Boolean.h"
+#include "java/lang/Float.h"
+#include "java/lang/Integer.h"
 #include "java/lang/Math.h"
 #include "java/util/ArrayList.h"
 #include "java/util/List.h"
 
-@class JavaUtilArrayList;
-@protocol JavaUtilList;
+
+
+
+#pragma clang diagnostic error "-Wreturn-type"
+#pragma clang diagnostic ignored "-Wswitch"
 
 
 @interface ADXToolbar () {
  @public
-  jint mPopupTheme_;
-  jint mTitleTextAppearance_;
-  jint mSubtitleTextAppearance_;
-  jint mMaxButtonHeight_;
-  jint mTitleMarginStart_;
-  jint mTitleMarginEnd_;
-  jint mTitleMarginTop_;
-  jint mTitleMarginBottom_;
+  int32_t mPopupTheme_;
+  int32_t mTitleTextAppearance_;
+  int32_t mSubtitleTextAppearance_;
+  int32_t mMaxButtonHeight_;
+  int32_t mTitleMarginStart_;
+  int32_t mTitleMarginEnd_;
+  int32_t mTitleMarginTop_;
+  int32_t mTitleMarginBottom_;
   ADXRtlSpacingHelper *mContentInsets_;
-  jint mContentInsetStartWithNavigation_;
-  jint mContentInsetEndWithActions_;
-  jint mGravity_;
-  jboolean mEatingTouch_;
-  jboolean mEatingHover_;
+  int32_t mContentInsetStartWithNavigation_;
+  int32_t mContentInsetEndWithActions_;
+  int32_t mGravity_;
+  bool mEatingTouch_;
+  bool mEatingHover_;
   JavaUtilArrayList *mTempViews_;
   JavaUtilArrayList *mHiddenViews_;
   IOSIntArray *mTempMargins_;
-  jboolean mCollapsible_;
+  bool mCollapsible_;
   ASBaseMeasurableImageView *mNavButtonView_;
   ADView *mCollapseButtonView_;
   ADView *mMenuView_;
@@ -60,52 +71,52 @@
 }
 
 - (void)addSystemViewWithADView:(ADView *)v
-                    withBoolean:(jboolean)allowHide;
+                    withBoolean:(bool)allowHide;
 
 - (void)measureChildConstrainedWithADView:(ADView *)child
-                                  withInt:(jint)parentWidthSpec
-                                  withInt:(jint)widthUsed
-                                  withInt:(jint)parentHeightSpec
-                                  withInt:(jint)heightUsed
-                                  withInt:(jint)heightConstraint;
+                                  withInt:(int32_t)parentWidthSpec
+                                  withInt:(int32_t)widthUsed
+                                  withInt:(int32_t)parentHeightSpec
+                                  withInt:(int32_t)heightUsed
+                                  withInt:(int32_t)heightConstraint;
 
-- (jint)measureChildCollapseMarginsWithADView:(ADView *)child
-                                      withInt:(jint)parentWidthMeasureSpec
-                                      withInt:(jint)widthUsed
-                                      withInt:(jint)parentHeightMeasureSpec
-                                      withInt:(jint)heightUsed
-                                 withIntArray:(IOSIntArray *)collapsingMargins;
-
-- (jboolean)shouldCollapse;
-
-- (jint)getViewListMeasuredWidthWithJavaUtilList:(id<JavaUtilList>)views
+- (int32_t)measureChildCollapseMarginsWithADView:(ADView *)child
+                                         withInt:(int32_t)parentWidthMeasureSpec
+                                         withInt:(int32_t)widthUsed
+                                         withInt:(int32_t)parentHeightMeasureSpec
+                                         withInt:(int32_t)heightUsed
                                     withIntArray:(IOSIntArray *)collapsingMargins;
 
-- (jint)layoutChildLeftWithADView:(ADView *)child
-                          withInt:(jint)left
-                     withIntArray:(IOSIntArray *)collapsingMargins
-                          withInt:(jint)alignmentHeight;
+- (bool)shouldCollapse;
 
-- (jint)layoutChildRightWithADView:(ADView *)child
-                           withInt:(jint)right
-                      withIntArray:(IOSIntArray *)collapsingMargins
-                           withInt:(jint)alignmentHeight;
+- (int32_t)getViewListMeasuredWidthWithJavaUtilList:(id<JavaUtilList>)views
+                                       withIntArray:(IOSIntArray *)collapsingMargins;
 
-- (jint)getChildTopWithADView:(ADView *)child
-                      withInt:(jint)alignmentHeight;
+- (int32_t)layoutChildLeftWithADView:(ADView *)child
+                             withInt:(int32_t)left
+                        withIntArray:(IOSIntArray *)collapsingMargins
+                             withInt:(int32_t)alignmentHeight;
 
-- (jint)getChildVerticalGravityWithInt:(jint)gravity;
+- (int32_t)layoutChildRightWithADView:(ADView *)child
+                              withInt:(int32_t)right
+                         withIntArray:(IOSIntArray *)collapsingMargins
+                              withInt:(int32_t)alignmentHeight;
+
+- (int32_t)getChildTopWithADView:(ADView *)child
+                         withInt:(int32_t)alignmentHeight;
+
+- (int32_t)getChildVerticalGravityWithInt:(int32_t)gravity;
 
 - (void)addCustomViewsWithGravityWithJavaUtilList:(id<JavaUtilList>)views
-                                          withInt:(jint)gravity;
+                                          withInt:(int32_t)gravity;
 
-- (jint)getChildHorizontalGravityWithInt:(jint)gravity;
+- (int32_t)getChildHorizontalGravityWithInt:(int32_t)gravity;
 
-- (jboolean)shouldLayoutWithADView:(ADView *)view;
+- (bool)shouldLayoutWithADView:(ADView *)view;
 
-- (jint)getHorizontalMarginsWithADView:(ADView *)v;
+- (int32_t)getHorizontalMarginsWithADView:(ADView *)v;
 
-- (jint)getVerticalMarginsWithADView:(ADView *)v;
+- (int32_t)getVerticalMarginsWithADView:(ADView *)v;
 
 - (void)ensureContentInsets;
 
@@ -123,33 +134,33 @@ J2OBJC_FIELD_SETTER(ADXToolbar, mLogoView_, ADView *)
 J2OBJC_FIELD_SETTER(ADXToolbar, mTitleTextView_, ADView *)
 J2OBJC_FIELD_SETTER(ADXToolbar, mSubtitleTextView_, ADView *)
 
-__attribute__((unused)) static void ADXToolbar_addSystemViewWithADView_withBoolean_(ADXToolbar *self, ADView *v, jboolean allowHide);
+__attribute__((unused)) static void ADXToolbar_addSystemViewWithADView_withBoolean_(ADXToolbar *self, ADView *v, bool allowHide);
 
-__attribute__((unused)) static void ADXToolbar_measureChildConstrainedWithADView_withInt_withInt_withInt_withInt_withInt_(ADXToolbar *self, ADView *child, jint parentWidthSpec, jint widthUsed, jint parentHeightSpec, jint heightUsed, jint heightConstraint);
+__attribute__((unused)) static void ADXToolbar_measureChildConstrainedWithADView_withInt_withInt_withInt_withInt_withInt_(ADXToolbar *self, ADView *child, int32_t parentWidthSpec, int32_t widthUsed, int32_t parentHeightSpec, int32_t heightUsed, int32_t heightConstraint);
 
-__attribute__((unused)) static jint ADXToolbar_measureChildCollapseMarginsWithADView_withInt_withInt_withInt_withInt_withIntArray_(ADXToolbar *self, ADView *child, jint parentWidthMeasureSpec, jint widthUsed, jint parentHeightMeasureSpec, jint heightUsed, IOSIntArray *collapsingMargins);
+__attribute__((unused)) static int32_t ADXToolbar_measureChildCollapseMarginsWithADView_withInt_withInt_withInt_withInt_withIntArray_(ADXToolbar *self, ADView *child, int32_t parentWidthMeasureSpec, int32_t widthUsed, int32_t parentHeightMeasureSpec, int32_t heightUsed, IOSIntArray *collapsingMargins);
 
-__attribute__((unused)) static jboolean ADXToolbar_shouldCollapse(ADXToolbar *self);
+__attribute__((unused)) static bool ADXToolbar_shouldCollapse(ADXToolbar *self);
 
-__attribute__((unused)) static jint ADXToolbar_getViewListMeasuredWidthWithJavaUtilList_withIntArray_(ADXToolbar *self, id<JavaUtilList> views, IOSIntArray *collapsingMargins);
+__attribute__((unused)) static int32_t ADXToolbar_getViewListMeasuredWidthWithJavaUtilList_withIntArray_(ADXToolbar *self, id<JavaUtilList> views, IOSIntArray *collapsingMargins);
 
-__attribute__((unused)) static jint ADXToolbar_layoutChildLeftWithADView_withInt_withIntArray_withInt_(ADXToolbar *self, ADView *child, jint left, IOSIntArray *collapsingMargins, jint alignmentHeight);
+__attribute__((unused)) static int32_t ADXToolbar_layoutChildLeftWithADView_withInt_withIntArray_withInt_(ADXToolbar *self, ADView *child, int32_t left, IOSIntArray *collapsingMargins, int32_t alignmentHeight);
 
-__attribute__((unused)) static jint ADXToolbar_layoutChildRightWithADView_withInt_withIntArray_withInt_(ADXToolbar *self, ADView *child, jint right, IOSIntArray *collapsingMargins, jint alignmentHeight);
+__attribute__((unused)) static int32_t ADXToolbar_layoutChildRightWithADView_withInt_withIntArray_withInt_(ADXToolbar *self, ADView *child, int32_t right, IOSIntArray *collapsingMargins, int32_t alignmentHeight);
 
-__attribute__((unused)) static jint ADXToolbar_getChildTopWithADView_withInt_(ADXToolbar *self, ADView *child, jint alignmentHeight);
+__attribute__((unused)) static int32_t ADXToolbar_getChildTopWithADView_withInt_(ADXToolbar *self, ADView *child, int32_t alignmentHeight);
 
-__attribute__((unused)) static jint ADXToolbar_getChildVerticalGravityWithInt_(ADXToolbar *self, jint gravity);
+__attribute__((unused)) static int32_t ADXToolbar_getChildVerticalGravityWithInt_(ADXToolbar *self, int32_t gravity);
 
-__attribute__((unused)) static void ADXToolbar_addCustomViewsWithGravityWithJavaUtilList_withInt_(ADXToolbar *self, id<JavaUtilList> views, jint gravity);
+__attribute__((unused)) static void ADXToolbar_addCustomViewsWithGravityWithJavaUtilList_withInt_(ADXToolbar *self, id<JavaUtilList> views, int32_t gravity);
 
-__attribute__((unused)) static jint ADXToolbar_getChildHorizontalGravityWithInt_(ADXToolbar *self, jint gravity);
+__attribute__((unused)) static int32_t ADXToolbar_getChildHorizontalGravityWithInt_(ADXToolbar *self, int32_t gravity);
 
-__attribute__((unused)) static jboolean ADXToolbar_shouldLayoutWithADView_(ADXToolbar *self, ADView *view);
+__attribute__((unused)) static bool ADXToolbar_shouldLayoutWithADView_(ADXToolbar *self, ADView *view);
 
-__attribute__((unused)) static jint ADXToolbar_getHorizontalMarginsWithADView_(ADXToolbar *self, ADView *v);
+__attribute__((unused)) static int32_t ADXToolbar_getHorizontalMarginsWithADView_(ADXToolbar *self, ADView *v);
 
-__attribute__((unused)) static jint ADXToolbar_getVerticalMarginsWithADView_(ADXToolbar *self, ADView *v);
+__attribute__((unused)) static int32_t ADXToolbar_getVerticalMarginsWithADView_(ADXToolbar *self, ADView *v);
 
 __attribute__((unused)) static void ADXToolbar_ensureContentInsets(ADXToolbar *self);
 
@@ -159,10 +170,10 @@ __attribute__((unused)) static void ADXToolbar_ensureContentInsets(ADXToolbar *s
 
 @implementation ADXToolbar
 
-- (void)setTitleMarginWithInt:(jint)start
-                      withInt:(jint)top
-                      withInt:(jint)end
-                      withInt:(jint)bottom {
+- (void)setTitleMarginWithInt:(int32_t)start
+                      withInt:(int32_t)top
+                      withInt:(int32_t)end
+                      withInt:(int32_t)bottom {
   mTitleMarginStart_ = start;
   mTitleMarginTop_ = top;
   mTitleMarginEnd_ = end;
@@ -170,22 +181,22 @@ __attribute__((unused)) static void ADXToolbar_ensureContentInsets(ADXToolbar *s
   [self requestLayout];
 }
 
-- (void)setTitleMarginStartWithInt:(jint)margin {
+- (void)setTitleMarginStartWithInt:(int32_t)margin {
   mTitleMarginStart_ = margin;
   [self requestLayout];
 }
 
-- (void)setTitleMarginTopWithInt:(jint)margin {
+- (void)setTitleMarginTopWithInt:(int32_t)margin {
   mTitleMarginTop_ = margin;
   [self requestLayout];
 }
 
-- (void)setTitleMarginEndWithInt:(jint)margin {
+- (void)setTitleMarginEndWithInt:(int32_t)margin {
   mTitleMarginEnd_ = margin;
   [self requestLayout];
 }
 
-- (void)setTitleMarginBottomWithInt:(jint)margin {
+- (void)setTitleMarginBottomWithInt:(int32_t)margin {
   mTitleMarginBottom_ = margin;
   [self requestLayout];
 }
@@ -194,35 +205,35 @@ __attribute__((unused)) static void ADXToolbar_ensureContentInsets(ADXToolbar *s
   return mNavButtonView_ != nil ? [mNavButtonView_ getImageDrawable] : nil;
 }
 
-- (void)setContentInsetsRelativeWithInt:(jint)contentInsetStart
-                                withInt:(jint)contentInsetEnd {
+- (void)setContentInsetsRelativeWithInt:(int32_t)contentInsetStart
+                                withInt:(int32_t)contentInsetEnd {
   ADXToolbar_ensureContentInsets(self);
   [((ADXRtlSpacingHelper *) nil_chk(mContentInsets_)) setRelativeWithInt:contentInsetStart withInt:contentInsetEnd];
 }
 
-- (jint)getContentInsetStart {
+- (int32_t)getContentInsetStart {
   return mContentInsets_ != nil ? [mContentInsets_ getStart] : 0;
 }
 
-- (jint)getContentInsetEnd {
+- (int32_t)getContentInsetEnd {
   return mContentInsets_ != nil ? [mContentInsets_ getEnd] : 0;
 }
 
-- (void)setContentInsetsAbsoluteWithInt:(jint)contentInsetLeft
-                                withInt:(jint)contentInsetRight {
+- (void)setContentInsetsAbsoluteWithInt:(int32_t)contentInsetLeft
+                                withInt:(int32_t)contentInsetRight {
   ADXToolbar_ensureContentInsets(self);
   [((ADXRtlSpacingHelper *) nil_chk(mContentInsets_)) setAbsoluteWithInt:contentInsetLeft withInt:contentInsetRight];
 }
 
-- (jint)getContentInsetLeft {
+- (int32_t)getContentInsetLeft {
   return mContentInsets_ != nil ? [mContentInsets_ getLeft] : 0;
 }
 
-- (jint)getContentInsetRight {
+- (int32_t)getContentInsetRight {
   return mContentInsets_ != nil ? [mContentInsets_ getRight] : 0;
 }
 
-- (void)setContentInsetStartWithNavigationWithInt:(jint)insetStartWithNavigation {
+- (void)setContentInsetStartWithNavigationWithInt:(int32_t)insetStartWithNavigation {
   if (insetStartWithNavigation < 0) {
     insetStartWithNavigation = ADXRtlSpacingHelper_UNDEFINED;
   }
@@ -234,7 +245,7 @@ __attribute__((unused)) static void ADXToolbar_ensureContentInsets(ADXToolbar *s
   }
 }
 
-- (void)setContentInsetEndWithActionsWithInt:(jint)insetEndWithActions {
+- (void)setContentInsetEndWithActionsWithInt:(int32_t)insetEndWithActions {
   if (insetEndWithActions < 0) {
     insetEndWithActions = ADXRtlSpacingHelper_UNDEFINED;
   }
@@ -246,60 +257,60 @@ __attribute__((unused)) static void ADXToolbar_ensureContentInsets(ADXToolbar *s
   }
 }
 
-- (jint)getCurrentContentInsetStart {
+- (int32_t)getCurrentContentInsetStart {
   return [self getNavigationIcon] != nil ? JavaLangMath_maxWithInt_withInt_([self getContentInsetStart], JavaLangMath_maxWithInt_withInt_(mContentInsetStartWithNavigation_, 0)) : [self getContentInsetStart];
 }
 
-- (jint)getCurrentContentInsetEnd {
-  jboolean hasActions = false;
+- (int32_t)getCurrentContentInsetEnd {
+  bool hasActions = false;
   if (mMenuView_ != nil) {
   }
   return hasActions ? JavaLangMath_maxWithInt_withInt_([self getContentInsetEnd], JavaLangMath_maxWithInt_withInt_(mContentInsetEndWithActions_, 0)) : [self getContentInsetEnd];
 }
 
-- (jint)getCurrentContentInsetLeft {
+- (int32_t)getCurrentContentInsetLeft {
   return ADXViewCompat_getLayoutDirectionWithADView_(self) == ADXViewCompat_LAYOUT_DIRECTION_RTL ? [self getCurrentContentInsetEnd] : [self getCurrentContentInsetStart];
 }
 
-- (jint)getCurrentContentInsetRight {
+- (int32_t)getCurrentContentInsetRight {
   return ADXViewCompat_getLayoutDirectionWithADView_(self) == ADXViewCompat_LAYOUT_DIRECTION_RTL ? [self getCurrentContentInsetStart] : [self getCurrentContentInsetEnd];
 }
 
 - (void)addSystemViewWithADView:(ADView *)v
-                    withBoolean:(jboolean)allowHide {
+                    withBoolean:(bool)allowHide {
   ADXToolbar_addSystemViewWithADView_withBoolean_(self, v, allowHide);
 }
 
 - (void)measureChildConstrainedWithADView:(ADView *)child
-                                  withInt:(jint)parentWidthSpec
-                                  withInt:(jint)widthUsed
-                                  withInt:(jint)parentHeightSpec
-                                  withInt:(jint)heightUsed
-                                  withInt:(jint)heightConstraint {
+                                  withInt:(int32_t)parentWidthSpec
+                                  withInt:(int32_t)widthUsed
+                                  withInt:(int32_t)parentHeightSpec
+                                  withInt:(int32_t)heightUsed
+                                  withInt:(int32_t)heightConstraint {
   ADXToolbar_measureChildConstrainedWithADView_withInt_withInt_withInt_withInt_withInt_(self, child, parentWidthSpec, widthUsed, parentHeightSpec, heightUsed, heightConstraint);
 }
 
-- (jint)measureChildCollapseMarginsWithADView:(ADView *)child
-                                      withInt:(jint)parentWidthMeasureSpec
-                                      withInt:(jint)widthUsed
-                                      withInt:(jint)parentHeightMeasureSpec
-                                      withInt:(jint)heightUsed
-                                 withIntArray:(IOSIntArray *)collapsingMargins {
+- (int32_t)measureChildCollapseMarginsWithADView:(ADView *)child
+                                         withInt:(int32_t)parentWidthMeasureSpec
+                                         withInt:(int32_t)widthUsed
+                                         withInt:(int32_t)parentHeightMeasureSpec
+                                         withInt:(int32_t)heightUsed
+                                    withIntArray:(IOSIntArray *)collapsingMargins {
   return ADXToolbar_measureChildCollapseMarginsWithADView_withInt_withInt_withInt_withInt_withIntArray_(self, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed, collapsingMargins);
 }
 
-- (jboolean)shouldCollapse {
+- (bool)shouldCollapse {
   return ADXToolbar_shouldCollapse(self);
 }
 
-- (void)onMeasureWithInt:(jint)widthMeasureSpec
-                 withInt:(jint)heightMeasureSpec {
-  jint width = 0;
-  jint height = 0;
-  jint childState = 0;
+- (void)onMeasureWithInt:(int32_t)widthMeasureSpec
+                 withInt:(int32_t)heightMeasureSpec {
+  int32_t width = 0;
+  int32_t height = 0;
+  int32_t childState = 0;
   IOSIntArray *collapsingMargins = mTempMargins_;
-  jint marginStartIndex;
-  jint marginEndIndex;
+  int32_t marginStartIndex;
+  int32_t marginEndIndex;
   if (ADXViewUtils_isLayoutRtlWithADView_(self)) {
     marginStartIndex = 1;
     marginEndIndex = 0;
@@ -308,7 +319,7 @@ __attribute__((unused)) static void ADXToolbar_ensureContentInsets(ADXToolbar *s
     marginStartIndex = 0;
     marginEndIndex = 1;
   }
-  jint navWidth = 0;
+  int32_t navWidth = 0;
   if (ADXToolbar_shouldLayoutWithADView_(self, mNavButtonView_)) {
     ADXToolbar_measureChildConstrainedWithADView_withInt_withInt_withInt_withInt_withInt_(self, mNavButtonView_, widthMeasureSpec, width, heightMeasureSpec, 0, mMaxButtonHeight_);
     navWidth = [((ASBaseMeasurableImageView *) nil_chk(mNavButtonView_)) getMeasuredWidth] + ADXToolbar_getHorizontalMarginsWithADView_(self, mNavButtonView_);
@@ -321,17 +332,17 @@ __attribute__((unused)) static void ADXToolbar_ensureContentInsets(ADXToolbar *s
     height = JavaLangMath_maxWithInt_withInt_(height, [((ADView *) nil_chk(mCollapseButtonView_)) getMeasuredHeight] + ADXToolbar_getVerticalMarginsWithADView_(self, mCollapseButtonView_));
     childState = ADView_combineMeasuredStatesWithInt_withInt_(childState, [((ADView *) nil_chk(mCollapseButtonView_)) getMeasuredState]);
   }
-  jint contentInsetStart = [self getCurrentContentInsetStart];
+  int32_t contentInsetStart = [self getCurrentContentInsetStart];
   width += JavaLangMath_maxWithInt_withInt_(contentInsetStart, navWidth);
   *IOSIntArray_GetRef(nil_chk(collapsingMargins), marginStartIndex) = JavaLangMath_maxWithInt_withInt_(0, contentInsetStart - navWidth);
-  jint menuWidth = 0;
+  int32_t menuWidth = 0;
   if (ADXToolbar_shouldLayoutWithADView_(self, mMenuView_)) {
     ADXToolbar_measureChildConstrainedWithADView_withInt_withInt_withInt_withInt_withInt_(self, mMenuView_, widthMeasureSpec, width, heightMeasureSpec, 0, mMaxButtonHeight_);
     menuWidth = [((ADView *) nil_chk(mMenuView_)) getMeasuredWidth] + ADXToolbar_getHorizontalMarginsWithADView_(self, mMenuView_);
     height = JavaLangMath_maxWithInt_withInt_(height, [((ADView *) nil_chk(mMenuView_)) getMeasuredHeight] + ADXToolbar_getVerticalMarginsWithADView_(self, mMenuView_));
     childState = ADView_combineMeasuredStatesWithInt_withInt_(childState, [((ADView *) nil_chk(mMenuView_)) getMeasuredState]);
   }
-  jint contentInsetEnd = [self getCurrentContentInsetEnd];
+  int32_t contentInsetEnd = [self getCurrentContentInsetEnd];
   width += JavaLangMath_maxWithInt_withInt_(contentInsetEnd, menuWidth);
   *IOSIntArray_GetRef(collapsingMargins, marginEndIndex) = JavaLangMath_maxWithInt_withInt_(0, contentInsetEnd - menuWidth);
   if (ADXToolbar_shouldLayoutWithADView_(self, mExpandedActionView_)) {
@@ -344,8 +355,8 @@ __attribute__((unused)) static void ADXToolbar_ensureContentInsets(ADXToolbar *s
     height = JavaLangMath_maxWithInt_withInt_(height, [((ADView *) nil_chk(mLogoView_)) getMeasuredHeight] + ADXToolbar_getVerticalMarginsWithADView_(self, mLogoView_));
     childState = ADView_combineMeasuredStatesWithInt_withInt_(childState, [((ADView *) nil_chk(mLogoView_)) getMeasuredState]);
   }
-  jint childCount = [self getChildCount];
-  for (jint i = 0; i < childCount; i++) {
+  int32_t childCount = [self getChildCount];
+  for (int32_t i = 0; i < childCount; i++) {
     ADView *child = [self getChildAtWithInt:i];
     ADXToolbar_LayoutParams *lp = (ADXToolbar_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXToolbar_LayoutParams class]);
     if (((ADXToolbar_LayoutParams *) nil_chk(lp))->mViewType_ != ADXToolbar_LayoutParams_CUSTOM || !ADXToolbar_shouldLayoutWithADView_(self, child)) {
@@ -355,10 +366,10 @@ __attribute__((unused)) static void ADXToolbar_ensureContentInsets(ADXToolbar *s
     height = JavaLangMath_maxWithInt_withInt_(height, [child getMeasuredHeight] + ADXToolbar_getVerticalMarginsWithADView_(self, child));
     childState = ADView_combineMeasuredStatesWithInt_withInt_(childState, [child getMeasuredState]);
   }
-  jint titleWidth = 0;
-  jint titleHeight = 0;
-  jint titleVertMargins = mTitleMarginTop_ + mTitleMarginBottom_;
-  jint titleHorizMargins = mTitleMarginStart_ + mTitleMarginEnd_;
+  int32_t titleWidth = 0;
+  int32_t titleHeight = 0;
+  int32_t titleVertMargins = mTitleMarginTop_ + mTitleMarginBottom_;
+  int32_t titleHorizMargins = mTitleMarginStart_ + mTitleMarginEnd_;
   if (ADXToolbar_shouldLayoutWithADView_(self, mTitleTextView_)) {
     titleWidth = ADXToolbar_measureChildCollapseMarginsWithADView_withInt_withInt_withInt_withInt_withIntArray_(self, mTitleTextView_, widthMeasureSpec, width + titleHorizMargins, heightMeasureSpec, titleVertMargins, collapsingMargins);
     titleWidth = [((ADView *) nil_chk(mTitleTextView_)) getMeasuredWidth] + ADXToolbar_getHorizontalMarginsWithADView_(self, mTitleTextView_);
@@ -374,29 +385,29 @@ __attribute__((unused)) static void ADXToolbar_ensureContentInsets(ADXToolbar *s
   height = JavaLangMath_maxWithInt_withInt_(height, titleHeight);
   width += [self getPaddingLeft] + [self getPaddingRight];
   height += [self getPaddingTop] + [self getPaddingBottom];
-  jint measuredWidth = ADView_resolveSizeAndStateWithInt_withInt_withInt_(JavaLangMath_maxWithInt_withInt_(width, [self getSuggestedMinimumWidth]), widthMeasureSpec, childState & ADView_MEASURED_STATE_MASK);
-  jint measuredHeight = ADView_resolveSizeAndStateWithInt_withInt_withInt_(JavaLangMath_maxWithInt_withInt_(height, [self getSuggestedMinimumHeight]), heightMeasureSpec, JreLShift32(childState, ADView_MEASURED_HEIGHT_STATE_SHIFT));
+  int32_t measuredWidth = ADView_resolveSizeAndStateWithInt_withInt_withInt_(JavaLangMath_maxWithInt_withInt_(width, [self getSuggestedMinimumWidth]), widthMeasureSpec, childState & ADView_MEASURED_STATE_MASK);
+  int32_t measuredHeight = ADView_resolveSizeAndStateWithInt_withInt_withInt_(JavaLangMath_maxWithInt_withInt_(height, [self getSuggestedMinimumHeight]), heightMeasureSpec, JreLShift32(childState, ADView_MEASURED_HEIGHT_STATE_SHIFT));
   [self setMeasuredDimensionWithInt:measuredWidth withInt:ADXToolbar_shouldCollapse(self) ? 0 : measuredHeight];
 }
 
-- (void)onLayoutWithBoolean:(jboolean)changed
-                    withInt:(jint)l
-                    withInt:(jint)t
-                    withInt:(jint)r
-                    withInt:(jint)b {
-  jboolean isRtl = ADXViewCompat_getLayoutDirectionWithADView_(self) == ADXViewCompat_LAYOUT_DIRECTION_RTL;
-  jint width = [self getWidth];
-  jint height = [self getHeight];
-  jint paddingLeft = [self getPaddingLeft];
-  jint paddingRight = [self getPaddingRight];
-  jint paddingTop = [self getPaddingTop];
-  jint paddingBottom = [self getPaddingBottom];
-  jint left = paddingLeft;
-  jint right = width - paddingRight;
+- (void)onLayoutWithBoolean:(bool)changed
+                    withInt:(int32_t)l
+                    withInt:(int32_t)t
+                    withInt:(int32_t)r
+                    withInt:(int32_t)b {
+  bool isRtl = ADXViewCompat_getLayoutDirectionWithADView_(self) == ADXViewCompat_LAYOUT_DIRECTION_RTL;
+  int32_t width = [self getWidth];
+  int32_t height = [self getHeight];
+  int32_t paddingLeft = [self getPaddingLeft];
+  int32_t paddingRight = [self getPaddingRight];
+  int32_t paddingTop = [self getPaddingTop];
+  int32_t paddingBottom = [self getPaddingBottom];
+  int32_t left = paddingLeft;
+  int32_t right = width - paddingRight;
   IOSIntArray *collapsingMargins = mTempMargins_;
   *IOSIntArray_GetRef(nil_chk(collapsingMargins), 0) = *IOSIntArray_GetRef(collapsingMargins, 1) = 0;
-  jint minHeight = ADXViewCompat_getMinimumHeightWithADView_(self);
-  jint alignmentHeight = minHeight >= 0 ? JavaLangMath_minWithInt_withInt_(minHeight, b - t) : 0;
+  int32_t minHeight = ADXViewCompat_getMinimumHeightWithADView_(self);
+  int32_t alignmentHeight = minHeight >= 0 ? JavaLangMath_minWithInt_withInt_(minHeight, b - t) : 0;
   if (ADXToolbar_shouldLayoutWithADView_(self, mNavButtonView_)) {
     if (isRtl) {
       right = ADXToolbar_layoutChildRightWithADView_withInt_withIntArray_withInt_(self, mNavButtonView_, right, collapsingMargins, alignmentHeight);
@@ -421,8 +432,8 @@ __attribute__((unused)) static void ADXToolbar_ensureContentInsets(ADXToolbar *s
       right = ADXToolbar_layoutChildRightWithADView_withInt_withIntArray_withInt_(self, mMenuView_, right, collapsingMargins, alignmentHeight);
     }
   }
-  jint contentInsetLeft = [self getCurrentContentInsetLeft];
-  jint contentInsetRight = [self getCurrentContentInsetRight];
+  int32_t contentInsetLeft = [self getCurrentContentInsetLeft];
+  int32_t contentInsetRight = [self getCurrentContentInsetRight];
   *IOSIntArray_GetRef(collapsingMargins, 0) = JavaLangMath_maxWithInt_withInt_(0, contentInsetLeft - left);
   *IOSIntArray_GetRef(collapsingMargins, 1) = JavaLangMath_maxWithInt_withInt_(0, contentInsetRight - (width - paddingRight - right));
   left = JavaLangMath_maxWithInt_withInt_(left, contentInsetLeft);
@@ -443,9 +454,9 @@ __attribute__((unused)) static void ADXToolbar_ensureContentInsets(ADXToolbar *s
       left = ADXToolbar_layoutChildLeftWithADView_withInt_withIntArray_withInt_(self, mLogoView_, left, collapsingMargins, alignmentHeight);
     }
   }
-  jboolean layoutTitle = ADXToolbar_shouldLayoutWithADView_(self, mTitleTextView_);
-  jboolean layoutSubtitle = ADXToolbar_shouldLayoutWithADView_(self, mSubtitleTextView_);
-  jint titleHeight = 0;
+  bool layoutTitle = ADXToolbar_shouldLayoutWithADView_(self, mTitleTextView_);
+  bool layoutSubtitle = ADXToolbar_shouldLayoutWithADView_(self, mSubtitleTextView_);
+  int32_t titleHeight = 0;
   if (layoutTitle) {
     ADXToolbar_LayoutParams *lp = (ADXToolbar_LayoutParams *) cast_chk([((ADView *) nil_chk(mTitleTextView_)) getLayoutParams], [ADXToolbar_LayoutParams class]);
     titleHeight += ((ADXToolbar_LayoutParams *) nil_chk(lp))->topMargin_ + [((ADView *) nil_chk(mTitleTextView_)) getMeasuredHeight] + lp->bottomMargin_;
@@ -455,15 +466,15 @@ __attribute__((unused)) static void ADXToolbar_ensureContentInsets(ADXToolbar *s
     titleHeight += ((ADXToolbar_LayoutParams *) nil_chk(lp))->topMargin_ + [((ADView *) nil_chk(mSubtitleTextView_)) getMeasuredHeight] + lp->bottomMargin_;
   }
   if (layoutTitle || layoutSubtitle) {
-    jint titleTop;
+    int32_t titleTop;
     ADView *topChild = layoutTitle ? mTitleTextView_ : mSubtitleTextView_;
     ADView *bottomChild = layoutSubtitle ? mSubtitleTextView_ : mTitleTextView_;
     ADXToolbar_LayoutParams *toplp = (ADXToolbar_LayoutParams *) cast_chk([topChild getLayoutParams], [ADXToolbar_LayoutParams class]);
     ADXToolbar_LayoutParams *bottomlp = (ADXToolbar_LayoutParams *) cast_chk([bottomChild getLayoutParams], [ADXToolbar_LayoutParams class]);
-    jboolean titleHasWidth = (layoutTitle && ([((ADView *) nil_chk(mTitleTextView_)) getMeasuredWidth] > 0)) || (layoutSubtitle && [((ADView *) nil_chk(mSubtitleTextView_)) getMeasuredWidth] > 0);
+    bool titleHasWidth = (layoutTitle && ([((ADView *) nil_chk(mTitleTextView_)) getMeasuredWidth] > 0)) || (layoutSubtitle && [((ADView *) nil_chk(mSubtitleTextView_)) getMeasuredWidth] > 0);
     {
-      jint space;
-      jint spaceAbove;
+      int32_t space;
+      int32_t spaceAbove;
       switch (mGravity_ & ADGravity_VERTICAL_GRAVITY_MASK) {
         case ADGravity_TOP:
         titleTop = [self getPaddingTop] + ((ADXToolbar_LayoutParams *) nil_chk(toplp))->topMargin_ + mTitleMarginTop_;
@@ -476,7 +487,7 @@ __attribute__((unused)) static void ADXToolbar_ensureContentInsets(ADXToolbar *s
           spaceAbove = toplp->topMargin_ + mTitleMarginTop_;
         }
         else {
-          jint spaceBelow = height - paddingBottom - titleHeight - spaceAbove - paddingTop;
+          int32_t spaceBelow = height - paddingBottom - titleHeight - spaceAbove - paddingTop;
           if (spaceBelow < toplp->bottomMargin_ + mTitleMarginBottom_) {
             spaceAbove = JavaLangMath_maxWithInt_withInt_(0, spaceAbove - (((ADXToolbar_LayoutParams *) nil_chk(bottomlp))->bottomMargin_ + mTitleMarginBottom_ - spaceBelow));
           }
@@ -489,15 +500,15 @@ __attribute__((unused)) static void ADXToolbar_ensureContentInsets(ADXToolbar *s
       }
     }
     if (isRtl) {
-      jint rd = (titleHasWidth ? mTitleMarginStart_ : 0) - IOSIntArray_Get(collapsingMargins, 1);
+      int32_t rd = (titleHasWidth ? mTitleMarginStart_ : 0) - IOSIntArray_Get(collapsingMargins, 1);
       right -= JavaLangMath_maxWithInt_withInt_(0, rd);
       *IOSIntArray_GetRef(collapsingMargins, 1) = JavaLangMath_maxWithInt_withInt_(0, -rd);
-      jint titleRight = right;
-      jint subtitleRight = right;
+      int32_t titleRight = right;
+      int32_t subtitleRight = right;
       if (layoutTitle) {
         ADXToolbar_LayoutParams *lp = (ADXToolbar_LayoutParams *) cast_chk([((ADView *) nil_chk(mTitleTextView_)) getLayoutParams], [ADXToolbar_LayoutParams class]);
-        jint titleLeft = titleRight - [((ADView *) nil_chk(mTitleTextView_)) getMeasuredWidth];
-        jint titleBottom = titleTop + [((ADView *) nil_chk(mTitleTextView_)) getMeasuredHeight];
+        int32_t titleLeft = titleRight - [((ADView *) nil_chk(mTitleTextView_)) getMeasuredWidth];
+        int32_t titleBottom = titleTop + [((ADView *) nil_chk(mTitleTextView_)) getMeasuredHeight];
         [((ADView *) nil_chk(mTitleTextView_)) layoutWithInt:titleLeft withInt:titleTop withInt:titleRight withInt:titleBottom];
         titleRight = titleLeft - mTitleMarginEnd_;
         titleTop = titleBottom + ((ADXToolbar_LayoutParams *) nil_chk(lp))->bottomMargin_;
@@ -505,8 +516,8 @@ __attribute__((unused)) static void ADXToolbar_ensureContentInsets(ADXToolbar *s
       if (layoutSubtitle) {
         ADXToolbar_LayoutParams *lp = (ADXToolbar_LayoutParams *) cast_chk([((ADView *) nil_chk(mSubtitleTextView_)) getLayoutParams], [ADXToolbar_LayoutParams class]);
         titleTop += ((ADXToolbar_LayoutParams *) nil_chk(lp))->topMargin_;
-        jint subtitleLeft = subtitleRight - [((ADView *) nil_chk(mSubtitleTextView_)) getMeasuredWidth];
-        jint subtitleBottom = titleTop + [((ADView *) nil_chk(mSubtitleTextView_)) getMeasuredHeight];
+        int32_t subtitleLeft = subtitleRight - [((ADView *) nil_chk(mSubtitleTextView_)) getMeasuredWidth];
+        int32_t subtitleBottom = titleTop + [((ADView *) nil_chk(mSubtitleTextView_)) getMeasuredHeight];
         [((ADView *) nil_chk(mSubtitleTextView_)) layoutWithInt:subtitleLeft withInt:titleTop withInt:subtitleRight withInt:subtitleBottom];
         subtitleRight = subtitleRight - mTitleMarginEnd_;
         titleTop = subtitleBottom + lp->bottomMargin_;
@@ -516,15 +527,15 @@ __attribute__((unused)) static void ADXToolbar_ensureContentInsets(ADXToolbar *s
       }
     }
     else {
-      jint ld = (titleHasWidth ? mTitleMarginStart_ : 0) - IOSIntArray_Get(collapsingMargins, 0);
+      int32_t ld = (titleHasWidth ? mTitleMarginStart_ : 0) - IOSIntArray_Get(collapsingMargins, 0);
       left += JavaLangMath_maxWithInt_withInt_(0, ld);
       *IOSIntArray_GetRef(collapsingMargins, 0) = JavaLangMath_maxWithInt_withInt_(0, -ld);
-      jint titleLeft = left;
-      jint subtitleLeft = left;
+      int32_t titleLeft = left;
+      int32_t subtitleLeft = left;
       if (layoutTitle) {
         ADXToolbar_LayoutParams *lp = (ADXToolbar_LayoutParams *) cast_chk([((ADView *) nil_chk(mTitleTextView_)) getLayoutParams], [ADXToolbar_LayoutParams class]);
-        jint titleRight = titleLeft + [((ADView *) nil_chk(mTitleTextView_)) getMeasuredWidth];
-        jint titleBottom = titleTop + [((ADView *) nil_chk(mTitleTextView_)) getMeasuredHeight];
+        int32_t titleRight = titleLeft + [((ADView *) nil_chk(mTitleTextView_)) getMeasuredWidth];
+        int32_t titleBottom = titleTop + [((ADView *) nil_chk(mTitleTextView_)) getMeasuredHeight];
         [((ADView *) nil_chk(mTitleTextView_)) layoutWithInt:titleLeft withInt:titleTop withInt:titleRight withInt:titleBottom];
         titleLeft = titleRight + mTitleMarginEnd_;
         titleTop = titleBottom + ((ADXToolbar_LayoutParams *) nil_chk(lp))->bottomMargin_;
@@ -532,8 +543,8 @@ __attribute__((unused)) static void ADXToolbar_ensureContentInsets(ADXToolbar *s
       if (layoutSubtitle) {
         ADXToolbar_LayoutParams *lp = (ADXToolbar_LayoutParams *) cast_chk([((ADView *) nil_chk(mSubtitleTextView_)) getLayoutParams], [ADXToolbar_LayoutParams class]);
         titleTop += ((ADXToolbar_LayoutParams *) nil_chk(lp))->topMargin_;
-        jint subtitleRight = subtitleLeft + [((ADView *) nil_chk(mSubtitleTextView_)) getMeasuredWidth];
-        jint subtitleBottom = titleTop + [((ADView *) nil_chk(mSubtitleTextView_)) getMeasuredHeight];
+        int32_t subtitleRight = subtitleLeft + [((ADView *) nil_chk(mSubtitleTextView_)) getMeasuredWidth];
+        int32_t subtitleBottom = titleTop + [((ADView *) nil_chk(mSubtitleTextView_)) getMeasuredHeight];
         [((ADView *) nil_chk(mSubtitleTextView_)) layoutWithInt:subtitleLeft withInt:titleTop withInt:subtitleRight withInt:subtitleBottom];
         subtitleLeft = subtitleRight + mTitleMarginEnd_;
         titleTop = subtitleBottom + lp->bottomMargin_;
@@ -544,80 +555,80 @@ __attribute__((unused)) static void ADXToolbar_ensureContentInsets(ADXToolbar *s
     }
   }
   ADXToolbar_addCustomViewsWithGravityWithJavaUtilList_withInt_(self, mTempViews_, ADGravity_LEFT);
-  jint leftViewsCount = [((JavaUtilArrayList *) nil_chk(mTempViews_)) size];
-  for (jint i = 0; i < leftViewsCount; i++) {
+  int32_t leftViewsCount = [((JavaUtilArrayList *) nil_chk(mTempViews_)) size];
+  for (int32_t i = 0; i < leftViewsCount; i++) {
     left = ADXToolbar_layoutChildLeftWithADView_withInt_withIntArray_withInt_(self, [mTempViews_ getWithInt:i], left, collapsingMargins, alignmentHeight);
   }
   ADXToolbar_addCustomViewsWithGravityWithJavaUtilList_withInt_(self, mTempViews_, ADGravity_RIGHT);
-  jint rightViewsCount = [mTempViews_ size];
-  for (jint i = 0; i < rightViewsCount; i++) {
+  int32_t rightViewsCount = [mTempViews_ size];
+  for (int32_t i = 0; i < rightViewsCount; i++) {
     right = ADXToolbar_layoutChildRightWithADView_withInt_withIntArray_withInt_(self, [mTempViews_ getWithInt:i], right, collapsingMargins, alignmentHeight);
   }
   ADXToolbar_addCustomViewsWithGravityWithJavaUtilList_withInt_(self, mTempViews_, ADGravity_CENTER_HORIZONTAL);
-  jint centerViewsWidth = ADXToolbar_getViewListMeasuredWidthWithJavaUtilList_withIntArray_(self, mTempViews_, collapsingMargins);
-  jint parentCenter = paddingLeft + JreIntDiv((width - paddingLeft - paddingRight), 2);
-  jint halfCenterViewsWidth = JreIntDiv(centerViewsWidth, 2);
-  jint centerLeft = parentCenter - halfCenterViewsWidth;
-  jint centerRight = centerLeft + centerViewsWidth;
+  int32_t centerViewsWidth = ADXToolbar_getViewListMeasuredWidthWithJavaUtilList_withIntArray_(self, mTempViews_, collapsingMargins);
+  int32_t parentCenter = paddingLeft + JreIntDiv((width - paddingLeft - paddingRight), 2);
+  int32_t halfCenterViewsWidth = JreIntDiv(centerViewsWidth, 2);
+  int32_t centerLeft = parentCenter - halfCenterViewsWidth;
+  int32_t centerRight = centerLeft + centerViewsWidth;
   if (centerLeft < left) {
     centerLeft = left;
   }
   else if (centerRight > right) {
     centerLeft -= centerRight - right;
   }
-  jint centerViewsCount = [mTempViews_ size];
-  for (jint i = 0; i < centerViewsCount; i++) {
+  int32_t centerViewsCount = [mTempViews_ size];
+  for (int32_t i = 0; i < centerViewsCount; i++) {
     centerLeft = ADXToolbar_layoutChildLeftWithADView_withInt_withIntArray_withInt_(self, [mTempViews_ getWithInt:i], centerLeft, collapsingMargins, alignmentHeight);
   }
   [mTempViews_ clear];
 }
 
-- (jint)getViewListMeasuredWidthWithJavaUtilList:(id<JavaUtilList>)views
-                                    withIntArray:(IOSIntArray *)collapsingMargins {
+- (int32_t)getViewListMeasuredWidthWithJavaUtilList:(id<JavaUtilList>)views
+                                       withIntArray:(IOSIntArray *)collapsingMargins {
   return ADXToolbar_getViewListMeasuredWidthWithJavaUtilList_withIntArray_(self, views, collapsingMargins);
 }
 
-- (jint)layoutChildLeftWithADView:(ADView *)child
-                          withInt:(jint)left
-                     withIntArray:(IOSIntArray *)collapsingMargins
-                          withInt:(jint)alignmentHeight {
+- (int32_t)layoutChildLeftWithADView:(ADView *)child
+                             withInt:(int32_t)left
+                        withIntArray:(IOSIntArray *)collapsingMargins
+                             withInt:(int32_t)alignmentHeight {
   return ADXToolbar_layoutChildLeftWithADView_withInt_withIntArray_withInt_(self, child, left, collapsingMargins, alignmentHeight);
 }
 
-- (jint)layoutChildRightWithADView:(ADView *)child
-                           withInt:(jint)right
-                      withIntArray:(IOSIntArray *)collapsingMargins
-                           withInt:(jint)alignmentHeight {
+- (int32_t)layoutChildRightWithADView:(ADView *)child
+                              withInt:(int32_t)right
+                         withIntArray:(IOSIntArray *)collapsingMargins
+                              withInt:(int32_t)alignmentHeight {
   return ADXToolbar_layoutChildRightWithADView_withInt_withIntArray_withInt_(self, child, right, collapsingMargins, alignmentHeight);
 }
 
-- (jint)getChildTopWithADView:(ADView *)child
-                      withInt:(jint)alignmentHeight {
+- (int32_t)getChildTopWithADView:(ADView *)child
+                         withInt:(int32_t)alignmentHeight {
   return ADXToolbar_getChildTopWithADView_withInt_(self, child, alignmentHeight);
 }
 
-- (jint)getChildVerticalGravityWithInt:(jint)gravity {
+- (int32_t)getChildVerticalGravityWithInt:(int32_t)gravity {
   return ADXToolbar_getChildVerticalGravityWithInt_(self, gravity);
 }
 
 - (void)addCustomViewsWithGravityWithJavaUtilList:(id<JavaUtilList>)views
-                                          withInt:(jint)gravity {
+                                          withInt:(int32_t)gravity {
   ADXToolbar_addCustomViewsWithGravityWithJavaUtilList_withInt_(self, views, gravity);
 }
 
-- (jint)getChildHorizontalGravityWithInt:(jint)gravity {
+- (int32_t)getChildHorizontalGravityWithInt:(int32_t)gravity {
   return ADXToolbar_getChildHorizontalGravityWithInt_(self, gravity);
 }
 
-- (jboolean)shouldLayoutWithADView:(ADView *)view {
+- (bool)shouldLayoutWithADView:(ADView *)view {
   return ADXToolbar_shouldLayoutWithADView_(self, view);
 }
 
-- (jint)getHorizontalMarginsWithADView:(ADView *)v {
+- (int32_t)getHorizontalMarginsWithADView:(ADView *)v {
   return ADXToolbar_getHorizontalMarginsWithADView_(self, v);
 }
 
-- (jint)getVerticalMarginsWithADView:(ADView *)v {
+- (int32_t)getVerticalMarginsWithADView:(ADView *)v {
   return ADXToolbar_getVerticalMarginsWithADView_(self, v);
 }
 
@@ -640,7 +651,7 @@ __attribute__((unused)) static void ADXToolbar_ensureContentInsets(ADXToolbar *s
   return create_ADXToolbar_LayoutParams_initWithInt_withInt_(ADViewGroup_LayoutParams_WRAP_CONTENT, ADViewGroup_LayoutParams_WRAP_CONTENT);
 }
 
-- (jboolean)checkLayoutParamsWithADViewGroup_LayoutParams:(ADViewGroup_LayoutParams *)p {
+- (bool)checkLayoutParamsWithADViewGroup_LayoutParams:(ADViewGroup_LayoutParams *)p {
   return [super checkLayoutParamsWithADViewGroup_LayoutParams:p] && [p isKindOfClass:[ADXToolbar_LayoutParams class]];
 }
 
@@ -680,11 +691,11 @@ J2OBJC_IGNORE_DESIGNATED_END
   ADXToolbar_addSystemViewWithADView_withBoolean_(self, mMenuView, mCollapsible_);
 }
 
-- (void)setGravityWithInt:(jint)gravity {
+- (void)setGravityWithInt:(int32_t)gravity {
   mGravity_ = gravity;
 }
 
-- (void)setMaxButtonHeightWithInt:(jint)height {
+- (void)setMaxButtonHeightWithInt:(int32_t)height {
   mMaxButtonHeight_ = height;
 }
 
@@ -695,8 +706,8 @@ J2OBJC_IGNORE_DESIGNATED_END
 - (void)requestLayout {
   [super requestLayout];
   if (mMenuView_ != nil) {
-    jint menuSize = [((ADXMenuBuilder *) nil_chk([self getMenu])) size];
-    for (jint i = 0; i < menuSize; i++) {
+    int32_t menuSize = [((ADXMenuBuilder *) nil_chk([self getMenu])) size];
+    for (int32_t i = 0; i < menuSize; i++) {
       id<ADMenuItem> menu = JreRetainedLocalValue([((ADXMenuBuilder *) nil_chk([self getMenu])) getItemWithInt:i]);
       if ([((ADXActionMenuView *) nil_chk(((ADXActionMenuView *) cast_chk(mMenuView_, [ADXActionMenuView class])))) hasItemViewWithADMenuItem:menu]) {
         ADView *itemView = JreRetainedLocalValue([((ADXActionMenuView *) nil_chk(((ADXActionMenuView *) cast_chk(mMenuView_, [ADXActionMenuView class])))) getItemViewWithADMenuItem:menu]);
@@ -861,7 +872,7 @@ J2OBJC_IGNORE_DESIGNATED_END
 
 @end
 
-void ADXToolbar_addSystemViewWithADView_withBoolean_(ADXToolbar *self, ADView *v, jboolean allowHide) {
+void ADXToolbar_addSystemViewWithADView_withBoolean_(ADXToolbar *self, ADView *v, bool allowHide) {
   ADViewGroup_LayoutParams *vlp = [((ADView *) nil_chk(v)) getLayoutParams];
   ADXToolbar_LayoutParams *lp;
   if (vlp == nil) {
@@ -883,37 +894,37 @@ void ADXToolbar_addSystemViewWithADView_withBoolean_(ADXToolbar *self, ADView *v
   }
 }
 
-void ADXToolbar_measureChildConstrainedWithADView_withInt_withInt_withInt_withInt_withInt_(ADXToolbar *self, ADView *child, jint parentWidthSpec, jint widthUsed, jint parentHeightSpec, jint heightUsed, jint heightConstraint) {
+void ADXToolbar_measureChildConstrainedWithADView_withInt_withInt_withInt_withInt_withInt_(ADXToolbar *self, ADView *child, int32_t parentWidthSpec, int32_t widthUsed, int32_t parentHeightSpec, int32_t heightUsed, int32_t heightConstraint) {
   ADViewGroup_MarginLayoutParams *lp = (ADViewGroup_MarginLayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADViewGroup_MarginLayoutParams class]);
-  jint childWidthSpec = ADViewGroup_getChildMeasureSpecWithInt_withInt_withInt_(parentWidthSpec, [self getPaddingLeft] + [self getPaddingRight] + ((ADViewGroup_MarginLayoutParams *) nil_chk(lp))->leftMargin_ + lp->rightMargin_ + widthUsed, lp->width_);
-  jint childHeightSpec = ADViewGroup_getChildMeasureSpecWithInt_withInt_withInt_(parentHeightSpec, [self getPaddingTop] + [self getPaddingBottom] + lp->topMargin_ + lp->bottomMargin_ + heightUsed, lp->height_);
-  jint childHeightMode = ADView_MeasureSpec_getModeWithInt_(childHeightSpec);
+  int32_t childWidthSpec = ADViewGroup_getChildMeasureSpecWithInt_withInt_withInt_(parentWidthSpec, [self getPaddingLeft] + [self getPaddingRight] + ((ADViewGroup_MarginLayoutParams *) nil_chk(lp))->leftMargin_ + lp->rightMargin_ + widthUsed, lp->width_);
+  int32_t childHeightSpec = ADViewGroup_getChildMeasureSpecWithInt_withInt_withInt_(parentHeightSpec, [self getPaddingTop] + [self getPaddingBottom] + lp->topMargin_ + lp->bottomMargin_ + heightUsed, lp->height_);
+  int32_t childHeightMode = ADView_MeasureSpec_getModeWithInt_(childHeightSpec);
   if (childHeightMode != ADView_MeasureSpec_EXACTLY && heightConstraint >= 0) {
-    jint size = childHeightMode != ADView_MeasureSpec_UNSPECIFIED ? JavaLangMath_minWithInt_withInt_(ADView_MeasureSpec_getSizeWithInt_(childHeightSpec), heightConstraint) : heightConstraint;
+    int32_t size = childHeightMode != ADView_MeasureSpec_UNSPECIFIED ? JavaLangMath_minWithInt_withInt_(ADView_MeasureSpec_getSizeWithInt_(childHeightSpec), heightConstraint) : heightConstraint;
     childHeightSpec = ADView_MeasureSpec_makeMeasureSpecWithInt_withInt_(size, ADView_MeasureSpec_EXACTLY);
   }
   [child measureWithInt:childWidthSpec withInt:childHeightSpec];
 }
 
-jint ADXToolbar_measureChildCollapseMarginsWithADView_withInt_withInt_withInt_withInt_withIntArray_(ADXToolbar *self, ADView *child, jint parentWidthMeasureSpec, jint widthUsed, jint parentHeightMeasureSpec, jint heightUsed, IOSIntArray *collapsingMargins) {
+int32_t ADXToolbar_measureChildCollapseMarginsWithADView_withInt_withInt_withInt_withInt_withIntArray_(ADXToolbar *self, ADView *child, int32_t parentWidthMeasureSpec, int32_t widthUsed, int32_t parentHeightMeasureSpec, int32_t heightUsed, IOSIntArray *collapsingMargins) {
   ADViewGroup_MarginLayoutParams *lp = (ADViewGroup_MarginLayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADViewGroup_MarginLayoutParams class]);
-  jint leftDiff = ((ADViewGroup_MarginLayoutParams *) nil_chk(lp))->leftMargin_ - IOSIntArray_Get(nil_chk(collapsingMargins), 0);
-  jint rightDiff = lp->rightMargin_ - IOSIntArray_Get(collapsingMargins, 1);
-  jint leftMargin = JavaLangMath_maxWithInt_withInt_(0, leftDiff);
-  jint rightMargin = JavaLangMath_maxWithInt_withInt_(0, rightDiff);
-  jint hMargins = leftMargin + rightMargin;
+  int32_t leftDiff = ((ADViewGroup_MarginLayoutParams *) nil_chk(lp))->leftMargin_ - IOSIntArray_Get(nil_chk(collapsingMargins), 0);
+  int32_t rightDiff = lp->rightMargin_ - IOSIntArray_Get(collapsingMargins, 1);
+  int32_t leftMargin = JavaLangMath_maxWithInt_withInt_(0, leftDiff);
+  int32_t rightMargin = JavaLangMath_maxWithInt_withInt_(0, rightDiff);
+  int32_t hMargins = leftMargin + rightMargin;
   *IOSIntArray_GetRef(collapsingMargins, 0) = JavaLangMath_maxWithInt_withInt_(0, -leftDiff);
   *IOSIntArray_GetRef(collapsingMargins, 1) = JavaLangMath_maxWithInt_withInt_(0, -rightDiff);
-  jint childWidthMeasureSpec = ADViewGroup_getChildMeasureSpecWithInt_withInt_withInt_(parentWidthMeasureSpec, [self getPaddingLeft] + [self getPaddingRight] + hMargins + widthUsed, lp->width_);
-  jint childHeightMeasureSpec = ADViewGroup_getChildMeasureSpecWithInt_withInt_withInt_(parentHeightMeasureSpec, [self getPaddingTop] + [self getPaddingBottom] + lp->topMargin_ + lp->bottomMargin_ + heightUsed, lp->height_);
+  int32_t childWidthMeasureSpec = ADViewGroup_getChildMeasureSpecWithInt_withInt_withInt_(parentWidthMeasureSpec, [self getPaddingLeft] + [self getPaddingRight] + hMargins + widthUsed, lp->width_);
+  int32_t childHeightMeasureSpec = ADViewGroup_getChildMeasureSpecWithInt_withInt_withInt_(parentHeightMeasureSpec, [self getPaddingTop] + [self getPaddingBottom] + lp->topMargin_ + lp->bottomMargin_ + heightUsed, lp->height_);
   [child measureWithInt:childWidthMeasureSpec withInt:childHeightMeasureSpec];
   return [child getMeasuredWidth] + hMargins;
 }
 
-jboolean ADXToolbar_shouldCollapse(ADXToolbar *self) {
+bool ADXToolbar_shouldCollapse(ADXToolbar *self) {
   if (!self->mCollapsible_) return false;
-  jint childCount = [self getChildCount];
-  for (jint i = 0; i < childCount; i++) {
+  int32_t childCount = [self getChildCount];
+  for (int32_t i = 0; i < childCount; i++) {
     ADView *child = [self getChildAtWithInt:i];
     if (ADXToolbar_shouldLayoutWithADView_(self, child) && [((ADView *) nil_chk(child)) getMeasuredWidth] > 0 && [child getMeasuredHeight] > 0) {
       return false;
@@ -922,18 +933,18 @@ jboolean ADXToolbar_shouldCollapse(ADXToolbar *self) {
   return true;
 }
 
-jint ADXToolbar_getViewListMeasuredWidthWithJavaUtilList_withIntArray_(ADXToolbar *self, id<JavaUtilList> views, IOSIntArray *collapsingMargins) {
-  jint collapseLeft = IOSIntArray_Get(nil_chk(collapsingMargins), 0);
-  jint collapseRight = IOSIntArray_Get(collapsingMargins, 1);
-  jint width = 0;
-  jint count = [((id<JavaUtilList>) nil_chk(views)) size];
-  for (jint i = 0; i < count; i++) {
+int32_t ADXToolbar_getViewListMeasuredWidthWithJavaUtilList_withIntArray_(ADXToolbar *self, id<JavaUtilList> views, IOSIntArray *collapsingMargins) {
+  int32_t collapseLeft = IOSIntArray_Get(nil_chk(collapsingMargins), 0);
+  int32_t collapseRight = IOSIntArray_Get(collapsingMargins, 1);
+  int32_t width = 0;
+  int32_t count = [((id<JavaUtilList>) nil_chk(views)) size];
+  for (int32_t i = 0; i < count; i++) {
     ADView *v = [views getWithInt:i];
     ADXToolbar_LayoutParams *lp = (ADXToolbar_LayoutParams *) cast_chk([((ADView *) nil_chk(v)) getLayoutParams], [ADXToolbar_LayoutParams class]);
-    jint l = ((ADXToolbar_LayoutParams *) nil_chk(lp))->leftMargin_ - collapseLeft;
-    jint r = lp->rightMargin_ - collapseRight;
-    jint leftMargin = JavaLangMath_maxWithInt_withInt_(0, l);
-    jint rightMargin = JavaLangMath_maxWithInt_withInt_(0, r);
+    int32_t l = ((ADXToolbar_LayoutParams *) nil_chk(lp))->leftMargin_ - collapseLeft;
+    int32_t r = lp->rightMargin_ - collapseRight;
+    int32_t leftMargin = JavaLangMath_maxWithInt_withInt_(0, l);
+    int32_t rightMargin = JavaLangMath_maxWithInt_withInt_(0, r);
     collapseLeft = JavaLangMath_maxWithInt_withInt_(0, -l);
     collapseRight = JavaLangMath_maxWithInt_withInt_(0, -r);
     width += leftMargin + [v getMeasuredWidth] + rightMargin;
@@ -941,40 +952,40 @@ jint ADXToolbar_getViewListMeasuredWidthWithJavaUtilList_withIntArray_(ADXToolba
   return width;
 }
 
-jint ADXToolbar_layoutChildLeftWithADView_withInt_withIntArray_withInt_(ADXToolbar *self, ADView *child, jint left, IOSIntArray *collapsingMargins, jint alignmentHeight) {
+int32_t ADXToolbar_layoutChildLeftWithADView_withInt_withIntArray_withInt_(ADXToolbar *self, ADView *child, int32_t left, IOSIntArray *collapsingMargins, int32_t alignmentHeight) {
   ADXToolbar_LayoutParams *lp = (ADXToolbar_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXToolbar_LayoutParams class]);
-  jint l = ((ADXToolbar_LayoutParams *) nil_chk(lp))->leftMargin_ - IOSIntArray_Get(nil_chk(collapsingMargins), 0);
+  int32_t l = ((ADXToolbar_LayoutParams *) nil_chk(lp))->leftMargin_ - IOSIntArray_Get(nil_chk(collapsingMargins), 0);
   left += JavaLangMath_maxWithInt_withInt_(0, l);
   *IOSIntArray_GetRef(collapsingMargins, 0) = JavaLangMath_maxWithInt_withInt_(0, -l);
-  jint top = ADXToolbar_getChildTopWithADView_withInt_(self, child, alignmentHeight);
-  jint childWidth = [child getMeasuredWidth];
+  int32_t top = ADXToolbar_getChildTopWithADView_withInt_(self, child, alignmentHeight);
+  int32_t childWidth = [child getMeasuredWidth];
   [child layoutWithInt:left withInt:top withInt:left + childWidth withInt:top + [child getMeasuredHeight]];
   left += childWidth + lp->rightMargin_;
   return left;
 }
 
-jint ADXToolbar_layoutChildRightWithADView_withInt_withIntArray_withInt_(ADXToolbar *self, ADView *child, jint right, IOSIntArray *collapsingMargins, jint alignmentHeight) {
+int32_t ADXToolbar_layoutChildRightWithADView_withInt_withIntArray_withInt_(ADXToolbar *self, ADView *child, int32_t right, IOSIntArray *collapsingMargins, int32_t alignmentHeight) {
   ADXToolbar_LayoutParams *lp = (ADXToolbar_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXToolbar_LayoutParams class]);
-  jint r = ((ADXToolbar_LayoutParams *) nil_chk(lp))->rightMargin_ - IOSIntArray_Get(nil_chk(collapsingMargins), 1);
+  int32_t r = ((ADXToolbar_LayoutParams *) nil_chk(lp))->rightMargin_ - IOSIntArray_Get(nil_chk(collapsingMargins), 1);
   right -= JavaLangMath_maxWithInt_withInt_(0, r);
   *IOSIntArray_GetRef(collapsingMargins, 1) = JavaLangMath_maxWithInt_withInt_(0, -r);
-  jint top = ADXToolbar_getChildTopWithADView_withInt_(self, child, alignmentHeight);
-  jint childWidth = [child getMeasuredWidth];
+  int32_t top = ADXToolbar_getChildTopWithADView_withInt_(self, child, alignmentHeight);
+  int32_t childWidth = [child getMeasuredWidth];
   [child layoutWithInt:right - childWidth withInt:top withInt:right withInt:top + [child getMeasuredHeight]];
   right -= childWidth + lp->leftMargin_;
   return right;
 }
 
-jint ADXToolbar_getChildTopWithADView_withInt_(ADXToolbar *self, ADView *child, jint alignmentHeight) {
+int32_t ADXToolbar_getChildTopWithADView_withInt_(ADXToolbar *self, ADView *child, int32_t alignmentHeight) {
   ADXToolbar_LayoutParams *lp = (ADXToolbar_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXToolbar_LayoutParams class]);
-  jint childHeight = [child getMeasuredHeight];
-  jint alignmentOffset = alignmentHeight > 0 ? JreIntDiv((childHeight - alignmentHeight), 2) : 0;
+  int32_t childHeight = [child getMeasuredHeight];
+  int32_t alignmentOffset = alignmentHeight > 0 ? JreIntDiv((childHeight - alignmentHeight), 2) : 0;
   {
-    jint paddingTop;
-    jint paddingBottom;
-    jint height;
-    jint space;
-    jint spaceAbove;
+    int32_t paddingTop;
+    int32_t paddingBottom;
+    int32_t height;
+    int32_t space;
+    int32_t spaceAbove;
     switch (ADXToolbar_getChildVerticalGravityWithInt_(self, ((ADXToolbar_LayoutParams *) nil_chk(lp))->gravity_)) {
       case ADGravity_TOP:
       return [self getPaddingTop] - alignmentOffset;
@@ -991,7 +1002,7 @@ jint ADXToolbar_getChildTopWithADView_withInt_(ADXToolbar *self, ADView *child, 
         spaceAbove = lp->topMargin_;
       }
       else {
-        jint spaceBelow = height - paddingBottom - childHeight - spaceAbove - paddingTop;
+        int32_t spaceBelow = height - paddingBottom - childHeight - spaceAbove - paddingTop;
         if (spaceBelow < lp->bottomMargin_) {
           spaceAbove = JavaLangMath_maxWithInt_withInt_(0, spaceAbove - (lp->bottomMargin_ - spaceBelow));
         }
@@ -1001,8 +1012,8 @@ jint ADXToolbar_getChildTopWithADView_withInt_(ADXToolbar *self, ADView *child, 
   }
 }
 
-jint ADXToolbar_getChildVerticalGravityWithInt_(ADXToolbar *self, jint gravity) {
-  jint vgrav = gravity & ADGravity_VERTICAL_GRAVITY_MASK;
+int32_t ADXToolbar_getChildVerticalGravityWithInt_(ADXToolbar *self, int32_t gravity) {
+  int32_t vgrav = gravity & ADGravity_VERTICAL_GRAVITY_MASK;
   switch (vgrav) {
     case ADGravity_TOP:
     case ADGravity_BOTTOM:
@@ -1013,13 +1024,13 @@ jint ADXToolbar_getChildVerticalGravityWithInt_(ADXToolbar *self, jint gravity) 
   }
 }
 
-void ADXToolbar_addCustomViewsWithGravityWithJavaUtilList_withInt_(ADXToolbar *self, id<JavaUtilList> views, jint gravity) {
-  jboolean isRtl = ADXViewCompat_getLayoutDirectionWithADView_(self) == ADXViewCompat_LAYOUT_DIRECTION_RTL;
-  jint childCount = [self getChildCount];
-  jint absGrav = ADXGravityCompat_getAbsoluteGravityWithInt_withInt_(gravity, ADXViewCompat_getLayoutDirectionWithADView_(self));
+void ADXToolbar_addCustomViewsWithGravityWithJavaUtilList_withInt_(ADXToolbar *self, id<JavaUtilList> views, int32_t gravity) {
+  bool isRtl = ADXViewCompat_getLayoutDirectionWithADView_(self) == ADXViewCompat_LAYOUT_DIRECTION_RTL;
+  int32_t childCount = [self getChildCount];
+  int32_t absGrav = ADXGravityCompat_getAbsoluteGravityWithInt_withInt_(gravity, ADXViewCompat_getLayoutDirectionWithADView_(self));
   [((id<JavaUtilList>) nil_chk(views)) clear];
   if (isRtl) {
-    for (jint i = childCount - 1; i >= 0; i--) {
+    for (int32_t i = childCount - 1; i >= 0; i--) {
       ADView *child = [self getChildAtWithInt:i];
       ADXToolbar_LayoutParams *lp = (ADXToolbar_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXToolbar_LayoutParams class]);
       if (((ADXToolbar_LayoutParams *) nil_chk(lp))->mViewType_ == ADXToolbar_LayoutParams_CUSTOM && ADXToolbar_shouldLayoutWithADView_(self, child) && ADXToolbar_getChildHorizontalGravityWithInt_(self, lp->gravity_) == absGrav) {
@@ -1028,7 +1039,7 @@ void ADXToolbar_addCustomViewsWithGravityWithJavaUtilList_withInt_(ADXToolbar *s
     }
   }
   else {
-    for (jint i = 0; i < childCount; i++) {
+    for (int32_t i = 0; i < childCount; i++) {
       ADView *child = [self getChildAtWithInt:i];
       ADXToolbar_LayoutParams *lp = (ADXToolbar_LayoutParams *) cast_chk([((ADView *) nil_chk(child)) getLayoutParams], [ADXToolbar_LayoutParams class]);
       if (((ADXToolbar_LayoutParams *) nil_chk(lp))->mViewType_ == ADXToolbar_LayoutParams_CUSTOM && ADXToolbar_shouldLayoutWithADView_(self, child) && ADXToolbar_getChildHorizontalGravityWithInt_(self, lp->gravity_) == absGrav) {
@@ -1038,10 +1049,10 @@ void ADXToolbar_addCustomViewsWithGravityWithJavaUtilList_withInt_(ADXToolbar *s
   }
 }
 
-jint ADXToolbar_getChildHorizontalGravityWithInt_(ADXToolbar *self, jint gravity) {
-  jint ld = ADXViewCompat_getLayoutDirectionWithADView_(self);
-  jint absGrav = ADXGravityCompat_getAbsoluteGravityWithInt_withInt_(gravity, ld);
-  jint hGrav = absGrav & ADGravity_HORIZONTAL_GRAVITY_MASK;
+int32_t ADXToolbar_getChildHorizontalGravityWithInt_(ADXToolbar *self, int32_t gravity) {
+  int32_t ld = ADXViewCompat_getLayoutDirectionWithADView_(self);
+  int32_t absGrav = ADXGravityCompat_getAbsoluteGravityWithInt_withInt_(gravity, ld);
+  int32_t hGrav = absGrav & ADGravity_HORIZONTAL_GRAVITY_MASK;
   switch (hGrav) {
     case ADGravity_LEFT:
     case ADGravity_RIGHT:
@@ -1052,16 +1063,16 @@ jint ADXToolbar_getChildHorizontalGravityWithInt_(ADXToolbar *self, jint gravity
   }
 }
 
-jboolean ADXToolbar_shouldLayoutWithADView_(ADXToolbar *self, ADView *view) {
-  return view != nil && [view getParent] == self && [view getVisibility] != ADView_GONE;
+bool ADXToolbar_shouldLayoutWithADView_(ADXToolbar *self, ADView *view) {
+  return view != nil && JreObjectEqualsEquals([view getParent], self) && [view getVisibility] != ADView_GONE;
 }
 
-jint ADXToolbar_getHorizontalMarginsWithADView_(ADXToolbar *self, ADView *v) {
+int32_t ADXToolbar_getHorizontalMarginsWithADView_(ADXToolbar *self, ADView *v) {
   ADViewGroup_MarginLayoutParams *mlp = (ADViewGroup_MarginLayoutParams *) cast_chk([((ADView *) nil_chk(v)) getLayoutParams], [ADViewGroup_MarginLayoutParams class]);
   return ADXMarginLayoutParamsCompat_getMarginStartWithADViewGroup_MarginLayoutParams_(mlp) + ADXMarginLayoutParamsCompat_getMarginEndWithADViewGroup_MarginLayoutParams_(mlp);
 }
 
-jint ADXToolbar_getVerticalMarginsWithADView_(ADXToolbar *self, ADView *v) {
+int32_t ADXToolbar_getVerticalMarginsWithADView_(ADXToolbar *self, ADView *v) {
   ADViewGroup_MarginLayoutParams *mlp = (ADViewGroup_MarginLayoutParams *) cast_chk([((ADView *) nil_chk(v)) getLayoutParams], [ADViewGroup_MarginLayoutParams class]);
   return ((ADViewGroup_MarginLayoutParams *) nil_chk(mlp))->topMargin_ + mlp->bottomMargin_;
 }
@@ -1078,7 +1089,7 @@ void ADXToolbar_init(ADXToolbar *self) {
   JreStrongAssignAndConsume(&self->mTempViews_, new_JavaUtilArrayList_init());
   JreStrongAssignAndConsume(&self->mHiddenViews_, new_JavaUtilArrayList_init());
   JreStrongAssignAndConsume(&self->mTempMargins_, [IOSIntArray newArrayWithLength:2]);
-  jfloat density = ((ADDisplayMetrics *) nil_chk([((ADResources *) nil_chk([self getResources])) getDisplayMetrics]))->density_;
+  float density = ((ADDisplayMetrics *) nil_chk([((ADResources *) nil_chk([self getResources])) getDisplayMetrics]))->density_;
   self->mMaxButtonHeight_ = JreFpToInt(((density * 48) + 0.5f));
   self->mButtonGravity_ = ADGravity_TOP;
 }
@@ -1092,6 +1103,8 @@ ADXToolbar *create_ADXToolbar_init() {
 }
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXToolbar)
+
+J2OBJC_NAME_MAPPING(ADXToolbar, "androidx.appcompat.widget", "ADX")
 
 @implementation ADXToolbar_OnMenuItemClickListener
 
@@ -1115,15 +1128,15 @@ J2OBJC_INTERFACE_TYPE_LITERAL_SOURCE(ADXToolbar_OnMenuItemClickListener)
 
 @implementation ADXToolbar_ActionBar_LayoutParams
 
-- (instancetype)initWithInt:(jint)width
-                    withInt:(jint)height {
+- (instancetype)initWithInt:(int32_t)width
+                    withInt:(int32_t)height {
   ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_(self, width, height);
   return self;
 }
 
-- (instancetype)initWithInt:(jint)width
-                    withInt:(jint)height
-                    withInt:(jint)gravity {
+- (instancetype)initWithInt:(int32_t)width
+                    withInt:(int32_t)height
+                    withInt:(int32_t)gravity {
   ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_withInt_(self, width, height, gravity);
   return self;
 }
@@ -1163,29 +1176,29 @@ J2OBJC_INTERFACE_TYPE_LITERAL_SOURCE(ADXToolbar_OnMenuItemClickListener)
 
 @end
 
-void ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_(ADXToolbar_ActionBar_LayoutParams *self, jint width, jint height) {
+void ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_(ADXToolbar_ActionBar_LayoutParams *self, int32_t width, int32_t height) {
   ADViewGroup_MarginLayoutParams_initWithInt_withInt_(self, width, height);
   self->gravity_ = ADGravity_CENTER_VERTICAL | ADXGravityCompat_START;
 }
 
-ADXToolbar_ActionBar_LayoutParams *new_ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_(jint width, jint height) {
+ADXToolbar_ActionBar_LayoutParams *new_ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_(int32_t width, int32_t height) {
   J2OBJC_NEW_IMPL(ADXToolbar_ActionBar_LayoutParams, initWithInt_withInt_, width, height)
 }
 
-ADXToolbar_ActionBar_LayoutParams *create_ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_(jint width, jint height) {
+ADXToolbar_ActionBar_LayoutParams *create_ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_(int32_t width, int32_t height) {
   J2OBJC_CREATE_IMPL(ADXToolbar_ActionBar_LayoutParams, initWithInt_withInt_, width, height)
 }
 
-void ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_withInt_(ADXToolbar_ActionBar_LayoutParams *self, jint width, jint height, jint gravity) {
+void ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_withInt_(ADXToolbar_ActionBar_LayoutParams *self, int32_t width, int32_t height, int32_t gravity) {
   ADViewGroup_MarginLayoutParams_initWithInt_withInt_(self, width, height);
   self->gravity_ = gravity;
 }
 
-ADXToolbar_ActionBar_LayoutParams *new_ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_withInt_(jint width, jint height, jint gravity) {
+ADXToolbar_ActionBar_LayoutParams *new_ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_withInt_(int32_t width, int32_t height, int32_t gravity) {
   J2OBJC_NEW_IMPL(ADXToolbar_ActionBar_LayoutParams, initWithInt_withInt_withInt_, width, height, gravity)
 }
 
-ADXToolbar_ActionBar_LayoutParams *create_ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_withInt_(jint width, jint height, jint gravity) {
+ADXToolbar_ActionBar_LayoutParams *create_ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_withInt_(int32_t width, int32_t height, int32_t gravity) {
   J2OBJC_CREATE_IMPL(ADXToolbar_ActionBar_LayoutParams, initWithInt_withInt_withInt_, width, height, gravity)
 }
 
@@ -1217,15 +1230,15 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXToolbar_ActionBar_LayoutParams)
 
 @implementation ADXToolbar_LayoutParams
 
-- (instancetype)initWithInt:(jint)width
-                    withInt:(jint)height {
+- (instancetype)initWithInt:(int32_t)width
+                    withInt:(int32_t)height {
   ADXToolbar_LayoutParams_initWithInt_withInt_(self, width, height);
   return self;
 }
 
-- (instancetype)initWithInt:(jint)width
-                    withInt:(jint)height
-                    withInt:(jint)gravity {
+- (instancetype)initWithInt:(int32_t)width
+                    withInt:(int32_t)height
+                    withInt:(int32_t)gravity {
   ADXToolbar_LayoutParams_initWithInt_withInt_withInt_(self, width, height, gravity);
   return self;
 }
@@ -1268,31 +1281,31 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ADXToolbar_ActionBar_LayoutParams)
 
 @end
 
-void ADXToolbar_LayoutParams_initWithInt_withInt_(ADXToolbar_LayoutParams *self, jint width, jint height) {
+void ADXToolbar_LayoutParams_initWithInt_withInt_(ADXToolbar_LayoutParams *self, int32_t width, int32_t height) {
   ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_(self, width, height);
   self->mViewType_ = ADXToolbar_LayoutParams_CUSTOM;
   self->gravity_ = ADGravity_CENTER_VERTICAL | ADXGravityCompat_START;
 }
 
-ADXToolbar_LayoutParams *new_ADXToolbar_LayoutParams_initWithInt_withInt_(jint width, jint height) {
+ADXToolbar_LayoutParams *new_ADXToolbar_LayoutParams_initWithInt_withInt_(int32_t width, int32_t height) {
   J2OBJC_NEW_IMPL(ADXToolbar_LayoutParams, initWithInt_withInt_, width, height)
 }
 
-ADXToolbar_LayoutParams *create_ADXToolbar_LayoutParams_initWithInt_withInt_(jint width, jint height) {
+ADXToolbar_LayoutParams *create_ADXToolbar_LayoutParams_initWithInt_withInt_(int32_t width, int32_t height) {
   J2OBJC_CREATE_IMPL(ADXToolbar_LayoutParams, initWithInt_withInt_, width, height)
 }
 
-void ADXToolbar_LayoutParams_initWithInt_withInt_withInt_(ADXToolbar_LayoutParams *self, jint width, jint height, jint gravity) {
+void ADXToolbar_LayoutParams_initWithInt_withInt_withInt_(ADXToolbar_LayoutParams *self, int32_t width, int32_t height, int32_t gravity) {
   ADXToolbar_ActionBar_LayoutParams_initWithInt_withInt_(self, width, height);
   self->mViewType_ = ADXToolbar_LayoutParams_CUSTOM;
   self->gravity_ = gravity;
 }
 
-ADXToolbar_LayoutParams *new_ADXToolbar_LayoutParams_initWithInt_withInt_withInt_(jint width, jint height, jint gravity) {
+ADXToolbar_LayoutParams *new_ADXToolbar_LayoutParams_initWithInt_withInt_withInt_(int32_t width, int32_t height, int32_t gravity) {
   J2OBJC_NEW_IMPL(ADXToolbar_LayoutParams, initWithInt_withInt_withInt_, width, height, gravity)
 }
 
-ADXToolbar_LayoutParams *create_ADXToolbar_LayoutParams_initWithInt_withInt_withInt_(jint width, jint height, jint gravity) {
+ADXToolbar_LayoutParams *create_ADXToolbar_LayoutParams_initWithInt_withInt_withInt_(int32_t width, int32_t height, int32_t gravity) {
   J2OBJC_CREATE_IMPL(ADXToolbar_LayoutParams, initWithInt_withInt_withInt_, width, height, gravity)
 }
 

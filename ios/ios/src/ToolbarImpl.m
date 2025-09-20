@@ -3,6 +3,11 @@
 //  source: D:\Java\git\core-ios-widgets\IOSToolbarPlugin\src\main\java\com\ashera\toolbar\ToolbarImpl.java
 //
 
+#define J2OBJC_IMPORTED_BY_JAVA_IMPLEMENTATION 1
+
+
+
+
 #include "ActionMenuView.h"
 #include "ActionMenuViewImpl.h"
 #include "AutoCompleteTextView.h"
@@ -53,6 +58,7 @@
 #include "WidgetAttribute.h"
 #include "WidgetFactory.h"
 #include "java/lang/Boolean.h"
+#include "java/lang/Float.h"
 #include "java/lang/Integer.h"
 #include "java/lang/Runnable.h"
 #include "java/lang/UnsupportedOperationException.h"
@@ -65,9 +71,13 @@
 #include "ASUIView.h"
 #include "HasLifeCycleDecorators.h"
 
+
 @class ASToolbarImpl_OnClickListener;
-@protocol JavaUtilList;
-@protocol JavaUtilMap;
+@class NSString;
+
+
+#pragma clang diagnostic error "-Wreturn-type"
+#pragma clang diagnostic ignored "-Wswitch"
 
 
 #pragma clang diagnostic ignored "-Wprotocol"
@@ -85,8 +95,8 @@
   NSString *menu_;
   id<ADXToolbar_OnMenuItemClickListener> onMenuItemClickListener_;
   id overflowIcon_;
-  jint mButtonGravity_;
-  jint screenWidth_;
+  int32_t mButtonGravity_;
+  int32_t screenWidth_;
   id<JavaUtilMap> badgeDrawables_;
   id<ADXSearchView_OnQueryTextListener> onQueryTextSubmit_;
   id<ADXSearchView_OnQueryTextListener> onQueryTextChange_;
@@ -168,7 +178,7 @@
 - (void)setOnSuggestionListenerWithADMenuItem:(id<ADMenuItem>)menu
                    withADAutoCompleteTextView:(ADAutoCompleteTextView *)autoComplete;
 
-- (ADXBadgeDrawable *)getOrCreateBadgeWithInt:(jint)id_;
+- (ADXBadgeDrawable *)getOrCreateBadgeWithInt:(int32_t)id_;
 
 - (void)reapplyBadgeDrawables;
 
@@ -285,7 +295,7 @@ __attribute__((unused)) static id<ASIWidget> ASToolbarImpl_getAutoCompleteImplWi
 
 __attribute__((unused)) static void ASToolbarImpl_setOnSuggestionListenerWithADMenuItem_withADAutoCompleteTextView_(ASToolbarImpl *self, id<ADMenuItem> menu, ADAutoCompleteTextView *autoComplete);
 
-__attribute__((unused)) static ADXBadgeDrawable *ASToolbarImpl_getOrCreateBadgeWithInt_(ASToolbarImpl *self, jint id_);
+__attribute__((unused)) static ADXBadgeDrawable *ASToolbarImpl_getOrCreateBadgeWithInt_(ASToolbarImpl *self, int32_t id_);
 
 __attribute__((unused)) static void ASToolbarImpl_reapplyBadgeDrawables(ASToolbarImpl *self);
 
@@ -333,19 +343,19 @@ __attribute__((unused)) static void ASToolbarImpl_setNavigationOnClickListenerWi
 
 @interface ASToolbarImpl_PreMeasureHandler () {
  @public
-  __unsafe_unretained ASToolbarImpl *this$0_;
+  WEAK_ ASToolbarImpl *this$0_;
 }
 
 @end
 
 @interface ASToolbarImpl_ToolbarExt () {
  @public
-  __unsafe_unretained ASToolbarImpl *this$0_;
+  WEAK_ ASToolbarImpl *this$0_;
   ASMeasureEvent *measureFinished_;
   ASOnLayoutEvent *onLayoutEvent_;
   id<JavaUtilList> overlays_;
-  jint mMaxWidth_;
-  jint mMaxHeight_;
+  int32_t mMaxWidth_;
+  int32_t mMaxHeight_;
   id<JavaUtilMap> templates_;
 }
 
@@ -379,6 +389,7 @@ __attribute__((unused)) static ASToolbarImpl_1 *new_ASToolbarImpl_1_initWithASTo
 
 __attribute__((unused)) static ASToolbarImpl_1 *create_ASToolbarImpl_1_initWithASToolbarImpl_withADMenuItem_withNSString_(ASToolbarImpl *outer$, id<ADMenuItem> capture$0, NSString *capture$1);
 
+
 @interface ASToolbarImpl_2 : NSObject < ADXSearchView_OnQueryTextListener > {
  @public
   ASToolbarImpl *this$0_;
@@ -386,9 +397,9 @@ __attribute__((unused)) static ASToolbarImpl_1 *create_ASToolbarImpl_1_initWithA
 
 - (instancetype)initWithASToolbarImpl:(ASToolbarImpl *)outer$;
 
-- (jboolean)onQueryTextChangeWithNSString:(NSString *)text;
+- (bool)onQueryTextChangeWithNSString:(NSString *)text;
 
-- (jboolean)onQueryTextSubmitWithNSString:(NSString *)query;
+- (bool)onQueryTextSubmitWithNSString:(NSString *)query;
 
 @end
 
@@ -399,6 +410,7 @@ __attribute__((unused)) static void ASToolbarImpl_2_initWithASToolbarImpl_(ASToo
 __attribute__((unused)) static ASToolbarImpl_2 *new_ASToolbarImpl_2_initWithASToolbarImpl_(ASToolbarImpl *outer$) NS_RETURNS_RETAINED;
 
 __attribute__((unused)) static ASToolbarImpl_2 *create_ASToolbarImpl_2_initWithASToolbarImpl_(ASToolbarImpl *outer$);
+
 
 @interface ASToolbarImpl_ValueSetter : NSObject
 
@@ -421,11 +433,11 @@ __attribute__((unused)) static ASToolbarImpl_2 *create_ASToolbarImpl_2_initWithA
                      withNSString:(NSString *)strValue
                      withNSString:(NSString *)action;
 
-- (jboolean)onQueryTextSubmitWithNSString:(NSString *)query;
+- (bool)onQueryTextSubmitWithNSString:(NSString *)query;
 
 - (id<JavaUtilMap>)getOnQueryTextSubmitEventObjWithNSString:(NSString *)query;
 
-- (jboolean)onQueryTextChangeWithNSString:(NSString *)newText;
+- (bool)onQueryTextChangeWithNSString:(NSString *)newText;
 
 - (id<JavaUtilMap>)getOnQueryTextChangeEventObjWithNSString:(NSString *)newText;
 
@@ -451,6 +463,7 @@ __attribute__((unused)) static ASToolbarImpl_OnQueryTextListener *new_ASToolbarI
 __attribute__((unused)) static ASToolbarImpl_OnQueryTextListener *create_ASToolbarImpl_OnQueryTextListener_initWithASIWidget_withNSString_withNSString_(id<ASIWidget> w, NSString *strValue, NSString *action);
 
 J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_OnQueryTextListener)
+
 
 @interface ASToolbarImpl_OnClickListener : NSObject < ADView_OnClickListener, ASIListener > {
  @public
@@ -496,6 +509,7 @@ __attribute__((unused)) static ASToolbarImpl_OnClickListener *create_ASToolbarIm
 
 J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_OnClickListener)
 
+
 @interface ASToolbarImpl_OnMenuItemClickListener : NSObject < ADXToolbar_OnMenuItemClickListener, ASIListener > {
  @public
   id<ASIWidget> w_;
@@ -513,7 +527,7 @@ J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_OnClickListener)
                      withNSString:(NSString *)strValue
                      withNSString:(NSString *)action;
 
-- (jboolean)onMenuItemClickWithADMenuItem:(id<ADMenuItem>)item;
+- (bool)onMenuItemClickWithADMenuItem:(id<ADMenuItem>)item;
 
 - (id<JavaUtilMap>)getOnMenuItemClickEventObjWithADMenuItem:(id<ADMenuItem>)item;
 
@@ -540,6 +554,7 @@ __attribute__((unused)) static ASToolbarImpl_OnMenuItemClickListener *create_AST
 
 J2OBJC_TYPE_LITERAL_HEADER(ASToolbarImpl_OnMenuItemClickListener)
 
+
 @interface ASToolbarImpl_$Lambda$1 : NSObject < JavaLangRunnable > {
  @public
   id<ASIWidget> val$widget_;
@@ -556,6 +571,7 @@ __attribute__((unused)) static void ASToolbarImpl_$Lambda$1_initWithASIWidget_(A
 __attribute__((unused)) static ASToolbarImpl_$Lambda$1 *new_ASToolbarImpl_$Lambda$1_initWithASIWidget_(id<ASIWidget> capture$0) NS_RETURNS_RETAINED;
 
 __attribute__((unused)) static ASToolbarImpl_$Lambda$1 *create_ASToolbarImpl_$Lambda$1_initWithASIWidget_(id<ASIWidget> capture$0);
+
 
 @interface ASToolbarImpl_$Lambda$2 : NSObject < ASToolbarImpl_ValueSetter >
 
@@ -576,6 +592,7 @@ __attribute__((unused)) static ASToolbarImpl_$Lambda$2 *new_ASToolbarImpl_$Lambd
 
 __attribute__((unused)) static ASToolbarImpl_$Lambda$2 *create_ASToolbarImpl_$Lambda$2_init(void);
 
+
 @interface ASToolbarImpl_$Lambda$3 : NSObject < ASToolbarImpl_ValueSetter >
 
 - (void)setValueOnBadgeDrawableWithADXBadgeDrawable:(ADXBadgeDrawable *)badge
@@ -594,6 +611,7 @@ __attribute__((unused)) static void ASToolbarImpl_$Lambda$3_init(ASToolbarImpl_$
 __attribute__((unused)) static ASToolbarImpl_$Lambda$3 *new_ASToolbarImpl_$Lambda$3_init(void) NS_RETURNS_RETAINED;
 
 __attribute__((unused)) static ASToolbarImpl_$Lambda$3 *create_ASToolbarImpl_$Lambda$3_init(void);
+
 
 @interface ASToolbarImpl_$Lambda$4 : NSObject < ASToolbarImpl_ValueSetter >
 
@@ -614,6 +632,7 @@ __attribute__((unused)) static ASToolbarImpl_$Lambda$4 *new_ASToolbarImpl_$Lambd
 
 __attribute__((unused)) static ASToolbarImpl_$Lambda$4 *create_ASToolbarImpl_$Lambda$4_init(void);
 
+
 @interface ASToolbarImpl_$Lambda$5 : NSObject < ASToolbarImpl_ValueSetter >
 
 - (void)setValueOnBadgeDrawableWithADXBadgeDrawable:(ADXBadgeDrawable *)badge
@@ -632,6 +651,7 @@ __attribute__((unused)) static void ASToolbarImpl_$Lambda$5_init(ASToolbarImpl_$
 __attribute__((unused)) static ASToolbarImpl_$Lambda$5 *new_ASToolbarImpl_$Lambda$5_init(void) NS_RETURNS_RETAINED;
 
 __attribute__((unused)) static ASToolbarImpl_$Lambda$5 *create_ASToolbarImpl_$Lambda$5_init(void);
+
 
 @interface ASToolbarImpl_$Lambda$6 : NSObject < ASToolbarImpl_ValueSetter >
 
@@ -652,6 +672,7 @@ __attribute__((unused)) static ASToolbarImpl_$Lambda$6 *new_ASToolbarImpl_$Lambd
 
 __attribute__((unused)) static ASToolbarImpl_$Lambda$6 *create_ASToolbarImpl_$Lambda$6_init(void);
 
+
 @interface ASToolbarImpl_$Lambda$7 : NSObject < ASToolbarImpl_ValueSetter >
 
 - (void)setValueOnBadgeDrawableWithADXBadgeDrawable:(ADXBadgeDrawable *)badge
@@ -670,6 +691,7 @@ __attribute__((unused)) static void ASToolbarImpl_$Lambda$7_init(ASToolbarImpl_$
 __attribute__((unused)) static ASToolbarImpl_$Lambda$7 *new_ASToolbarImpl_$Lambda$7_init(void) NS_RETURNS_RETAINED;
 
 __attribute__((unused)) static ASToolbarImpl_$Lambda$7 *create_ASToolbarImpl_$Lambda$7_init(void);
+
 
 @interface ASToolbarImpl_$Lambda$8 : NSObject < ASToolbarImpl_ValueSetter >
 
@@ -690,6 +712,7 @@ __attribute__((unused)) static ASToolbarImpl_$Lambda$8 *new_ASToolbarImpl_$Lambd
 
 __attribute__((unused)) static ASToolbarImpl_$Lambda$8 *create_ASToolbarImpl_$Lambda$8_init(void);
 
+
 @interface ASToolbarImpl_$Lambda$9 : NSObject < ASToolbarImpl_ValueSetter >
 
 - (void)setValueOnBadgeDrawableWithADXBadgeDrawable:(ADXBadgeDrawable *)badge
@@ -708,6 +731,7 @@ __attribute__((unused)) static void ASToolbarImpl_$Lambda$9_init(ASToolbarImpl_$
 __attribute__((unused)) static ASToolbarImpl_$Lambda$9 *new_ASToolbarImpl_$Lambda$9_init(void) NS_RETURNS_RETAINED;
 
 __attribute__((unused)) static ASToolbarImpl_$Lambda$9 *create_ASToolbarImpl_$Lambda$9_init(void);
+
 
 @interface ASToolbarImpl_$Lambda$10 : NSObject < ASToolbarImpl_ValueSetter >
 
@@ -728,6 +752,7 @@ __attribute__((unused)) static ASToolbarImpl_$Lambda$10 *new_ASToolbarImpl_$Lamb
 
 __attribute__((unused)) static ASToolbarImpl_$Lambda$10 *create_ASToolbarImpl_$Lambda$10_init(void);
 
+
 @interface ASToolbarImpl_$Lambda$11 : NSObject < ASToolbarImpl_ValueSetter >
 
 - (void)setValueOnBadgeDrawableWithADXBadgeDrawable:(ADXBadgeDrawable *)badge
@@ -746,6 +771,7 @@ __attribute__((unused)) static void ASToolbarImpl_$Lambda$11_init(ASToolbarImpl_
 __attribute__((unused)) static ASToolbarImpl_$Lambda$11 *new_ASToolbarImpl_$Lambda$11_init(void) NS_RETURNS_RETAINED;
 
 __attribute__((unused)) static ASToolbarImpl_$Lambda$11 *create_ASToolbarImpl_$Lambda$11_init(void);
+
 
 NSString *ASToolbarImpl_LOCAL_NAME = @"androidx.appcompat.widget.Toolbar";
 NSString *ASToolbarImpl_GROUP_NAME = @"androidx.appcompat.widget.Toolbar";
@@ -842,16 +868,16 @@ J2OBJC_IGNORE_DESIGNATED_END
   return toolbar_;
 }
 
-- (jboolean)removeWithASIWidget:(id<ASIWidget>)w {
-  jboolean remove = [super removeWithASIWidget:w];
+- (bool)removeWithASIWidget:(id<ASIWidget>)w {
+  bool remove = [super removeWithASIWidget:w];
   [((ADXToolbar *) nil_chk(toolbar_)) removeViewWithADView:(ADView *) cast_chk([((id<ASIWidget>) nil_chk(w)) asWidget], [ADView class])];
   ASToolbarImpl_nativeRemoveViewWithASIWidget_(self, w);
   return remove;
 }
 
-- (jboolean)removeWithInt:(jint)index {
+- (bool)removeWithInt:(int32_t)index {
   id<ASIWidget> widget = [((id<JavaUtilList>) nil_chk(widgets_)) getWithInt:index];
-  jboolean remove = [super removeWithInt:index];
+  bool remove = [super removeWithInt:index];
   if (index + 1 <= [((ADXToolbar *) nil_chk(toolbar_)) getChildCount]) {
     [((ADXToolbar *) nil_chk(toolbar_)) removeViewAtWithInt:index];
     ASToolbarImpl_nativeRemoveViewWithASIWidget_(self, widget);
@@ -864,7 +890,7 @@ J2OBJC_IGNORE_DESIGNATED_END
 }
 
 - (void)addWithASIWidget:(id<ASIWidget>)w
-                 withInt:(jint)index {
+                 withInt:(int32_t)index {
   if (index != -2) {
     ADView *view = (ADView *) cast_chk([((id<ASIWidget>) nil_chk(w)) asWidget], [ADView class]);
     ASToolbarImpl_createLayoutParamsWithADView_(self, view);
@@ -1156,7 +1182,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   return uiView_;
 }
 
-- (jboolean)checkIosVersionWithNSString:(NSString *)v {
+- (bool)checkIosVersionWithNSString:(NSString *)v {
   return ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending);
 }
 
@@ -1277,8 +1303,8 @@ J2OBJC_IGNORE_DESIGNATED_END
 - (void)initialized {
   [super initialized];
   if (self->actionLayoutEventIds_ != nil || searchviewAttributes_ != nil) {
-    jint menuSize = [((ADXMenuBuilder *) nil_chk([((ADXToolbar *) nil_chk(toolbar_)) getMenu])) size];
-    for (jint i = 0; i < menuSize; i++) {
+    int32_t menuSize = [((ADXMenuBuilder *) nil_chk([((ADXToolbar *) nil_chk(toolbar_)) getMenu])) size];
+    for (int32_t i = 0; i < menuSize; i++) {
       id<ADMenuItem> menu = [((ADXMenuBuilder *) nil_chk([((ADXToolbar *) nil_chk(toolbar_)) getMenu])) getItemWithInt:i];
       if (self->actionLayoutEventIds_ != nil && [((id<ADMenuItem>) nil_chk(menu)) getActionView] != nil && !([[menu getActionView] isKindOfClass:[ADXSearchView class]])) {
         for (NSString * __strong actionLayoutEventId in self->actionLayoutEventIds_) {
@@ -1306,7 +1332,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   ASToolbarImpl_setOnSuggestionListenerWithADMenuItem_withADAutoCompleteTextView_(self, menu, autoComplete);
 }
 
-- (ADXBadgeDrawable *)getOrCreateBadgeWithInt:(jint)id_ {
+- (ADXBadgeDrawable *)getOrCreateBadgeWithInt:(int32_t)id_ {
   return ASToolbarImpl_getOrCreateBadgeWithInt_(self, id_);
 }
 
@@ -1404,7 +1430,7 @@ J2OBJC_IGNORE_DESIGNATED_END
   }
 }
 
-- (void)setVisibleWithBoolean:(jboolean)b {
+- (void)setVisibleWithBoolean:(bool)b {
   [((ADView *) nil_chk(((ADView *) cast_chk([self asWidget], [ADView class])))) setVisibilityWithInt:b ? ADView_VISIBLE : ADView_GONE];
 }
 
@@ -1808,7 +1834,7 @@ void ASToolbarImpl_setButtonGravityWithId_(ASToolbarImpl *self, id objValue) {
 }
 
 void ASToolbarImpl_handlePreMeasureWithId_(ASToolbarImpl *self, id payload) {
-  jint currentScreenWidth = ASPluginInvoker_getScreenWidth();
+  int32_t currentScreenWidth = ASPluginInvoker_getScreenWidth();
   if (self->screenWidth_ != -1 && self->screenWidth_ != currentScreenWidth) {
     ASToolbarImpl_createMenu(self);
   }
@@ -1822,7 +1848,7 @@ id<ASIWidget> ASToolbarImpl_getAutoCompleteImplWithADAutoCompleteTextView_(ASToo
 void ASToolbarImpl_setOnSuggestionListenerWithADMenuItem_withADAutoCompleteTextView_(ASToolbarImpl *self, id<ADMenuItem> menu, ADAutoCompleteTextView *autoComplete) {
 }
 
-ADXBadgeDrawable *ASToolbarImpl_getOrCreateBadgeWithInt_(ASToolbarImpl *self, jint id_) {
+ADXBadgeDrawable *ASToolbarImpl_getOrCreateBadgeWithInt_(ASToolbarImpl *self, int32_t id_) {
   if (self->badgeDrawables_ == nil) {
     self->badgeDrawables_ = new_JavaUtilHashMap_init();
   }
@@ -1844,7 +1870,7 @@ void ASToolbarImpl_reapplyBadgeDrawables(ASToolbarImpl *self) {
   if (self->badgeDrawables_ != nil) {
     id<JavaUtilSet> ids = [self->badgeDrawables_ keySet];
     for (JavaLangInteger *boxed__ in nil_chk(ids)) {
-      jint id_ = [((JavaLangInteger *) nil_chk(boxed__)) intValue];
+      int32_t id_ = [((JavaLangInteger *) nil_chk(boxed__)) intValue];
       id<ADMenuItem> menuItem = [((ADXMenuBuilder *) nil_chk([((ADXToolbar *) nil_chk(self->toolbar_)) getMenu])) findItemWithInt:id_];
       ADView *itemView = [((ADXActionMenuView *) nil_chk(((ADXActionMenuView *) cast_chk([((id<ASIWidget>) nil_chk(self->actionMenuView_)) asWidget], [ADXActionMenuView class])))) getItemViewWithADMenuItem:menuItem];
       if ([((ADView *) nil_chk(itemView)) getParent] != nil) {
@@ -1882,8 +1908,8 @@ void ASToolbarImpl_setOnQueryTextListenerWithNSString_withNSString_withId_(ASToo
     self->onQueryTextSubmit_ = nil;
     onQueryTextListener = (id<ADXSearchView_OnQueryTextListener>) cast_check(objValue, ADXSearchView_OnQueryTextListener_class_());
   }
-  jint menuSize = [((ADXMenuBuilder *) nil_chk([((ADXToolbar *) nil_chk(self->toolbar_)) getMenu])) size];
-  for (jint i = 0; i < menuSize; i++) {
+  int32_t menuSize = [((ADXMenuBuilder *) nil_chk([((ADXToolbar *) nil_chk(self->toolbar_)) getMenu])) size];
+  for (int32_t i = 0; i < menuSize; i++) {
     id<ADMenuItem> menu = [((ADXMenuBuilder *) nil_chk([((ADXToolbar *) nil_chk(self->toolbar_)) getMenu])) getItemWithInt:i];
     if ([[((id<ADMenuItem>) nil_chk(menu)) getActionView] isKindOfClass:[ADXSearchView class]]) {
       if (self->onQueryTextSubmit_ == nil && self->onQueryTextChange_ == nil) {
@@ -1912,7 +1938,7 @@ void ASToolbarImpl_applySearchViewAttributesWithADMenuItem_(ASToolbarImpl *self,
 }
 
 ADAutoCompleteTextView *ASToolbarImpl_findAutoCompleteWithADViewGroup_(ASToolbarImpl *self, ADViewGroup *actionView) {
-  for (jint i = 0; i < [((ADViewGroup *) nil_chk(actionView)) getChildCount]; i++) {
+  for (int32_t i = 0; i < [((ADViewGroup *) nil_chk(actionView)) getChildCount]; i++) {
     ADView *view = [actionView getChildAtWithInt:i];
     if ([view isKindOfClass:[ADAutoCompleteTextView class]]) {
       return (ADAutoCompleteTextView *) view;
@@ -1935,8 +1961,8 @@ void ASToolbarImpl_setBadgeBackgroundColorsWithId_(ASToolbarImpl *self, id objVa
 void ASToolbarImpl_setValueOnBadgeDrawableWithId_withASToolbarImpl_ValueSetter_(ASToolbarImpl *self, id objValue, id<ASToolbarImpl_ValueSetter> valueSetter) {
   if (self->badgeMenuItemIds_ != nil) {
     id<JavaUtilList> badgeAttrs = ASPluginInvoker_getListWithId_(objValue);
-    for (jint i = 0; i < [((id<JavaUtilList>) nil_chk(self->badgeMenuItemIds_)) size]; i++) {
-      jint id_ = [((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk([((id<JavaUtilList>) nil_chk(self->badgeMenuItemIds_)) getWithInt:i], [JavaLangInteger class]))) intValue];
+    for (int32_t i = 0; i < [((id<JavaUtilList>) nil_chk(self->badgeMenuItemIds_)) size]; i++) {
+      int32_t id_ = [((JavaLangInteger *) nil_chk((JavaLangInteger *) cast_chk([((id<JavaUtilList>) nil_chk(self->badgeMenuItemIds_)) getWithInt:i], [JavaLangInteger class]))) intValue];
       ADXBadgeDrawable *badge = ASToolbarImpl_getOrCreateBadgeWithInt_(self, id_);
       id value = [((id<JavaUtilList>) nil_chk(badgeAttrs)) getWithInt:i];
       [((id<ASToolbarImpl_ValueSetter>) nil_chk(valueSetter)) setValueOnBadgeDrawableWithADXBadgeDrawable:badge withId:value];
@@ -1991,6 +2017,8 @@ void ASToolbarImpl_setNavigationOnClickListenerWithASToolbarImpl_OnClickListener
 }
 
 J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl)
+
+J2OBJC_NAME_MAPPING(ASToolbarImpl, "com.ashera.toolbar", "AS")
 
 @implementation ASToolbarImpl_PreMeasureHandler
 
@@ -2051,19 +2079,19 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_PreMeasureHandler)
   return this$0_;
 }
 
-- (void)setMaxWidthWithInt:(jint)width {
+- (void)setMaxWidthWithInt:(int32_t)width {
   mMaxWidth_ = width;
 }
 
-- (void)setMaxHeightWithInt:(jint)height {
+- (void)setMaxHeightWithInt:(int32_t)height {
   mMaxHeight_ = height;
 }
 
-- (jint)getMaxWidth {
+- (int32_t)getMaxWidth {
   return mMaxWidth_;
 }
 
-- (jint)getMaxHeight {
+- (int32_t)getMaxHeight {
   return mMaxHeight_;
 }
 
@@ -2072,8 +2100,8 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_PreMeasureHandler)
   return self;
 }
 
-- (void)onMeasureWithInt:(jint)widthMeasureSpec
-                 withInt:(jint)heightMeasureSpec {
+- (void)onMeasureWithInt:(int32_t)widthMeasureSpec
+                 withInt:(int32_t)heightMeasureSpec {
   if (mMaxWidth_ > 0) {
     widthMeasureSpec = ADView_MeasureSpec_makeMeasureSpecWithInt_withInt_(mMaxWidth_, ADView_MeasureSpec_AT_MOST);
   }
@@ -2089,11 +2117,11 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_PreMeasureHandler)
   }
 }
 
-- (void)onLayoutWithBoolean:(jboolean)changed
-                    withInt:(jint)l
-                    withInt:(jint)t
-                    withInt:(jint)r
-                    withInt:(jint)b {
+- (void)onLayoutWithBoolean:(bool)changed
+                    withInt:(int32_t)l
+                    withInt:(int32_t)t
+                    withInt:(int32_t)r
+                    withInt:(int32_t)b {
   [super onLayoutWithBoolean:changed withInt:l withInt:t withInt:r withInt:b];
   ASViewImpl_setDrawableBoundsWithASIWidget_withInt_withInt_withInt_withInt_(this$0_, l, t, r, b);
   if (![self isOverlay]) {
@@ -2120,8 +2148,8 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_PreMeasureHandler)
           withNSObjectArray:(IOSObjectArray *)canvas {
 }
 
-- (void)updateMeasuredDimensionWithInt:(jint)width
-                               withInt:(jint)height {
+- (void)updateMeasuredDimensionWithInt:(int32_t)width
+                               withInt:(int32_t)height {
   [self setMeasuredDimensionWithInt:width withInt:height];
 }
 
@@ -2189,12 +2217,12 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_PreMeasureHandler)
   displayFrame->bottom_ = displayFrame->top_ + [self getHeight];
 }
 
-- (void)offsetTopAndBottomWithInt:(jint)offset {
+- (void)offsetTopAndBottomWithInt:(int32_t)offset {
   [super offsetTopAndBottomWithInt:offset];
   ASViewImpl_nativeMakeFrameWithId_withInt_withInt_withInt_withInt_([this$0_ asNativeWidget], [self getLeft], [self getTop], [self getRight], [self getBottom]);
 }
 
-- (void)offsetLeftAndRightWithInt:(jint)offset {
+- (void)offsetLeftAndRightWithInt:(int32_t)offset {
   [super offsetLeftAndRightWithInt:offset];
   ASViewImpl_nativeMakeFrameWithId_withInt_withInt_withInt_withInt_([this$0_ asNativeWidget], [self getLeft], [self getTop], [self getRight], [self getBottom]);
 }
@@ -2224,7 +2252,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_PreMeasureHandler)
   [this$0_ setAttributeWithNSString:name withId:value withBoolean:!([value isKindOfClass:[NSString class]])];
 }
 
-- (void)setVisibilityWithInt:(jint)visibility {
+- (void)setVisibilityWithInt:(int32_t)visibility {
   [super setVisibilityWithInt:visibility];
   ASViewImpl_nativeSetVisibilityWithId_withBoolean_([this$0_ asNativeWidget], visibility != ADView_VISIBLE);
 }
@@ -2438,7 +2466,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_ToolbarExt)
     { "val$myactionLayoutEventId_", "LNSString;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
   };
   static const void *ptrTable[] = { "LASToolbarImpl;LADMenuItem;LNSString;", "onClick", "LADView;", "LASToolbarImpl;", "initialized" };
-  static const J2ObjcClassInfo _ASToolbarImpl_1 = { "", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x8010, 2, 3, 3, -1, 4, -1, -1 };
+  static const J2ObjcClassInfo _ASToolbarImpl_1 = { "", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x8000, 2, 3, 3, -1, 4, -1, -1 };
   return &_ASToolbarImpl_1;
 }
 
@@ -2466,14 +2494,14 @@ ASToolbarImpl_1 *create_ASToolbarImpl_1_initWithASToolbarImpl_withADMenuItem_wit
   return self;
 }
 
-- (jboolean)onQueryTextChangeWithNSString:(NSString *)text {
+- (bool)onQueryTextChangeWithNSString:(NSString *)text {
   if (this$0_->onQueryTextChange_ != nil) {
     [this$0_->onQueryTextChange_ onQueryTextChangeWithNSString:text];
   }
   return false;
 }
 
-- (jboolean)onQueryTextSubmitWithNSString:(NSString *)query {
+- (bool)onQueryTextSubmitWithNSString:(NSString *)query {
   if (this$0_->onQueryTextSubmit_ != nil) {
     [this$0_->onQueryTextSubmit_ onQueryTextSubmitWithNSString:query];
   }
@@ -2497,7 +2525,7 @@ ASToolbarImpl_1 *create_ASToolbarImpl_1_initWithASToolbarImpl_withADMenuItem_wit
     { "this$0_", "LASToolbarImpl;", .constantValue.asLong = 0, 0x1012, -1, -1, -1, -1 },
   };
   static const void *ptrTable[] = { "LASToolbarImpl;", "onQueryTextChange", "LNSString;", "onQueryTextSubmit", "setOnQueryTextListenerWithNSString:withNSString:withId:" };
-  static const J2ObjcClassInfo _ASToolbarImpl_2 = { "", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x8010, 3, 1, 0, -1, 4, -1, -1 };
+  static const J2ObjcClassInfo _ASToolbarImpl_2 = { "", "com.ashera.toolbar", ptrTable, methods, fields, 7, 0x8000, 3, 1, 0, -1, 4, -1, -1 };
   return &_ASToolbarImpl_2;
 }
 
@@ -2555,8 +2583,8 @@ J2OBJC_INTERFACE_TYPE_LITERAL_SOURCE(ASToolbarImpl_ValueSetter)
   return self;
 }
 
-- (jboolean)onQueryTextSubmitWithNSString:(NSString *)query {
-  jboolean result = true;
+- (bool)onQueryTextSubmitWithNSString:(NSString *)query {
+  bool result = true;
   if (action_ == nil || [action_ isEqual:@"onQueryTextSubmit"]) {
     [((id<ASIWidget>) nil_chk(w_)) syncModelFromUiToPojoWithNSString:@"onQueryTextSubmit"];
     id<JavaUtilMap> obj = [self getOnQueryTextSubmitEventObjWithNSString:query];
@@ -2581,7 +2609,7 @@ J2OBJC_INTERFACE_TYPE_LITERAL_SOURCE(ASToolbarImpl_ValueSetter)
     if ([((id<ASIWidget>) nil_chk(w_)) getModelUiToPojoEventIds] != nil) {
       ASViewImpl_refreshUiFromModelWithASIWidget_withId_withBoolean_(w_, [((id<ASIWidget>) nil_chk(w_)) getModelUiToPojoEventIds], true);
     }
-    if (strValue_ != nil && ![strValue_ java_isEmpty] && ![((NSString *) nil_chk([((NSString *) nil_chk(strValue_)) java_trim])) java_hasPrefix:@"+"]) {
+    if (strValue_ != nil && ![strValue_ isEmpty] && ![((NSString *) nil_chk([((NSString *) nil_chk(strValue_)) java_trim])) java_hasPrefix:@"+"]) {
       id<ASIActivity> activity = [((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getRootActivity];
       if (activity != nil) {
         [activity sendEventMessageWithJavaUtilMap:obj];
@@ -2608,8 +2636,8 @@ J2OBJC_INTERFACE_TYPE_LITERAL_SOURCE(ASToolbarImpl_ValueSetter)
   return obj;
 }
 
-- (jboolean)onQueryTextChangeWithNSString:(NSString *)newText {
-  jboolean result = true;
+- (bool)onQueryTextChangeWithNSString:(NSString *)newText {
+  bool result = true;
   if (action_ == nil || [action_ isEqual:@"onQueryTextChange"]) {
     [((id<ASIWidget>) nil_chk(w_)) syncModelFromUiToPojoWithNSString:@"onQueryTextChange"];
     id<JavaUtilMap> obj = [self getOnQueryTextChangeEventObjWithNSString:newText];
@@ -2634,7 +2662,7 @@ J2OBJC_INTERFACE_TYPE_LITERAL_SOURCE(ASToolbarImpl_ValueSetter)
     if ([((id<ASIWidget>) nil_chk(w_)) getModelUiToPojoEventIds] != nil) {
       ASViewImpl_refreshUiFromModelWithASIWidget_withId_withBoolean_(w_, [((id<ASIWidget>) nil_chk(w_)) getModelUiToPojoEventIds], true);
     }
-    if (strValue_ != nil && ![strValue_ java_isEmpty] && ![((NSString *) nil_chk([((NSString *) nil_chk(strValue_)) java_trim])) java_hasPrefix:@"+"]) {
+    if (strValue_ != nil && ![strValue_ isEmpty] && ![((NSString *) nil_chk([((NSString *) nil_chk(strValue_)) java_trim])) java_hasPrefix:@"+"]) {
       id<ASIActivity> activity = [((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getRootActivity];
       if (activity != nil) {
         [activity sendEventMessageWithJavaUtilMap:obj];
@@ -2767,7 +2795,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_OnQueryTextListener)
     if ([((id<ASIWidget>) nil_chk(w_)) getModelUiToPojoEventIds] != nil) {
       ASViewImpl_refreshUiFromModelWithASIWidget_withId_withBoolean_(w_, [((id<ASIWidget>) nil_chk(w_)) getModelUiToPojoEventIds], true);
     }
-    if (strValue_ != nil && ![strValue_ java_isEmpty] && ![((NSString *) nil_chk([((NSString *) nil_chk(strValue_)) java_trim])) java_hasPrefix:@"+"]) {
+    if (strValue_ != nil && ![strValue_ isEmpty] && ![((NSString *) nil_chk([((NSString *) nil_chk(strValue_)) java_trim])) java_hasPrefix:@"+"]) {
       id<ASIActivity> activity = [((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getRootActivity];
       if (activity != nil) {
         [activity sendEventMessageWithJavaUtilMap:obj];
@@ -2873,8 +2901,8 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_OnClickListener)
   return self;
 }
 
-- (jboolean)onMenuItemClickWithADMenuItem:(id<ADMenuItem>)item {
-  jboolean result = true;
+- (bool)onMenuItemClickWithADMenuItem:(id<ADMenuItem>)item {
+  bool result = true;
   if (action_ == nil || [action_ isEqual:@"onMenuItemClick"]) {
     [((id<ASIWidget>) nil_chk(w_)) syncModelFromUiToPojoWithNSString:@"onMenuItemClick"];
     id<JavaUtilMap> obj = [self getOnMenuItemClickEventObjWithADMenuItem:item];
@@ -2899,7 +2927,7 @@ J2OBJC_CLASS_TYPE_LITERAL_SOURCE(ASToolbarImpl_OnClickListener)
     if ([((id<ASIWidget>) nil_chk(w_)) getModelUiToPojoEventIds] != nil) {
       ASViewImpl_refreshUiFromModelWithASIWidget_withId_withBoolean_(w_, [((id<ASIWidget>) nil_chk(w_)) getModelUiToPojoEventIds], true);
     }
-    if (strValue_ != nil && ![strValue_ java_isEmpty] && ![((NSString *) nil_chk([((NSString *) nil_chk(strValue_)) java_trim])) java_hasPrefix:@"+"]) {
+    if (strValue_ != nil && ![strValue_ isEmpty] && ![((NSString *) nil_chk([((NSString *) nil_chk(strValue_)) java_trim])) java_hasPrefix:@"+"]) {
       id<ASIActivity> activity = [((id<ASIFragment>) nil_chk([((id<ASIWidget>) nil_chk(w_)) getFragment])) getRootActivity];
       if (activity != nil) {
         [activity sendEventMessageWithJavaUtilMap:obj];

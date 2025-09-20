@@ -3,6 +3,7 @@
 //  source: D:\Java\git\core-ios-widgets\IOSToolbarPlugin\src\main\java\com\ashera\toolbar\ToolbarPlugin.java
 //
 
+#import <Foundation/Foundation.h>
 #include "J2ObjC_header.h"
 
 #pragma push_macro("INCLUDE_ALL_ToolbarPlugin")
@@ -39,6 +40,7 @@ FOUNDATION_EXPORT void ASToolbarPlugin_initPlugin(void);
 J2OBJC_TYPE_LITERAL_HEADER(ASToolbarPlugin)
 
 @compatibility_alias ComAsheraToolbarToolbarPlugin ASToolbarPlugin;
+
 
 #endif
 

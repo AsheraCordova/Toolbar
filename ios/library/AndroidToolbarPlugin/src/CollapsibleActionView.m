@@ -3,8 +3,19 @@
 //  source: D:\Java\git\core-javafx-widget\SWTAndroidToolBar\src\main\java\androidx\appcompat\view\CollapsibleActionView.java
 //
 
+#define J2OBJC_IMPORTED_BY_JAVA_IMPLEMENTATION 1
+
+
+
+
 #include "CollapsibleActionView.h"
 #include "J2ObjC_source.h"
+
+
+
+
+#pragma clang diagnostic error "-Wreturn-type"
+#pragma clang diagnostic ignored "-Wswitch"
 
 
 @interface ADXCollapsibleActionView : NSObject
@@ -31,3 +42,5 @@
 @end
 
 J2OBJC_INTERFACE_TYPE_LITERAL_SOURCE(ADXCollapsibleActionView)
+
+J2OBJC_NAME_MAPPING(ADXCollapsibleActionView, "androidx.appcompat.view", "ADX")

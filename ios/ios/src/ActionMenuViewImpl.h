@@ -3,6 +3,7 @@
 //  source: D:\Java\git\core-ios-widgets\IOSToolbarPlugin\src\main\java\com\ashera\toolbar\ActionMenuViewImpl.java
 //
 
+#import <Foundation/Foundation.h>
 #include "J2ObjC_header.h"
 
 #pragma push_macro("INCLUDE_ALL_ActionMenuViewImpl")
@@ -23,6 +24,9 @@
 @class ADView;
 @class ASWidgetAttribute;
 @class IOSClass;
+@class JavaLangBoolean;
+@class JavaLangInteger;
+@class NSString;
 @protocol ADMenuItem;
 @protocol ASIFragment;
 @protocol ASILifeCycleDecorator;
@@ -42,13 +46,13 @@
                     withNSString:(NSString *)localname;
 
 - (void)addWithASIWidget:(id<ASIWidget>)w
-                 withInt:(jint)index;
+                 withInt:(int32_t)index;
 
 - (id)asNativeWidget;
 
 - (id)asWidget;
 
-- (jboolean)checkIosVersionWithNSString:(NSString *)v;
+- (bool)checkIosVersionWithNSString:(NSString *)v;
 
 - (void)createWithASIFragment:(id<ASIFragment>)fragment
               withJavaUtilMap:(id<JavaUtilMap>)params;
@@ -65,7 +69,7 @@
 
 - (IOSClass *)getViewClass;
 
-- (jboolean)hasItemViewWithADMenuItem:(id<ADMenuItem>)item;
+- (bool)hasItemViewWithADMenuItem:(id<ADMenuItem>)item;
 
 - (void)initialized OBJC_METHOD_FAMILY_NONE;
 
@@ -77,9 +81,9 @@
 
 - (id<ASIWidget>)newInstance OBJC_METHOD_FAMILY_NONE;
 
-- (jboolean)removeWithInt:(jint)index;
+- (bool)removeWithInt:(int32_t)index;
 
-- (jboolean)removeWithASIWidget:(id<ASIWidget>)w;
+- (bool)removeWithASIWidget:(id<ASIWidget>)w;
 
 - (void)requestLayout;
 
@@ -95,7 +99,7 @@
 
 - (void)setIdWithNSString:(NSString *)id_;
 
-- (void)setVisibleWithBoolean:(jboolean)b;
+- (void)setVisibleWithBoolean:(bool)b;
 
 #pragma mark Package-Private
 
@@ -135,6 +139,7 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl)
 
 @compatibility_alias ComAsheraToolbarActionMenuViewImpl ASActionMenuViewImpl;
 
+
 #endif
 
 #if !defined (ASActionMenuViewImpl_Divider_) && (INCLUDE_ALL_ActionMenuViewImpl || defined(INCLUDE_ASActionMenuViewImpl_Divider))
@@ -170,6 +175,7 @@ FOUNDATION_EXPORT ASActionMenuViewImpl_Divider *new_ASActionMenuViewImpl_Divider
 FOUNDATION_EXPORT ASActionMenuViewImpl_Divider *create_ASActionMenuViewImpl_Divider_init(void);
 
 J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Divider)
+
 
 #endif
 
@@ -207,6 +213,7 @@ FOUNDATION_EXPORT ASActionMenuViewImpl_Orientation *create_ASActionMenuViewImpl_
 
 J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Orientation)
 
+
 #endif
 
 #if !defined (ASActionMenuViewImpl_ActionMenuViewExt_) && (INCLUDE_ALL_ActionMenuViewImpl || defined(INCLUDE_ASActionMenuViewImpl_ActionMenuViewExt))
@@ -230,6 +237,9 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Orientation)
 @class ASWidgetAttribute;
 @class IOSIntArray;
 @class IOSObjectArray;
+@class JavaLangBoolean;
+@class JavaLangInteger;
+@class NSString;
 @protocol ADMenuItem;
 @protocol ASIWidget;
 @protocol JavaUtilList;
@@ -253,9 +263,9 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Orientation)
 
 - (void)getLocationOnScreenWithIntArray:(IOSIntArray *)appScreenLocation;
 
-- (jint)getMaxHeight;
+- (int32_t)getMaxHeight;
 
-- (jint)getMaxWidth;
+- (int32_t)getMaxWidth;
 
 - (id<JavaUtilList>)getMethods;
 
@@ -265,7 +275,7 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Orientation)
 
 - (void)getWindowVisibleDisplayFrameWithADRect:(ADRect *)displayFrame;
 
-- (jboolean)hasItemViewWithADMenuItem:(id<ADMenuItem>)item;
+- (bool)hasItemViewWithADMenuItem:(id<ADMenuItem>)item;
 
 - (ADView *)inflateViewWithNSString:(NSString *)layout;
 
@@ -273,12 +283,12 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Orientation)
 
 - (id<ASILifeCycleDecorator>)newInstanceWithASIWidget:(id<ASIWidget>)widget OBJC_METHOD_FAMILY_NONE;
 
-- (void)offsetLeftAndRightWithInt:(jint)offset;
+- (void)offsetLeftAndRightWithInt:(int32_t)offset;
 
-- (void)offsetTopAndBottomWithInt:(jint)offset;
+- (void)offsetTopAndBottomWithInt:(int32_t)offset;
 
-- (void)onMeasureWithInt:(jint)widthMeasureSpec
-                 withInt:(jint)heightMeasureSpec;
+- (void)onMeasureWithInt:(int32_t)widthMeasureSpec
+                 withInt:(int32_t)heightMeasureSpec;
 
 - (void)remeasure;
 
@@ -288,9 +298,9 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Orientation)
                              withNSString:(NSString *)strValue
                                    withId:(id)objValue;
 
-- (void)setMaxHeightWithInt:(jint)height;
+- (void)setMaxHeightWithInt:(int32_t)height;
 
-- (void)setMaxWidthWithInt:(jint)width;
+- (void)setMaxWidthWithInt:(int32_t)width;
 
 - (void)setMyAttributeWithNSString:(NSString *)name
                             withId:(id)value;
@@ -305,7 +315,7 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Orientation)
 
 - (void)setState4WithId:(id)value;
 
-- (void)setVisibilityWithInt:(jint)visibility;
+- (void)setVisibilityWithInt:(int32_t)visibility;
 
 - (void)state0;
 
@@ -321,16 +331,16 @@ J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_Orientation)
 
 - (void)stateYes;
 
-- (void)updateMeasuredDimensionWithInt:(jint)width
-                               withInt:(jint)height;
+- (void)updateMeasuredDimensionWithInt:(int32_t)width
+                               withInt:(int32_t)height;
 
 #pragma mark Protected
 
-- (void)onLayoutWithBoolean:(jboolean)changed
-                    withInt:(jint)l
-                    withInt:(jint)t
-                    withInt:(jint)r
-                    withInt:(jint)b;
+- (void)onLayoutWithBoolean:(bool)changed
+                    withInt:(int32_t)l
+                    withInt:(int32_t)t
+                    withInt:(int32_t)r
+                    withInt:(int32_t)b;
 
 // Disallowed inherited constructors, do not use.
 
@@ -347,6 +357,7 @@ FOUNDATION_EXPORT ASActionMenuViewImpl_ActionMenuViewExt *new_ASActionMenuViewIm
 FOUNDATION_EXPORT ASActionMenuViewImpl_ActionMenuViewExt *create_ASActionMenuViewImpl_ActionMenuViewExt_initWithASActionMenuViewImpl_(ASActionMenuViewImpl *outer$);
 
 J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_ActionMenuViewExt)
+
 
 #endif
 
@@ -383,6 +394,7 @@ FOUNDATION_EXPORT ASActionMenuViewImpl_ShowAsAction *new_ASActionMenuViewImpl_Sh
 FOUNDATION_EXPORT ASActionMenuViewImpl_ShowAsAction *create_ASActionMenuViewImpl_ShowAsAction_init(void);
 
 J2OBJC_TYPE_LITERAL_HEADER(ASActionMenuViewImpl_ShowAsAction)
+
 
 #endif
 

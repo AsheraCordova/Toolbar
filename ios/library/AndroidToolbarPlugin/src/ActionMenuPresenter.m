@@ -3,6 +3,11 @@
 //  source: D:\Java\git\core-javafx-widget\SWTAndroidToolBar\src\main\java\androidx\appcompat\widget\ActionMenuPresenter.java
 //
 
+#define J2OBJC_IMPORTED_BY_JAVA_IMPLEMENTATION 1
+
+
+
+
 #include "ActionMenuPresenter.h"
 #include "ActionMenuView.h"
 #include "BaseMenuPresenter.h"
@@ -15,22 +20,30 @@
 #include "View.h"
 #include "ViewGroup.h"
 #include "ViewParent.h"
+#include "java/lang/Boolean.h"
+#include "java/lang/Integer.h"
 #include "java/util/ArrayList.h"
+
+
+
+
+#pragma clang diagnostic error "-Wreturn-type"
+#pragma clang diagnostic ignored "-Wswitch"
 
 
 @interface ADXActionMenuPresenter () {
  @public
-  jboolean mPendingOverflowIconSet_;
-  jboolean mReserveOverflow_;
-  jboolean mReserveOverflowSet_;
-  jint mWidthLimit_;
-  jint mActionItemWidthLimit_;
-  jint mMaxItems_;
-  jboolean mMaxItemsSet_;
-  jboolean mStrictWidthLimit_;
-  jboolean mWidthLimitSet_;
-  jboolean mExpandedActionViewsExclusive_;
-  jint mMinCellSize_;
+  bool mPendingOverflowIconSet_;
+  bool mReserveOverflow_;
+  bool mReserveOverflowSet_;
+  int32_t mWidthLimit_;
+  int32_t mActionItemWidthLimit_;
+  int32_t mMaxItems_;
+  bool mMaxItemsSet_;
+  bool mStrictWidthLimit_;
+  bool mWidthLimitSet_;
+  bool mExpandedActionViewsExclusive_;
+  int32_t mMinCellSize_;
   ADSparseBooleanArray *mActionButtonGroups_;
   ADView *mOverflowButton_;
 }
@@ -46,7 +59,7 @@ __attribute__((unused)) static void ADXActionMenuPresenter_subtractOverFlow(ADXA
 
 @implementation ADXActionMenuPresenter
 
-- (void)setReserveOverflowWithBoolean:(jboolean)reserveOverflow {
+- (void)setReserveOverflowWithBoolean:(bool)reserveOverflow {
   mReserveOverflow_ = reserveOverflow;
   mReserveOverflowSet_ = true;
 }
@@ -67,18 +80,18 @@ __attribute__((unused)) static void ADXActionMenuPresenter_subtractOverFlow(ADXA
   return actionView;
 }
 
-- (jboolean)shouldIncludeItemWithInt:(jint)childIndex
-                 withADXMenuItemImpl:(ADXMenuItemImpl *)item {
+- (bool)shouldIncludeItemWithInt:(int32_t)childIndex
+             withADXMenuItemImpl:(ADXMenuItemImpl *)item {
   return [((ADXMenuItemImpl *) nil_chk(item)) isActionButton];
 }
 
-- (void)updateMenuViewWithBoolean:(jboolean)cleared {
+- (void)updateMenuViewWithBoolean:(bool)cleared {
   [super updateMenuViewWithBoolean:cleared];
   [((ADView *) nil_chk((mMenuView_))) requestLayout];
   if (mMenu_ != nil) {
     JavaUtilArrayList *actionItems = [mMenu_ getActionItems];
-    jint count = [((JavaUtilArrayList *) nil_chk(actionItems)) size];
-    for (jint i = 0; i < count; i++) {
+    int32_t count = [((JavaUtilArrayList *) nil_chk(actionItems)) size];
+    for (int32_t i = 0; i < count; i++) {
       ADXActionMenuPresenter_ActionProvider *provider = nil;
       if (provider != nil) {
         [provider setSubUiVisibilityListenerWithADXActionMenuPresenter:self];
@@ -86,9 +99,9 @@ __attribute__((unused)) static void ADXActionMenuPresenter_subtractOverFlow(ADXA
     }
   }
   JavaUtilArrayList *nonActionItems = mMenu_ != nil ? [mMenu_ getNonActionItems] : nil;
-  jboolean hasOverflow = false;
+  bool hasOverflow = false;
   if (mReserveOverflow_ && nonActionItems != nil) {
-    jint count = [nonActionItems size];
+    int32_t count = [nonActionItems size];
     if (count == 1) {
       hasOverflow = ![((ADXMenuItemImpl *) nil_chk([nonActionItems getWithInt:0])) isActionViewExpanded];
     }
@@ -107,7 +120,7 @@ __attribute__((unused)) static void ADXActionMenuPresenter_subtractOverFlow(ADXA
       JreStrongAssign(&mOverflowButton_, [((ADXActionMenuView *) nil_chk(((ADXActionMenuView *) cast_chk(mMenuView_, [ADXActionMenuView class])))) getOverFlowButton]);
     }
     ADViewGroup *parent = (ADViewGroup *) cast_chk([((ADView *) nil_chk(mOverflowButton_)) getParent], [ADViewGroup class]);
-    if (parent != mMenuView_) {
+    if (!JreObjectEqualsEquals(parent, mMenuView_)) {
       if (parent != nil) {
         [parent removeViewWithADView:mOverflowButton_];
       }
@@ -115,15 +128,15 @@ __attribute__((unused)) static void ADXActionMenuPresenter_subtractOverFlow(ADXA
       [((ADXActionMenuView *) nil_chk(menuView)) addViewWithADView:mOverflowButton_ withADViewGroup_LayoutParams:[menuView generateOverflowButtonLayoutParams]];
     }
   }
-  else if (mOverflowButton_ != nil && [mOverflowButton_ getParent] == (id) mMenuView_) {
+  else if (mOverflowButton_ != nil && JreObjectEqualsEquals([mOverflowButton_ getParent], mMenuView_)) {
     [((ADViewGroup *) nil_chk(((ADViewGroup *) cast_chk(mMenuView_, [ADViewGroup class])))) removeViewWithADView:mOverflowButton_];
   }
   [((ADXActionMenuView *) nil_chk(((ADXActionMenuView *) cast_chk(mMenuView_, [ADXActionMenuView class])))) setOverflowReservedWithBoolean:mReserveOverflow_];
 }
 
-- (jboolean)flagActionItems {
+- (bool)flagActionItems {
   JavaUtilArrayList *visibleItems;
-  jint itemsSize;
+  int32_t itemsSize;
   if (mMenu_ != nil) {
     visibleItems = [mMenu_ getVisibleItems];
     itemsSize = [((JavaUtilArrayList *) nil_chk(visibleItems)) size];
@@ -132,15 +145,15 @@ __attribute__((unused)) static void ADXActionMenuPresenter_subtractOverFlow(ADXA
     visibleItems = nil;
     itemsSize = 0;
   }
-  jint maxActions = mMaxItems_;
-  jint widthLimit = mActionItemWidthLimit_;
-  jint querySpec = ADView_MeasureSpec_makeMeasureSpecWithInt_withInt_(0, ADView_MeasureSpec_UNSPECIFIED);
+  int32_t maxActions = mMaxItems_;
+  int32_t widthLimit = mActionItemWidthLimit_;
+  int32_t querySpec = ADView_MeasureSpec_makeMeasureSpecWithInt_withInt_(0, ADView_MeasureSpec_UNSPECIFIED);
   ADViewGroup *parent = (ADViewGroup *) cast_chk(mMenuView_, [ADViewGroup class]);
-  jint requiredItems = 0;
-  jint requestedItems = 0;
-  jint firstActionWidth = 0;
-  jboolean hasOverflow = false;
-  for (jint i = 0; i < itemsSize; i++) {
+  int32_t requiredItems = 0;
+  int32_t requestedItems = 0;
+  int32_t firstActionWidth = 0;
+  bool hasOverflow = false;
+  for (int32_t i = 0; i < itemsSize; i++) {
     ADXMenuItemImpl *item = JreRetainedLocalValue([((JavaUtilArrayList *) nil_chk(visibleItems)) getWithInt:i]);
     if ([((ADXMenuItemImpl *) nil_chk(item)) requiresActionButton]) {
       requiredItems++;
@@ -161,14 +174,14 @@ __attribute__((unused)) static void ADXActionMenuPresenter_subtractOverFlow(ADXA
   maxActions -= requiredItems;
   ADSparseBooleanArray *seenGroups = mActionButtonGroups_;
   [((ADSparseBooleanArray *) nil_chk(seenGroups)) clear];
-  jint cellSize = 0;
-  jint cellsRemaining = 0;
+  int32_t cellSize = 0;
+  int32_t cellsRemaining = 0;
   if (mStrictWidthLimit_) {
     cellsRemaining = JreIntDiv(widthLimit, mMinCellSize_);
-    jint cellSizeRemaining = JreIntMod(widthLimit, mMinCellSize_);
+    int32_t cellSizeRemaining = JreIntMod(widthLimit, mMinCellSize_);
     cellSize = mMinCellSize_ + JreIntDiv(cellSizeRemaining, cellsRemaining);
   }
-  for (jint i = 0; i < itemsSize; i++) {
+  for (int32_t i = 0; i < itemsSize; i++) {
     ADXMenuItemImpl *item = JreRetainedLocalValue([((JavaUtilArrayList *) nil_chk(visibleItems)) getWithInt:i]);
     if ([((ADXMenuItemImpl *) nil_chk(item)) requiresActionButton]) {
       ADView *v = JreRetainedLocalValue([self getItemViewWithADXMenuItemImpl:item withADView:nil withADViewGroup:parent]);
@@ -178,25 +191,25 @@ __attribute__((unused)) static void ADXActionMenuPresenter_subtractOverFlow(ADXA
       else {
         [((ADView *) nil_chk(v)) measureWithInt:querySpec withInt:querySpec];
       }
-      jint measuredWidth = [((ADView *) nil_chk(v)) getMeasuredWidth];
+      int32_t measuredWidth = [((ADView *) nil_chk(v)) getMeasuredWidth];
       widthLimit -= measuredWidth;
       if (firstActionWidth == 0) {
         firstActionWidth = measuredWidth;
       }
-      jint groupId = [item getGroupId];
+      int32_t groupId = [item getGroupId];
       if (groupId != 0) {
         [seenGroups putWithInt:groupId withBoolean:true];
       }
       [item setIsActionButtonWithBoolean:true];
     }
     else if ([item requestsActionButton]) {
-      jint groupId = [item getGroupId];
-      jboolean inGroup = [seenGroups getWithInt:groupId];
-      jboolean isAction = (maxActions > 0 || inGroup) && widthLimit > 0 && (!mStrictWidthLimit_ || cellsRemaining > 0);
+      int32_t groupId = [item getGroupId];
+      bool inGroup = [seenGroups getWithInt:groupId];
+      bool isAction = (maxActions > 0 || inGroup) && widthLimit > 0 && (!mStrictWidthLimit_ || cellsRemaining > 0);
       if (isAction) {
         ADView *v = JreRetainedLocalValue([self getItemViewWithADXMenuItemImpl:item withADView:nil withADViewGroup:parent]);
         if (mStrictWidthLimit_) {
-          jint cells = ADXActionMenuView_measureChildForCellsWithADView_withInt_withInt_withInt_withInt_(v, cellSize, cellsRemaining, querySpec, 0);
+          int32_t cells = ADXActionMenuView_measureChildForCellsWithADView_withInt_withInt_withInt_withInt_(v, cellSize, cellsRemaining, querySpec, 0);
           cellsRemaining -= cells;
           if (cells == 0) {
             isAction = false;
@@ -205,7 +218,7 @@ __attribute__((unused)) static void ADXActionMenuPresenter_subtractOverFlow(ADXA
         else {
           [((ADView *) nil_chk(v)) measureWithInt:querySpec withInt:querySpec];
         }
-        jint measuredWidth = [((ADView *) nil_chk(v)) getMeasuredWidth];
+        int32_t measuredWidth = [((ADView *) nil_chk(v)) getMeasuredWidth];
         widthLimit -= measuredWidth;
         if (firstActionWidth == 0) {
           firstActionWidth = measuredWidth;
@@ -222,7 +235,7 @@ __attribute__((unused)) static void ADXActionMenuPresenter_subtractOverFlow(ADXA
       }
       else if (inGroup) {
         [seenGroups putWithInt:groupId withBoolean:false];
-        for (jint j = 0; j < i; j++) {
+        for (int32_t j = 0; j < i; j++) {
           ADXMenuItemImpl *areYouMyGroupie = JreRetainedLocalValue([visibleItems getWithInt:j]);
           if ([((ADXMenuItemImpl *) nil_chk(areYouMyGroupie)) getGroupId] == groupId) {
             if ([areYouMyGroupie isActionButton]) maxActions++;
@@ -257,14 +270,14 @@ __attribute__((unused)) static void ADXActionMenuPresenter_subtractOverFlow(ADXA
   return [((ADXActionMenuView *) nil_chk(menuParent)) getItemViewWithADMenuItem:item];
 }
 
-- (jboolean)isMenuItemViewWithADView:(ADView *)convertView {
+- (bool)isMenuItemViewWithADView:(ADView *)convertView {
   return ADXActionMenuView_isActionMenuItemViewWithADView_(convertView);
 }
 
-- (jint)getMaxActionButtons {
-  jint widthDp = ASPluginInvoker_getScreenWidthDp();
-  jint heightDp = ASPluginInvoker_getScreenHeightDp();
-  jint smallest = widthDp > heightDp ? widthDp : heightDp;
+- (int32_t)getMaxActionButtons {
+  int32_t widthDp = ASPluginInvoker_getScreenWidthDp();
+  int32_t heightDp = ASPluginInvoker_getScreenHeightDp();
+  int32_t smallest = widthDp > heightDp ? widthDp : heightDp;
   if (smallest > 600 || widthDp > 600 || (widthDp > 960 && heightDp > 720) || (widthDp > 720 && heightDp > 960)) {
     return 5;
   }
@@ -356,7 +369,7 @@ void ADXActionMenuPresenter_initPackagePrivate(ADXActionMenuPresenter *self) {
   self->mReserveOverflow_ = true;
   self->mWidthLimit_ = JreIntDiv(ASPluginInvoker_getScreenWidth(), 2);
   self->mActionItemWidthLimit_ = self->mWidthLimit_;
-  self->mMinCellSize_ = (jint) (ADXActionMenuView_MIN_CELL_SIZE);
+  self->mMinCellSize_ = (int32_t) (ADXActionMenuView_MIN_CELL_SIZE);
   self->mMaxItems_ = [self getMaxActionButtons];
 }
 
@@ -369,11 +382,11 @@ ADXActionMenuPresenter *create_ADXActionMenuPresenter_initPackagePrivate() {
 }
 
 void ADXActionMenuPresenter_subtractOverFlow(ADXActionMenuPresenter *self) {
-  jint width = self->mWidthLimit_;
+  int32_t width = self->mWidthLimit_;
   if (self->mReserveOverflow_) {
     if (self->mOverflowButton_ == nil) {
       JreStrongAssign(&self->mOverflowButton_, [((ADXActionMenuView *) nil_chk(((ADXActionMenuView *) cast_chk(self->mMenuView_, [ADXActionMenuView class])))) getOverFlowButton]);
-      jint spec = ADView_MeasureSpec_makeMeasureSpecWithInt_withInt_(0, ADView_MeasureSpec_UNSPECIFIED);
+      int32_t spec = ADView_MeasureSpec_makeMeasureSpecWithInt_withInt_(0, ADView_MeasureSpec_UNSPECIFIED);
       [((ADView *) nil_chk(self->mOverflowButton_)) measureWithInt:spec withInt:spec];
     }
     width -= [((ADView *) nil_chk(self->mOverflowButton_)) getMeasuredWidth];
