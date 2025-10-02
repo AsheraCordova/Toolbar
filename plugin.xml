@@ -81,7 +81,7 @@
       </feature>
     </config-file>
    	<framework src="browser/core.gradle" custom="true" type="gradleReference" />
-   	<resource-file src="browser/www/css/toolbar.css" target="../../src/main/assets/www/css/toolbar.css" />
+   	<asset src="browser/www/css/toolbar.css" target="css/toolbar.css" />
    	<js-module src="browser/www/js/add_res.js" name="toolbarAddRes">
     	 <runs/>
   	</js-module>

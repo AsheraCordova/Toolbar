@@ -13,7 +13,7 @@
       </feature>
     </config-file>
    	<framework src="core.gradle" custom="true" type="gradleReference" />
-   	<resource-file src="www/css/toolbar.css" target="../../src/main/assets/www/css/toolbar.css" />
+   	<asset src="www/css/toolbar.css" target="css/toolbar.css" />
    	<js-module src="www/js/add_res.js" name="toolbarAddRes">
     	 <runs/>
   	</js-module>
