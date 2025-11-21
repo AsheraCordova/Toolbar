@@ -1,3 +1,18 @@
+//start - license
+/*
+ * Copyright (c) 2025 Ashera Cordova
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ */
+//end - license
 package com.ashera.toolbar;
 // start - imports
 import java.util.*;
@@ -976,11 +991,11 @@ return getDividerPadding();			}
 		}
 	}
 
-	private native void nativeShowKxMenu(Object root, Object overflowButton) /*-[
+	private native void nativeShowKxMenu(Object root, Object overflowButton)/*-[
     	CGRect newFrame = [((UIView*) overflowButton) convertRect:((UIView*) overflowButton).frame toView:((UIView*) root)];
   		[KxMenu showMenuInView:((UIView*) root) fromRect:newFrame menuItems:self->itemArray_];
 	]-*/;
-	private native void setKxMenuOnButton(Object button, List<Object> actionsObjs) /*-[
+	private native void setKxMenuOnButton(Object button, List<Object> actionsObjs)/*-[
 		NSMutableArray* actions = [[NSMutableArray alloc] init];
 		for (id action in actionsObjs) {
 			[actions addObject: action];
@@ -1015,7 +1030,7 @@ return getDividerPadding();			}
 	}
 	
 	// menu code
-	private native void setMenuOnButton(Object button, List<Object> actionsObjs) /*-[
+	private native void setMenuOnButton(Object button, List<Object> actionsObjs)/*-[
 		NSMutableArray* actions = [[NSMutableArray alloc] init];
 		for (id action in actionsObjs) {
   			[actions addObject: action];
@@ -1024,7 +1039,7 @@ return getDividerPadding();			}
 		((UIButton*)button).showsMenuAsPrimaryAction = YES;
 		((UIButton*)button).menu = menu;
 	]-*/;
-	private native Object getMenuInline(List<Object> actionsObjs, String groupId) /*-[
+	private native Object getMenuInline(List<Object> actionsObjs, String groupId)/*-[
 		NSMutableArray* actions = [[NSMutableArray alloc] init];
 		for (id action in actionsObjs) {
 				[actions addObject: action];
